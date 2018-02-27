@@ -2,7 +2,7 @@
 
 namespace Krenor\Prometheus\Contracts;
 
-interface Renderer
+interface Renderable
 {
     public function render();
 }
