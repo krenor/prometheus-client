@@ -2,6 +2,8 @@
 
 namespace Krenor\Prometheus\Contracts;
 
+use Krenor\Prometheus\CollectorRegistry;
+
 abstract class Metric
 {
     /**
@@ -25,17 +27,31 @@ abstract class Metric
     protected $labels = [];
 
     /**
-     * Type constructor.
-     *
-     * @param string $namespace
-     * @param string $name
-     * @param string $description
+     * @var bool
      */
-    public function __construct(string $namespace, string $name, string $description)
+    protected $register = true;
+
+    /**
+     * @var CollectorRegistry
+     */
+    protected $registry;
+
+    // TODO: Multiple Registries: Shoul've
+
+    // TODO: Initialize: Could've
+
+    /**
+     * Metric constructor.
+     *
+     * @param CollectorRegistry $registry
+     */
+    public function __construct(CollectorRegistry $registry)
     {
-        $this->namespace = $namespace;
-        $this->name = $name;
-        $this->description = $description;
+        $this->registry = $registry;
+
+        if ($this->register) {
+            $this->registry->register($this);
+        }
     }
 
     /**
@@ -47,35 +63,11 @@ abstract class Metric
     }
 
     /**
-     * @param string $namespace
-     *
-     * @return Metric
-     */
-    public function setNamespace(string $namespace): Metric
-    {
-        $this->namespace = $namespace;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function name(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Metric
-     */
-    public function setName(string $name): Metric
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -87,18 +79,6 @@ abstract class Metric
     }
 
     /**
-     * @param string $description
-     *
-     * @return Metric
-     */
-    public function setDescription(string $description): Metric
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
      * @return string[]
      */
     public function labels(): array
@@ -107,15 +87,11 @@ abstract class Metric
     }
 
     /**
-     * @param string[] $labels
-     *
-     * @return Metric
+     * @return bool
      */
-    public function setLabels(array $labels): Metric
+    public function registered(): bool
     {
-        $this->labels = $labels;
-
-        return $this;
+        return $this->registry->get($this) !== null;
     }
 
     /**

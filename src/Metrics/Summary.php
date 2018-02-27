@@ -2,10 +2,10 @@
 
 namespace Krenor\Prometheus\Metrics;
 
-use Krenor\Prometheus\Contracts\Types\Metric;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Contracts\Types\Observable;
 
-class Summary extends Metric implements Observable
+abstract class Summary extends Metric implements Observable
 {
     /**
      * @var int[]
@@ -18,9 +18,12 @@ class Summary extends Metric implements Observable
         .99,
     ];
 
-    public function observe(float $value)
+    /**
+     * {@inheritdoc}
+     */
+    public function observe(float $value): self
     {
-        // TODO: Implement observe() method.
+        return $this->registry->storage()->observe($this, $value);
     }
 
     /**
@@ -29,17 +32,5 @@ class Summary extends Metric implements Observable
     public function quantile(): array
     {
         return $this->quantile;
-    }
-
-    /**
-     * @param int[] $quantile
-     *
-     * @return Summary
-     */
-    public function setQuantile(array $quantile): Summary
-    {
-        $this->quantile = $quantile;
-
-        return $this;
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Krenor\Prometheus\Metrics;
 
-use Krenor\Prometheus\Contracts\Types\Metric;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Contracts\Types\Observable;
 
-class Histogram extends Metric implements Observable
+abstract class Histogram extends Metric implements Observable
 {
     /**
      * @var int[]
@@ -24,9 +24,14 @@ class Histogram extends Metric implements Observable
         10,
     ];
 
-    public function observe(float $value)
+    /**
+     * {@inheritdoc}
+     */
+    public function observe(float $value): self
     {
-        // TODO: Implement observe() method.
+        $this->registry->storage()->observe($this, $value);
+
+        return $this;
     }
 
     /**
@@ -35,17 +40,5 @@ class Histogram extends Metric implements Observable
     public function buckets(): array
     {
         return $this->buckets;
-    }
-
-    /**
-     * @param int[] $buckets
-     *
-     * @return Histogram
-     */
-    public function setBuckets(array $buckets): Histogram
-    {
-        $this->buckets = $buckets;
-
-        return $this;
     }
 }

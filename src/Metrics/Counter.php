@@ -2,18 +2,26 @@
 
 namespace Krenor\Prometheus\Metrics;
 
-use Krenor\Prometheus\Contracts\Types\Metric;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 
-class Counter extends Metric implements Incrementable
+abstract class Counter extends Metric implements Incrementable
 {
-    public function increment()
+    /**
+     * {@inheritdoc}
+     */
+    public function increment(): self
     {
         return $this->incrementBy(1);
     }
 
-    public function incrementBy(float $value)
+    /**
+     * {@inheritdoc}
+     */
+    public function incrementBy(float $value): self
     {
-        // TODO: Implement incrementBy() method.
+        $this->registry->storage()->increment($this, $value);
+
+        return $this;
     }
 }

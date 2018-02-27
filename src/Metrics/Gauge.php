@@ -2,34 +2,57 @@
 
 namespace Krenor\Prometheus\Metrics;
 
-use Krenor\Prometheus\Contracts\Types\Metric;
-use Krenor\Prometheus\Contracts\Types\Decrementable;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
+use Krenor\Prometheus\Contracts\Types\Decrementable;
 
-class Gauge extends Metric implements Incrementable, Decrementable
+abstract class Gauge extends Metric implements Incrementable, Decrementable
 {
-    public function increment()
+    /**
+     * {@inheritdoc}
+     */
+    public function increment(): self
     {
         return $this->incrementBy(1);
     }
 
-    public function incrementBy(float $value)
+    /**
+     * {@inheritdoc}
+     */
+    public function incrementBy(float $value): self
     {
-        // TODO: Implement incrementBy() method.
+        $this->registry->storage()->increment($this, $value);
+
+        return $this;
     }
 
-    public function decrement()
+    /**
+     * {@inheritdoc}
+     */
+    public function decrement(): self
     {
         return $this->decrementBy(1);
     }
 
-    public function decrementBy(float $value)
+    /**
+     * {@inheritdoc}
+     */
+    public function decrementBy(float $value): self
     {
-        // TODO: Implement decrementBy() method.
+        $this->registry->storage()->decrement($this, $value);
+
+        return $this;
     }
 
-    public function set(float $value)
+    /**
+     * @param float $value
+     *
+     * @return self
+     */
+    public function set(float $value): self
     {
-        // TODO: Implement set() method.
+        $this->registry->storage()->set($this, $value);
+
+        return $this;
     }
 }
