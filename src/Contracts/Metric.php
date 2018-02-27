@@ -1,6 +1,6 @@
 <?php
 
-namespace Krenor\Prometheus\Contracts\Types;
+namespace Krenor\Prometheus\Contracts;
 
 abstract class Metric
 {
@@ -116,5 +116,13 @@ abstract class Metric
         $this->labels = $labels;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function key(): string
+    {
+        return "{$this->namespace()}:{$this->name()}";
     }
 }
