@@ -3,6 +3,7 @@
 namespace Krenor\Prometheus\Contracts;
 
 use Krenor\Prometheus\Metrics\Gauge;
+use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
@@ -18,6 +19,7 @@ interface Storage
      * @param float $value
      * @param array $labels
      *
+     * @throws LabelException
      * @throws StorageException
      *
      * @return void
@@ -29,6 +31,7 @@ interface Storage
      * @param float $value
      * @param array $labels
      *
+     * @throws LabelException
      * @throws StorageException
      *
      * @return void
@@ -40,6 +43,7 @@ interface Storage
      * @param float $value
      * @param array $labels
      *
+     * @throws LabelException
      * @throws StorageException
      *
      * @return void
@@ -51,6 +55,7 @@ interface Storage
      * @param float $value
      * @param array $labels
      *
+     * @throws LabelException
      * @throws StorageException
      *
      * @return void
