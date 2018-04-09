@@ -27,9 +27,9 @@ abstract class Histogram extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    public function observe(float $value): self
+    public function observe(float $value, array $labels): self
     {
-        $this->registry->storage()->observe($this, $value);
+        $this->registry->storage()->observe($this, $value, $labels);
 
         return $this;
     }

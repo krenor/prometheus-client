@@ -7,14 +7,17 @@ use Krenor\Prometheus\Contracts\Metric;
 interface Incrementable
 {
     /**
-     * @return Metric
-     */
-    public function increment();
-
-    /**
-     * @param float $value
+     * @param array $values
      *
      * @return Metric
      */
-    public function incrementBy(float $value);
+    public function increment(array $values);
+
+    /**
+     * @param float $value
+     * @param array $labels
+     *
+     * @return Metric
+     */
+    public function incrementBy(float $value, array $labels);
 }

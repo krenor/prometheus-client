@@ -10,17 +10,17 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
-    public function increment(): self
+    public function increment(array $labels): self
     {
-        return $this->incrementBy(1);
+        return $this->incrementBy(1, $labels);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function incrementBy(float $value): self
+    public function incrementBy(float $value, array $labels): self
     {
-        $this->registry->storage()->increment($this, $value);
+        $this->registry->storage()->increment($this, $value, $labels);
 
         return $this;
     }

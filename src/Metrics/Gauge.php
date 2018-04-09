@@ -11,17 +11,17 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
     /**
      * {@inheritdoc}
      */
-    public function increment(): self
+    public function increment(array $labels): self
     {
-        return $this->incrementBy(1);
+        return $this->incrementBy(1, $labels);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function incrementBy(float $value): self
+    public function incrementBy(float $value, array $labels): self
     {
-        $this->registry->storage()->increment($this, $value);
+        $this->registry->storage()->increment($this, $value, $labels);
 
         return $this;
     }
@@ -29,17 +29,17 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
     /**
      * {@inheritdoc}
      */
-    public function decrement(): self
+    public function decrement(array $labels): self
     {
-        return $this->decrementBy(1);
+        return $this->decrementBy(1, $labels);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function decrementBy(float $value): self
+    public function decrementBy(float $value, array $labels): self
     {
-        $this->registry->storage()->decrement($this, $value);
+        $this->registry->storage()->decrement($this, $value, $labels);
 
         return $this;
     }

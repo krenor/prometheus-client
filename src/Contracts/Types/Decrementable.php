@@ -7,14 +7,17 @@ use Krenor\Prometheus\Contracts\Metric;
 interface Decrementable
 {
     /**
-     * @return Metric
-     */
-    public function decrement();
-
-    /**
-     * @param float $value
+     * @param array $values
      *
      * @return Metric
      */
-    public function decrementBy(float $value);
+    public function decrement(array $values);
+
+    /**
+     * @param float $value
+     * @param array $labels
+     *
+     * @return Metric
+     */
+    public function decrementBy(float $value, array $labels);
 }

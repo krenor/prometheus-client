@@ -4,17 +4,56 @@ namespace Krenor\Prometheus\Contracts;
 
 use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Contracts\Types\Observable;
+use Krenor\Prometheus\Exceptions\StorageException;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 
 interface Storage
 {
+    // TODO: Define
+    public function collect();
 
-    public function increment(Incrementable $metric, float $value);
+    /**
+     * @param Incrementable $metric
+     * @param float $value
+     * @param array $labels
+     *
+     * @throws StorageException
+     *
+     * @return void
+     */
+    public function increment(Incrementable $metric, float $value, array $labels): void;
 
-    public function decrement(Decrementable $metric, float $value);
+    /**
+     * @param Decrementable $metric
+     * @param float $value
+     * @param array $labels
+     *
+     * @throws StorageException
+     *
+     * @return void
+     */
+    public function decrement(Decrementable $metric, float $value, array $labels): void;
 
-    public function observe(Observable $metric, float $value);
+    /**
+     * @param Observable $metric
+     * @param float $value
+     * @param array $labels
+     *
+     * @throws StorageException
+     *
+     * @return void
+     */
+    public function observe(Observable $metric, float $value, array $labels): void;
 
-    public function set(Gauge $gauge, float $value);
+    /**
+     * @param Gauge $gauge
+     * @param float $value
+     * @param array $labels
+     *
+     * @throws StorageException
+     *
+     * @return void
+     */
+    public function set(Gauge $gauge, float $value, array $labels): void;
 }

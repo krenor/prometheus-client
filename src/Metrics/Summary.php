@@ -21,9 +21,9 @@ abstract class Summary extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    public function observe(float $value): self
+    public function observe(float $value, array $labels): self
     {
-        return $this->registry->storage()->observe($this, $value);
+        return $this->registry->storage()->observe($this, $value, $labels);
     }
 
     /**

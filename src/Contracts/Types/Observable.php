@@ -8,8 +8,9 @@ interface Observable
 {
     /**
      * @param float $value
+     * @param array $labels
      *
      * @return Metric
      */
-    public function observe(float $value);
+    public function observe(float $value, array $labels);
 }
