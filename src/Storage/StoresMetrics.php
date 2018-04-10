@@ -10,13 +10,30 @@ use Krenor\Prometheus\Exceptions\LabelException;
 trait StoresMetrics
 {
     /**
+     * @var string
+     */
+    protected $prefix = 'PROMETHEUS';
+
+    /**
+     * @param string $prefix
+     *
+     * @return self
+     */
+    public function prefix(string $prefix): self
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    /**
      * @param Metric $metric
      *
      * @return string
      */
     protected function key(Metric $metric): string
     {
-        return "{$this->prefix}{$metric->key()}";
+        return "{$this->prefix}:{$metric->key()}";
     }
 
     /**
@@ -28,7 +45,7 @@ trait StoresMetrics
      *
      * @return string
      */
-    protected function field(Metric $metric, array $labels, ?float $value): string
+    protected function field(Metric $metric, array $labels, ?float $value = null): string
     {
         $combined = array_combine($metric->labels(), $labels);
 
