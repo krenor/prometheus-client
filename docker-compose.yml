@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  ## PHP Container ###########
+  php-fpm:
+    image: php:7.2-fpm-alpine
+    volumes:
+      - ./src:/var/www/prom/src
+      - ./tests:/var/www/prom/tests
+      - ./vendor:/var/www/prom/vendor
+    depends_on:
+      - redis
+
+  ## Redis Container ###########
+  redis:
+    image: redis:4.0-alpine
