@@ -25,7 +25,7 @@ class HistogramStub extends Histogram
      * @var string[]
      */
     protected $labels = [
-        'example:histogram',
+        'example_label',
     ];
 
     /**

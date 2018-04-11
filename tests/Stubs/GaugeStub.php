@@ -25,6 +25,6 @@ class GaugeStub extends Gauge
      * @var string[]
      */
     protected $labels = [
-        'example:gauge',
+        'example_label',
     ];
 }

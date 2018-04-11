@@ -25,6 +25,6 @@ class CounterStub extends Counter
      * @var string[]
      */
     protected $labels = [
-        'example:counter',
+        'example_label',
     ];
 }

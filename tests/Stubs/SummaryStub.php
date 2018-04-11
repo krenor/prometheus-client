@@ -25,7 +25,7 @@ class SummaryStub extends Summary
      * @var string[]
      */
     protected $labels = [
-        'example:summary',
+        'example_label',
     ];
 
     /**
