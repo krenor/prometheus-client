@@ -7,6 +7,7 @@ use Predis\Client as Redis;
 use Krenor\Prometheus\Sample;
 use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Storage;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Types\Observable;
@@ -43,7 +44,10 @@ class RedisStorage implements Storage
         try {
             $items = new Collection($this->redis->hgetall($key));
 
-            // TODO: Collect histogram:SUM, too
+            // TODO: Might want to use Observable instead. Check back when working with Summaries.
+            if ($metric instanceof Histogram) {
+                $items = $items->merge($this->redis->hgetall("{$key}:SUM"));
+            }
 
             return $items->map(function (string $value, string $key) {
                 return new Sample($value, json_decode($key, true));
