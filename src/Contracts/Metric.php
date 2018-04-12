@@ -62,14 +62,6 @@ abstract class Metric
     }
 
     /**
-     * @return string
-     */
-    public function key(): string
-    {
-        return "{$this->namespace()}:{$this->name()}";
-    }
-
-    /**
      * @param Storage $storage
      */
     public static function storeUsing(Storage $storage)

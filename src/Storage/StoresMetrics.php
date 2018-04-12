@@ -33,7 +33,7 @@ trait StoresMetrics
      */
     protected function key(Metric $metric): string
     {
-        return "{$this->prefix}:{$metric->key()}";
+        return "{$this->prefix}:{$metric->namespace()}:{$metric->name()}";
     }
 
     /**
@@ -56,7 +56,7 @@ trait StoresMetrics
             throw new LabelException("Expected {$expected} label values but only {$actual} were given.");
         }
 
-        $field = ['data' => $combined];
+        $field = ['labels' => $combined];
 
         if ($metric instanceof Histogram && $value !== null) {
             $field['bucket'] = Arr::first($metric->buckets(), function (float $bucket) use ($value) {

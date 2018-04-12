@@ -3,6 +3,7 @@
 namespace Krenor\Prometheus\Contracts;
 
 use Krenor\Prometheus\Metrics\Gauge;
+use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
@@ -11,8 +12,14 @@ use Krenor\Prometheus\Contracts\Types\Incrementable;
 
 interface Storage
 {
-    // TODO: Define
-    public function collect();
+    /**
+     * @param Metric $metric
+     *
+     * @throws StorageException
+     *
+     * @return Collection
+     */
+    public function collect(Metric $metric): Collection;
 
     /**
      * @param Incrementable $metric
