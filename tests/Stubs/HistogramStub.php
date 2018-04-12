@@ -32,9 +32,11 @@ class HistogramStub extends Histogram
      * @var int[]
      */
     protected $buckets = [
-        2,
-        3,
-        5,
-        7,
+        50,
+        150,
+        250,
+        400,
+        600,
+        850,
     ];
 }
