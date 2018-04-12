@@ -21,6 +21,14 @@ abstract class Summary extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
+    final public function type(): string
+    {
+        'summary';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function observe(float $value, array $labels): self
     {
         static::$storage->observe($this, $value, $labels);

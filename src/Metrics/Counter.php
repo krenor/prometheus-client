@@ -10,6 +10,14 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
+    final public function type(): string
+    {
+        return 'counter';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function increment(array $labels): self
     {
         return $this->incrementBy(1, $labels);

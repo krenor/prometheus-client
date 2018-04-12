@@ -11,6 +11,14 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
     /**
      * {@inheritdoc}
      */
+    final public function type(): string
+    {
+        return 'gauge';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function increment(array $labels): self
     {
         return $this->incrementBy(1, $labels);

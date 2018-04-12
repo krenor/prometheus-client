@@ -32,6 +32,11 @@ abstract class Metric
     /**
      * @return string
      */
+    abstract public function type(): string;
+
+    /**
+     * @return string
+     */
     public function namespace(): string
     {
         return $this->namespace;

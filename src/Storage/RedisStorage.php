@@ -50,7 +50,7 @@ class RedisStorage implements Storage
             }
 
             return $items->map(function (string $value, string $key) {
-                return new Sample($value, json_decode($key, true));
+                return new Sample($value, new Collection(json_decode($key, true)));
             })->values();
         } catch (Exception $e) {
             throw new StorageException("Failed to collect `{$key}` samples.", 0, $e);

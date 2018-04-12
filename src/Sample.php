@@ -2,6 +2,8 @@
 
 namespace Krenor\Prometheus;
 
+use Tightenco\Collect\Support\Collection;
+
 class Sample
 {
     /**
@@ -10,7 +12,7 @@ class Sample
     protected $value;
 
     /**
-     * @var array
+     * @var Collection
      */
     protected $data;
 
@@ -18,9 +20,9 @@ class Sample
      * Sample constructor.
      *
      * @param float $value
-     * @param array $data
+     * @param Collection $data
      */
-    public function __construct(float $value, array $data)
+    public function __construct(float $value, Collection $data)
     {
         $this->value = $value;
         $this->data = $data;
@@ -35,9 +37,9 @@ class Sample
     }
 
     /**
-     * @return array
+     * @return Collection
      */
-    public function data(): array
+    public function data(): Collection
     {
         return $this->data;
     }
