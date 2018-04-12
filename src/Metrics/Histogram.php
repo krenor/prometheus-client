@@ -29,7 +29,7 @@ abstract class Histogram extends Metric implements Observable
      */
     public function observe(float $value, array $labels): self
     {
-        $this->registry->storage()->observe($this, $value, $labels);
+        static::$storage->observe($this, $value, $labels);
 
         return $this;
     }

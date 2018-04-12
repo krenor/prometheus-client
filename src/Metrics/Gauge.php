@@ -21,7 +21,7 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
      */
     public function incrementBy(float $value, array $labels): self
     {
-        $this->registry->storage()->increment($this, $value, $labels);
+        static::$storage->increment($this, $value, $labels);
 
         return $this;
     }
@@ -39,7 +39,7 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
      */
     public function decrementBy(float $value, array $labels): self
     {
-        $this->registry->storage()->decrement($this, $value, $labels);
+        static::$storage->decrement($this, $value, $labels);
 
         return $this;
     }
@@ -47,11 +47,13 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
     /**
      * @param float $value
      *
+     * @throws \Krenor\Prometheus\Exceptions\LabelException
+     * @throws \Krenor\Prometheus\Exceptions\StorageException
      * @return self
      */
     public function set(float $value): self
     {
-        $this->registry->storage()->set($this, $value);
+        static::$storage->set($this, $value);
 
         return $this;
     }

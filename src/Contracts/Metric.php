@@ -2,8 +2,6 @@
 
 namespace Krenor\Prometheus\Contracts;
 
-use Krenor\Prometheus\CollectorRegistry;
-
 abstract class Metric
 {
     /**
@@ -24,35 +22,12 @@ abstract class Metric
     /**
      * @var string[]
      */
-    protected $labels = [];
+    protected $labels = []; // TODO: What about injecting the values, if any, through the constructor?
 
     /**
-     * @var bool
+     * @var Storage
      */
-    protected $register = true;
-
-    /**
-     * @var CollectorRegistry
-     */
-    protected $registry;
-
-    // TODO: Multiple Registries: Shoul've
-
-    // TODO: Initialize: Could've
-
-    /**
-     * Metric constructor.
-     *
-     * @param CollectorRegistry $registry
-     */
-    public function __construct(CollectorRegistry $registry)
-    {
-        $this->registry = $registry;
-
-        if ($this->register) {
-            $this->registry->register($this);
-        }
-    }
+    protected static $storage;
 
     /**
      * @return string
@@ -87,18 +62,18 @@ abstract class Metric
     }
 
     /**
-     * @return bool
-     */
-    public function registered(): bool
-    {
-        return $this->registry->get($this) !== null;
-    }
-
-    /**
      * @return string
      */
     public function key(): string
     {
         return "{$this->namespace()}:{$this->name()}";
+    }
+
+    /**
+     * @param Storage $storage
+     */
+    public static function storeUsing(Storage $storage)
+    {
+        static::$storage = $storage;
     }
 }

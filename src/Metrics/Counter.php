@@ -20,7 +20,7 @@ abstract class Counter extends Metric implements Incrementable
      */
     public function incrementBy(float $value, array $labels): self
     {
-        $this->registry->storage()->increment($this, $value, $labels);
+        static::$storage->increment($this, $value, $labels);
 
         return $this;
     }

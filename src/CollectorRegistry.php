@@ -5,18 +5,12 @@ namespace Krenor\Prometheus;
 use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Metrics\Summary;
-use Krenor\Prometheus\Contracts\Storage;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Metric;
 
 class CollectorRegistry
 {
-    /**
-     * @var Storage
-     */
-    protected $storage;
-
     /**
      * @var Collection
      */
@@ -39,12 +33,9 @@ class CollectorRegistry
 
     /**
      * CollectorRegistry constructor.
-     *
-     * @param Storage $storage
      */
-    public function __construct(Storage $storage)
+    public function __construct()
     {
-        $this->storage = $storage;
         $this->counters = new Collection;
         $this->gauges = new Collection;
         $this->histograms = new Collection;
@@ -85,14 +76,6 @@ class CollectorRegistry
         );
 
         return $this;
-    }
-
-    /**
-     * @return Storage
-     */
-    public function storage()
-    {
-        return $this->storage;
     }
 
     /**
