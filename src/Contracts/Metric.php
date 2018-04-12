@@ -68,4 +68,12 @@ abstract class Metric
     {
         static::$storage = $storage;
     }
+
+    /**
+     * @return Storage
+     */
+    public static function storage()
+    {
+        return static::$storage;
+    }
 }

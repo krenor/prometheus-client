@@ -5,9 +5,9 @@ namespace Krenor\Prometheus;
 use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Metrics\Summary;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Contracts\Metric;
 
 class CollectorRegistry
 {
@@ -42,9 +42,22 @@ class CollectorRegistry
         $this->summaries = new Collection;
     }
 
-    public function collect()
+    /**
+     * @return Collection
+     */
+    public function collect(): Collection
     {
-        // TODO: Implement collect() method.
+        return $this->counters
+            ->merge($this->gauges)
+            ->merge($this->histograms)
+            ->merge($this->summaries)
+            ->mapWithKeys(function (Metric $metric) {
+                return [
+                    get_class($metric) => $metric::storage()->collect($metric),
+                ];
+            })->map(function (Collection $samples, string $namespace) {
+                return new MetricFamilySamples(new $namespace, $samples);
+            })->values();
     }
 
     /**
