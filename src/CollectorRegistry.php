@@ -55,13 +55,13 @@ class CollectorRegistry
     public function register(Metric $metric): Metric
     {
         $collector = $this->collector($metric);
-        $key = $metric->key();
+        $namespace = get_class($metric);
 
-        if (!$collector->contains($key)) {
-            $collector->put($this->key($metric), $metric);
+        if (!$collector->contains($namespace)) {
+            $collector->put($namespace, $metric);
         }
 
-        return $collector->get($key);
+        return $collector->get($namespace);
     }
 
     /**
@@ -111,43 +111,43 @@ class CollectorRegistry
     }
 
     /**
-     * @param string $key
+     * @param string $namespace
      *
      * @return Counter|null
      */
-    public function counter(string $key): ?Counter
+    public function counter(string $namespace): ?Counter
     {
-        return $this->counters->get($key);
+        return $this->counters->get($namespace);
     }
 
     /**
-     * @param string $key
+     * @param string $namespace
      *
      * @return Gauge|null
      */
-    public function gauge(string $key): ?Gauge
+    public function gauge(string $namespace): ?Gauge
     {
-        return $this->gauges->get($key);
+        return $this->gauges->get($namespace);
     }
 
     /**
-     * @param string $key
+     * @param string $namespace
      *
      * @return Histogram|null
      */
-    public function histogram(string $key): ?Histogram
+    public function histogram(string $namespace): ?Histogram
     {
-        return $this->histograms->get($key);
+        return $this->histograms->get($namespace);
     }
 
     /**
-     * @param string $key
+     * @param string $namespace
      *
      * @return Summary|null
      */
-    public function summary(string $key): ?Summary
+    public function summary(string $namespace): ?Summary
     {
-        return $this->summaries->get($key);
+        return $this->summaries->get($namespace);
     }
 
     /**
