@@ -140,27 +140,45 @@ class RedisStorage implements Storage
      *
      * @return Collection
      */
-    private function transformHistograms(Collection $labeled, Collection $buckets): Collection // TODO: This might be better placed in the trait.
+    // TODO: This might be better placed in the trait.
+    // TODO: This might also be better if handled by a fractal transformer. Future me, take care!
+    private function transformHistograms(Collection $labeled, Collection $buckets): Collection
     {
+        // Serving as "+Inf" bucket.
+        $buckets->push(PHP_INT_MAX);
+
         return $labeled->map(function (Collection $items) use ($buckets) {
             $labels = $items->first()['labels'];
 
+            // The stored bucket containing "+Inf" has to be excluded because it's handled separately.
             $sets = $items->reject(function ($data) {
                 return $data['bucket'] === '+Inf';
             });
 
-            // Fill up all buckets, which are not stored, with the previous buckets value or zero.
             $missing = $buckets
                 ->diff($items->pluck('bucket'))
-                ->map(function (float $bucket) use ($sets) {
-                    $value = $sets->firstWhere('bucket', '<', $bucket)['value'] ?? 0;
+                ->map(function (float $bucket) use ($items, $sets) {
+                    // Use the value of the previous bucket or default to 0.
+                    $value = $sets->where('bucket', '<', $bucket)->last()['value'] ?? 0;
+
+                    // If the "+Inf" bucket is stored use its value instead of using
+                    // the previous bucket's value for the "pseudo" +Inf bucket.
+                    if ($bucket === (float) PHP_INT_MAX) {
+                        $bucket = '+Inf';
+
+                        $key = $items->search(function (array $item) {
+                            return $item['bucket'] === '+Inf';
+                        });
+
+                        if ($key !== false) {
+                            $value = $items->get($key)['value'];
+                        }
+                    }
 
                     return compact('bucket', 'labels', 'value');
                 });
 
-            // TODO: What if +Inf bucket isn't stored? 😱
-
-            return $items
+            return $sets
                 ->merge($missing)
                 ->map(function (array $item) use ($labels) {
                     $item['labels'] = $labels;
@@ -169,7 +187,7 @@ class RedisStorage implements Storage
                 })->sort(function (array $left, array $right) {
                     // Due to http://php.net/manual/en/language.types.string.php#language.types.string.conversion the
                     // bucket containing "+Inf" will be cast to 0. Sorting regularly would end up with it incorrectly
-                    // sitting at the very first spot. Therefore it has to end up as the biggest item of 'em all.
+                    // sitting at the very first spot instead of where it belongs - at the end.
                     if ($left['bucket'] === '+Inf') {
                         return 1;
                     }
