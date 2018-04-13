@@ -40,18 +40,37 @@ class RedisStorage implements Storage
     public function collect(Metric $metric): Collection
     {
         $key = $this->key($metric);
+        $name = "{$metric->namespace()}:{$metric->name()}";
 
         try {
             $items = new Collection($this->redis->hgetall($key));
 
+            $labeled = $items->mapToGroups(function (string $value, string $key) {
+                $raw = json_decode($key, true);
+
+                return [
+                    json_encode($raw['labels']) => compact('value') + $raw,
+                ];
+            });
+
             // TODO: Might want to use Observable instead. Check back when working with Summaries.
             if ($metric instanceof Histogram) {
-                $items = $items->merge($this->redis->hgetall("{$key}:SUM"));
+                $labeled = $this->transformHistograms($labeled, new Collection($metric->buckets()));
             }
 
-            return $items->map(function (string $value, string $key) {
-                return new Sample($value, new Collection(json_decode($key, true)));
-            })->values();
+            return $labeled->flatMap(function (Collection $group) use ($metric, $name) {
+                return $group->map(function (array $item) use ($metric, $name) {
+                    $value = $item['value'];
+                    $labels = new Collection($item['labels']);
+
+                    if ($metric instanceof Histogram) {
+                        // TODO: _count and _sum, too!
+                        return new Sample("{$name}_bucket", $value, $labels->put('le', $item['bucket']));
+                    }
+
+                    return new Sample($name, $value, $labels);
+                });
+            });
         } catch (Exception $e) {
             throw new StorageException("Failed to collect `{$key}` samples.", 0, $e);
         }
@@ -113,5 +132,54 @@ class RedisStorage implements Storage
 
             throw new StorageException("Failed to set the value of [$class] to `$value`.", 0, $e);
         }
+    }
+
+    /**
+     * @param Collection $labeled
+     * @param Collection $buckets
+     *
+     * @return Collection
+     */
+    private function transformHistograms(Collection $labeled, Collection $buckets): Collection // TODO: This might be better placed in the trait.
+    {
+        return $labeled->map(function (Collection $items) use ($buckets) {
+            $labels = $items->first()['labels'];
+
+            $sets = $items->reject(function ($data) {
+                return $data['bucket'] === '+Inf';
+            });
+
+            // Fill up all buckets, which are not stored, with the previous buckets value or zero.
+            $missing = $buckets
+                ->diff($items->pluck('bucket'))
+                ->map(function (float $bucket) use ($sets) {
+                    $value = $sets->firstWhere('bucket', '<', $bucket)['value'] ?? 0;
+
+                    return compact('bucket', 'labels', 'value');
+                });
+
+            // TODO: What if +Inf bucket isn't stored? 😱
+
+            return $items
+                ->merge($missing)
+                ->map(function (array $item) use ($labels) {
+                    $item['labels'] = $labels;
+
+                    return $item;
+                })->sort(function (array $left, array $right) {
+                    // Due to http://php.net/manual/en/language.types.string.php#language.types.string.conversion the
+                    // bucket containing "+Inf" will be cast to 0. Sorting regularly would end up with it incorrectly
+                    // sitting at the very first spot. Therefore it has to end up as the biggest item of 'em all.
+                    if ($left['bucket'] === '+Inf') {
+                        return 1;
+                    }
+
+                    if ($right['bucket'] === '+Inf') {
+                        return -1;
+                    }
+
+                    return $left['bucket'] <=> $right['bucket'];
+                })->values();
+        });
     }
 }

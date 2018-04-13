@@ -15,39 +15,48 @@ class TextRenderer implements Renderable
     public function render(Collection $metrics)
     {
         $text = $metrics->flatMap(function (MetricFamilySamples $family) {
-            $metric = $family->metric();
-            $identifier = "{$metric->namespace()}:{$metric->name()}";
-
-            $lines = collect([
-                "# HELP {$identifier} {$metric->description()}",
-                "# TYPE {$identifier} {$metric->type()}",
-            ]);
-
-            $samples = $family->samples()->map(function (Sample $sample) use ($identifier) {
-                $labels = $this->serialize($sample->data()->get('labels'));
-
-                return "{$identifier}{{$labels}} {$sample->value()}";
-            })->values();
-
-            return $lines->merge($samples);
+            return $this->transform($family);
         })->implode("\n");
 
         return "{$text}\n";
     }
 
     /**
-     * @param array $labels
+     * @param Collection $labels
      *
      * @return string
      */
-    protected function serialize(array $labels): string
+    protected function serialize(Collection $labels): string
     {
-        $quoted = array_map(function (string $value) {
+        $quoted = $labels->map(function (string $value) {
             return "\"{$value}\"";
-        }, $labels);
+        });
 
         return urldecode(
-            http_build_query($quoted, '', ',')
+            http_build_query($quoted->toArray(), '', ',')
         );
+    }
+
+    protected function transform(MetricFamilySamples $family)
+    {
+        $metric = $family->metric();
+        $name = $family->samples()->first()->name();
+
+        $lines = new Collection([
+            "# HELP {$name} {$metric->description()}",
+            "# TYPE {$name} {$metric->type()}",
+        ]);
+
+        $metrics = $family->samples()->map(function (Sample $sample) use ($metric, $name) {
+            $labels = $this->serialize($sample->labels());
+
+            if ($name !== $sample->name()) {
+                $breakpoint = true;
+            }
+
+            return "{$name}{{$labels}} {$sample->value()}";
+        })->values();
+
+        return $lines->merge($metrics);
     }
 }
