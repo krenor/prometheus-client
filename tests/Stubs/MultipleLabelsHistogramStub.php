@@ -2,9 +2,9 @@
 
 namespace Krenor\Prometheus\Tests\Stubs;
 
-use Krenor\Prometheus\Metrics\Summary;
+use Krenor\Prometheus\Metrics\Histogram;
 
-class SummaryStub extends Summary
+class MultipleLabelsHistogramStub extends Histogram
 {
     /**
      * @var string
@@ -14,27 +14,28 @@ class SummaryStub extends Summary
     /**
      * @var string
      */
-    protected $name = 'summary';
+    protected $name = 'multi_labeled_histogram';
 
     /**
      * @var string
      */
-    protected $description = 'Example Summary.';
+    protected $description = 'Example Histogram using multiple labels.';
 
     /**
      * @var string[]
      */
     protected $labels = [
         'example_label',
+        'other_label',
+        'yet_another_label',
     ];
 
     /**
      * @var int[]
      */
-    protected $quantile = [
-        .2,
-        .4,
-        .6,
-        .8,
+    protected $buckets = [
+        200,
+        400,
+        600,
     ];
 }

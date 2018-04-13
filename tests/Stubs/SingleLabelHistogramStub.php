@@ -4,7 +4,7 @@ namespace Krenor\Prometheus\Tests\Stubs;
 
 use Krenor\Prometheus\Metrics\Histogram;
 
-class HistogramStub extends Histogram
+class SingleLabelHistogramStub extends Histogram
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ class HistogramStub extends Histogram
      * @var int[]
      */
     protected $buckets = [
-        50,
+        100,
         150,
         250,
         400,

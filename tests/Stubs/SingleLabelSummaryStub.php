@@ -2,9 +2,9 @@
 
 namespace Krenor\Prometheus\Tests\Stubs;
 
-use Krenor\Prometheus\Metrics\Gauge;
+use Krenor\Prometheus\Metrics\Summary;
 
-class GaugeStub extends Gauge
+class SingleLabelSummaryStub extends Summary
 {
     /**
      * @var string
@@ -14,17 +14,27 @@ class GaugeStub extends Gauge
     /**
      * @var string
      */
-    protected $name = 'gauge';
+    protected $name = 'summary';
 
     /**
      * @var string
      */
-    protected $description = 'Example Gauge.';
+    protected $description = 'Example Summary.';
 
     /**
      * @var string[]
      */
     protected $labels = [
         'example_label',
+    ];
+
+    /**
+     * @var int[]
+     */
+    protected $quantile = [
+        .2,
+        .4,
+        .6,
+        .8,
     ];
 }

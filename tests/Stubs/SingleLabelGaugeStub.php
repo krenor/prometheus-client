@@ -2,9 +2,9 @@
 
 namespace Krenor\Prometheus\Tests\Stubs;
 
-use Krenor\Prometheus\Metrics\Counter;
+use Krenor\Prometheus\Metrics\Gauge;
 
-class CounterStub extends Counter
+class SingleLabelGaugeStub extends Gauge
 {
     /**
      * @var string
@@ -14,12 +14,12 @@ class CounterStub extends Counter
     /**
      * @var string
      */
-    protected $name = 'counter';
+    protected $name = 'gauge';
 
     /**
      * @var string
      */
-    protected $description = 'Example Counter.';
+    protected $description = 'Example Gauge.';
 
     /**
      * @var string[]
