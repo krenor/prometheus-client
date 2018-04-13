@@ -4,11 +4,18 @@ services:
 
   ## PHP Container ###########
   php-fpm:
-    image: php:7.2-fpm-alpine
+    build:
+      context: .
+      dockerfile: ./php-fpm/Dockerfile
+    environment:
+      - XDEBUG_CONFIG=idekey=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=localhost
+    env_file:
+      - .env
+    extra_hosts:
+      - XDEBUG_HOST:${XDEBUG_HOST}
     volumes:
-      - ./src:/var/www/prom/src
-      - ./tests:/var/www/prom/tests
-      - ./vendor:/var/www/prom/vendor
+      - ./:/var/www
     depends_on:
       - redis
 
