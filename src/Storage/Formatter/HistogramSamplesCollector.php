@@ -21,57 +21,52 @@ class HistogramSamplesCollector extends SamplesCollector
     protected function group(): Collection
     {
         $buckets = (new Collection($this->metric->buckets()))
-            ->push(PHP_INT_MAX); // Serving as "+Inf" bucket.
+            ->push('+Inf');
 
         return parent::group()->map(function (Collection $stored) use ($buckets) {
             $labels = $stored->first()['labels']; // TODO: What if it's missing? ..Can this even happen? 🤔
 
-            // The stored bucket containing "+Inf" has to be excluded because it's handled separately.
-            list($filled, $inf) = $stored->partition(function (array $data) {
-                return $data['bucket'] !== '+Inf';
-            });
-
-            /** @var Collection $filled */
-            /** @var Collection $inf */
             $missing = $buckets
                 ->diff($stored->pluck('bucket'))
-                ->map($this->fill($filled, $inf->first()));
+                ->map(function ($bucket) {
+                    return compact('bucket') + ['value' => 0];
+                });
 
-            return $filled
+            $merged = $stored
                 ->merge($missing)
-                ->map(function (array $item) use ($labels) {
+                ->sort($this->sort())
+                ->values(); // Drop the sorted indices.
+
+            return $this
+                ->fill($merged, new Collection)
+                ->map(function ($item) use ($labels) {
                     $item['labels'] = $labels;
 
                     return $item;
-                })->sort($this->sort())
-                ->values();
+                });
         });
     }
 
     /**
-     * @param Collection $filled
-     * @param array|null $inf
+     * @param Collection $original
+     * @param Collection $result
+     * @param int $sum
+     * @param int $i
      *
-     * @return Closure
+     * @return Collection
      */
-    protected function fill(Collection $filled, ?array $inf = null): Closure
+    protected function fill(Collection $original, Collection $result, int $sum = 0, int $i = 0): Collection
     {
-        return function (float $bucket) use ($filled, $inf) {
-            // Use the value of the previous bucket or default to 0.
-            $value = $filled->where('bucket', '<', $bucket)->last()['value'] ?? 0;
+        if ($i >= $original->count()) {
+            return $result;
+        }
 
-            // If the "+Inf" bucket is stored use its value instead of using
-            // the previous bucket's value for the "pseudo" +Inf bucket.
-            if ($bucket === (float) PHP_INT_MAX) {
-                $bucket = '+Inf';
+        $value = $original[$i]['value'] + $sum;
+        $bucket = $original[$i]['bucket'];
 
-                if ($inf) {
-                    $value = $inf['value'];
-                }
-            }
+        $result->push(compact('bucket', 'value'));
 
-            return compact('bucket', 'value');
-        };
+        return $this->fill($original, $result, $value, ++$i);
     }
 
     /**
