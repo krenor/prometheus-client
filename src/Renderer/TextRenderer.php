@@ -37,24 +37,25 @@ class TextRenderer implements Renderable
         );
     }
 
-    protected function transform(MetricFamilySamples $family)
+    /**
+     * @param MetricFamilySamples $family
+     *
+     * @return Collection
+     */
+    protected function transform(MetricFamilySamples $family): Collection
     {
         $metric = $family->metric();
-        $name = $family->samples()->first()->name();
+        $name = "{$metric->namespace()}:{$metric->name()}";
 
         $lines = new Collection([
             "# HELP {$name} {$metric->description()}",
             "# TYPE {$name} {$metric->type()}",
         ]);
 
-        $metrics = $family->samples()->map(function (Sample $sample) use ($metric, $name) {
+        $metrics = $family->samples()->map(function (Sample $sample) {
             $labels = $this->serialize($sample->labels());
 
-            if ($name !== $sample->name()) {
-                $breakpoint = true;
-            }
-
-            return "{$name}{{$labels}} {$sample->value()}";
+            return "{$sample->name()}{{$labels}} {$sample->value()}";
         })->values();
 
         return $lines->merge($metrics);

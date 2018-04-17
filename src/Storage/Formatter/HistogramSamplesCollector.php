@@ -24,6 +24,8 @@ class HistogramSamplesCollector extends SamplesCollector
             ->push('+Inf');
 
         return parent::group()->map(function (Collection $stored) use ($buckets) {
+            $sum = $stored->pop()['value'];
+            $count = $stored->sum('value');
             $labels = $stored->first()['labels']; // TODO: What if it's missing? ..Can this even happen? 🤔
 
             $missing = $buckets
@@ -39,6 +41,8 @@ class HistogramSamplesCollector extends SamplesCollector
 
             return $this
                 ->fill($merged, new Collection)
+                ->push(compact('count'))
+                ->push(compact('sum'))
                 ->map(function ($item) use ($labels) {
                     $item['labels'] = $labels;
 
@@ -96,11 +100,17 @@ class HistogramSamplesCollector extends SamplesCollector
     protected function sample(string $name): Closure
     {
         return function (array $item) use ($name) {
-            $value = $item['value'];
             $labels = new Collection($item['labels']);
 
-            // TODO: _count and _sum, too!
-            return new Sample("{$name}_bucket", $value, $labels->put('le', $item['bucket']));
+            if (array_key_exists('count', $item)) {
+                return new Sample("{$name}_count", $item['count'], $labels);
+            }
+
+            if (array_key_exists('sum', $item)) {
+                return new Sample("{$name}_sum", $item['sum'], $labels);
+            }
+
+            return new Sample("{$name}_bucket", $item['value'], $labels->put('le', $item['bucket']));
         };
     }
 }

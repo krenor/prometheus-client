@@ -12,6 +12,7 @@ class SamplesCollector
      * @var Metric
      */
     protected $metric;
+
     /**
      * @var Collection
      */
