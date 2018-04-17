@@ -9,16 +9,16 @@ use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Storage;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Contracts\SamplesCollector;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
-use Krenor\Prometheus\Storage\Formatter\HistogramSamplesCollector;
+use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
+use Krenor\Prometheus\Storage\Concerns\InteractsWithStoredMetrics;
 
 class RedisStorage implements Storage
 {
-    use StoresMetrics;
+    use InteractsWithStoredMetrics, StoresMetrics;
 
     /**
      * @var Redis
@@ -40,7 +40,7 @@ class RedisStorage implements Storage
      */
     public function collect(Metric $metric): Collection
     {
-        $key = $this->key($metric);
+        $key = $this->prefixed($this->key($metric));
 
         try {
             $items = new Collection($this->redis->hgetall($key));
@@ -48,12 +48,9 @@ class RedisStorage implements Storage
             // TODO: Sort by label values?
             switch (true) {
                 case $metric instanceof Histogram:
-                    return (new HistogramSamplesCollector(
-                        $metric,
-                        $items->merge($this->redis->hgetall("{$key}:SUM"))
-                    ))->collect();
+                    return $this->samples($metric, $items->merge($this->redis->hgetall("{$key}:SUM")));
                 default:
-                    return (new SamplesCollector($metric, $items))->collect();
+                    return $this->samples($metric, $items);
             }
         } catch (Exception $e) {
             throw new StorageException("Failed to collect `{$key}` samples.", 0, $e);
@@ -66,9 +63,11 @@ class RedisStorage implements Storage
     public function increment(Incrementable $metric, float $value, array $labels): void
     {
         try {
-            $key = $this->key($metric);
-
-            $this->redis->hincrbyfloat($key, $this->field($metric, $labels), $value);
+            $this->redis->hincrbyfloat(
+                $this->prefixed($this->key($metric)),
+                $this->labeled($metric, $labels)->toJson(),
+                $value
+            );
         } catch (Exception $e) {
             $class = get_class($metric);
             $operation = __METHOD__;
@@ -91,10 +90,11 @@ class RedisStorage implements Storage
     public function observe(Observable $metric, float $value, array $labels): void
     {
         try {
-            $key = $this->key($metric);
+            $key = $this->prefixed($this->key($metric));
+            $labeled = $this->labeled($metric, $labels);
 
-            $this->redis->hincrbyfloat($key, $this->field($metric, $labels, $value), 1);
-            $this->redis->hincrbyfloat("{$key}:SUM", $this->field($metric, $labels), $value);
+            $this->redis->hincrbyfloat($key, $labeled->merge($this->bucket($metric, $value))->toJson(), 1);
+            $this->redis->hincrbyfloat("{$key}:SUM", $labeled->toJson(), $value);
         } catch (Exception $e) {
             $class = get_class($metric);
 
@@ -108,9 +108,11 @@ class RedisStorage implements Storage
     public function set(Gauge $gauge, float $value, array $labels): void
     {
         try {
-            $key = $this->key($gauge);
-
-            $this->redis->hset($key, $this->field($gauge, $labels), $value);
+            $this->redis->hset(
+                $this->prefixed($this->key($gauge)),
+                $this->labeled($gauge, $labels)->toJson(),
+                $value
+            );
         } catch (Exception $e) {
             $class = get_class($gauge);
 

@@ -2,6 +2,8 @@
 
 namespace Krenor\Prometheus\Contracts;
 
+use Tightenco\Collect\Support\Collection;
+
 abstract class Metric
 {
     /**
@@ -59,11 +61,11 @@ abstract class Metric
     }
 
     /**
-     * @return string[]
+     * @return Collection
      */
-    public function labels(): array
+    public function labels(): Collection
     {
-        return $this->labels;
+        return new Collection($this->labels);
     }
 
     /**

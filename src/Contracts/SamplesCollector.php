@@ -5,9 +5,12 @@ namespace Krenor\Prometheus\Contracts;
 use Closure;
 use Krenor\Prometheus\Sample;
 use Tightenco\Collect\Support\Collection;
+use Krenor\Prometheus\Storage\Concerns\InteractsWithStoredMetrics;
 
 class SamplesCollector
 {
+    use InteractsWithStoredMetrics;
+
     /**
      * @var Metric
      */
@@ -35,10 +38,8 @@ class SamplesCollector
      */
     public function collect(): Collection
     {
-        $name = "{$this->metric->namespace()}:{$this->metric->name()}";
-
-        return $this->group()->flatMap(function (Collection $group) use ($name) {
-            return $group->map($this->sample($name));
+        return $this->group()->flatMap(function (Collection $group) {
+            return $group->map($this->sample($this->key($this->metric)));
         });
     }
 

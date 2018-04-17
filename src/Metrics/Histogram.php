@@ -3,6 +3,7 @@
 namespace Krenor\Prometheus\Metrics;
 
 use Krenor\Prometheus\Contracts\Metric;
+use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Types\Observable;
 
 abstract class Histogram extends Metric implements Observable
@@ -43,10 +44,10 @@ abstract class Histogram extends Metric implements Observable
     }
 
     /**
-     * @return int[]
+     * @return Collection
      */
-    public function buckets(): array
+    public function buckets(): Collection
     {
-        return $this->buckets;
+        return new Collection($this->buckets);
     }
 }

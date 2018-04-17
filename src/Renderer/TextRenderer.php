@@ -6,9 +6,12 @@ use Krenor\Prometheus\Sample;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\MetricFamilySamples;
 use Krenor\Prometheus\Contracts\Renderable;
+use Krenor\Prometheus\Storage\Concerns\InteractsWithStoredMetrics;
 
 class TextRenderer implements Renderable
 {
+    use InteractsWithStoredMetrics;
+
     /**
      * {@inheritdoc}
      */
@@ -45,11 +48,10 @@ class TextRenderer implements Renderable
     protected function transform(MetricFamilySamples $family): Collection
     {
         $metric = $family->metric();
-        $name = "{$metric->namespace()}:{$metric->name()}";
 
         $lines = new Collection([
-            "# HELP {$name} {$metric->description()}",
-            "# TYPE {$name} {$metric->type()}",
+            "# HELP {$this->key($metric)} {$metric->description()}",
+            "# TYPE {$this->key($metric)} {$metric->type()}",
         ]);
 
         $metrics = $family->samples()->map(function (Sample $sample) {

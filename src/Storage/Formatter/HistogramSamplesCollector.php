@@ -20,8 +20,7 @@ class HistogramSamplesCollector extends SamplesCollector
      */
     protected function group(): Collection
     {
-        $buckets = (new Collection($this->metric->buckets()))
-            ->push('+Inf');
+        $buckets = $this->metric->buckets()->push('+Inf');
 
         return parent::group()->map(function (Collection $stored) use ($buckets) {
             $sum = $stored->pop()['value'];
