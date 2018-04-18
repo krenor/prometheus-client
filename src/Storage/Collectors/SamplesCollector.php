@@ -1,9 +1,10 @@
 <?php
 
-namespace Krenor\Prometheus\Contracts;
+namespace Krenor\Prometheus\Storage\Collectors;
 
 use Closure;
 use Krenor\Prometheus\Sample;
+use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Storage\Concerns\InteractsWithStoredMetrics;
 

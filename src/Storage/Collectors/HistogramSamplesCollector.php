@@ -1,12 +1,11 @@
 <?php
 
-namespace Krenor\Prometheus\Storage\Formatter;
+namespace Krenor\Prometheus\Storage\Collectors;
 
 use Closure;
 use Krenor\Prometheus\Sample;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Contracts\SamplesCollector;
 
 class HistogramSamplesCollector extends SamplesCollector
 {
