@@ -5,6 +5,7 @@ namespace Krenor\Prometheus\Storage;
 use Exception;
 use Predis\Client as Redis;
 use Krenor\Prometheus\Metrics\Gauge;
+use Krenor\Prometheus\Metrics\Summary;
 use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Storage;
@@ -92,9 +93,19 @@ class RedisStorage implements Storage
         try {
             $key = $this->prefixed($this->key($metric));
             $labeled = $this->labeled($metric, $labels);
+            $field = $labeled->toJson();
 
-            $this->redis->hincrbyfloat($key, $labeled->merge($this->bucket($metric, $value))->toJson(), 1);
-            $this->redis->hincrbyfloat("{$key}:SUM", $labeled->toJson(), $value);
+            if ($metric instanceof Histogram) {
+                $this->redis->hincrbyfloat($key, $labeled->merge($this->bucket($metric, $value))->toJson(), 1);
+                $this->redis->hincrbyfloat("{$key}:SUM", $field, $value);
+            }
+
+            if ($metric instanceof Summary) {
+                $identifier = "$key:" . crc32($field) . ':VALUES';
+
+                $this->redis->hsetnx($key, $field, $identifier);
+                $this->redis->rpush($identifier, $value);
+            }
         } catch (Exception $e) {
             $class = get_class($metric);
 
