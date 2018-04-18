@@ -50,6 +50,10 @@ class RedisStorage implements Storage
             switch (true) {
                 case $metric instanceof Histogram:
                     return $this->samples($metric, $items->merge($this->redis->hgetall("{$key}:SUM")));
+                case $metric instanceof Summary:
+                    return $this->samples($metric, $items->map(function (string $key) {
+                        return new Collection($this->redis->lrange($key, 0, -1));
+                    }));
                 default:
                     return $this->samples($metric, $items);
             }

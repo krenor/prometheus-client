@@ -33,7 +33,7 @@ class MultipleLabelsSummaryStub extends Summary
     /**
      * @var int[]
      */
-    protected $quantile = [
+    protected $quantiles = [
         .1,
         .3,
         .5,

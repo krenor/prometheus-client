@@ -3,6 +3,7 @@
 namespace Krenor\Prometheus\Metrics;
 
 use Krenor\Prometheus\Contracts\Metric;
+use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Types\Observable;
 
 abstract class Summary extends Metric implements Observable
@@ -10,7 +11,7 @@ abstract class Summary extends Metric implements Observable
     /**
      * @var int[]
      */
-    protected $quantile = [
+    protected $quantiles = [
         .01,
         .05,
         .5,
@@ -23,7 +24,7 @@ abstract class Summary extends Metric implements Observable
      */
     final public function type(): string
     {
-        'summary';
+        return 'summary';
     }
 
     /**
@@ -37,10 +38,10 @@ abstract class Summary extends Metric implements Observable
     }
 
     /**
-     * @return int[]
+     * @return Collection
      */
-    public function quantile(): array
+    public function quantiles(): Collection
     {
-        return $this->quantile;
+        return new Collection($this->quantiles);
     }
 }

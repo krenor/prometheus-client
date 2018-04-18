@@ -24,7 +24,6 @@ class HistogramSamplesCollector extends SamplesCollector
 
         return parent::group()->map(function (Collection $stored) use ($buckets) {
             $sum = $stored->pop()['value'];
-            $count = $stored->sum('value');
             $labels = $stored->first()['labels']; // TODO: What if it's missing? ..Can this even happen? 🤔
 
             $missing = $buckets
@@ -40,7 +39,7 @@ class HistogramSamplesCollector extends SamplesCollector
 
             return $this
                 ->fill($merged, new Collection)
-                ->push(compact('count'))
+                ->push(['count' => $stored->sum('value')])
                 ->push(compact('sum'))
                 ->map(function ($item) use ($labels) {
                     $item['labels'] = $labels;

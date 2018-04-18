@@ -31,7 +31,7 @@ class SingleLabelSummaryStub extends Summary
     /**
      * @var int[]
      */
-    protected $quantile = [
+    protected $quantiles = [
         .2,
         .4,
         .6,

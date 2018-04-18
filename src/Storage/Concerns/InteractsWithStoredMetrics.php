@@ -2,10 +2,12 @@
 
 namespace Krenor\Prometheus\Storage\Concerns;
 
+use Krenor\Prometheus\Metrics\Summary;
 use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesCollector;
+use Krenor\Prometheus\Storage\Formatter\SummarySamplesCollector;
 use Krenor\Prometheus\Storage\Formatter\HistogramSamplesCollector;
 
 trait InteractsWithStoredMetrics
@@ -31,6 +33,8 @@ trait InteractsWithStoredMetrics
         switch (true) {
             case $metric instanceof Histogram:
                 return (new HistogramSamplesCollector($metric, $items))->collect();
+            case $metric instanceof Summary:
+                return (new SummarySamplesCollector($metric, $items))->collect();
             default:
                 return (new SamplesCollector($metric, $items))->collect();
         }
