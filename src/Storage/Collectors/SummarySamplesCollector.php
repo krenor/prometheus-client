@@ -23,11 +23,9 @@ class SummarySamplesCollector extends SamplesCollector
             $count = $values->count();
             $labels = json_decode($key, true)['labels'];
 
-            $values = $values->sort()->values();
-
             return $this->metric
                 ->quantiles()
-                ->map($this->calculate($values, $count))
+                ->map($this->calculate($values->sort()->values(), $count))
                 ->push(compact('count'))
                 ->push(['sum' => $values->sum()])
                 ->map(function ($item) use ($labels) {
