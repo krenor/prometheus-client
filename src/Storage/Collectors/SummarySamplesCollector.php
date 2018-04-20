@@ -19,40 +19,24 @@ class SummarySamplesCollector extends SamplesCollector
      */
     protected function group(): Collection
     {
-        return $this->stored->map(function (Collection $values, string $key) {
+        return parent::group()->map(function (Collection $stored) {
+            return $stored->first();
+        })->map(function (array $stored) {
+            /** @var Collection $values */
+            $values = $stored['value'];
             $count = $values->count();
-            $labels = json_decode($key, true)['labels'];
 
             return $this->metric
                 ->quantiles()
                 ->map($this->calculate($values->sort()->values(), $count))
                 ->push(compact('count'))
                 ->push(['sum' => $values->sum()])
-                ->map(function ($item) use ($labels) {
-                    $item['labels'] = $labels;
+                ->map(function ($item) use ($stored) {
+                    $item['labels'] = $stored['labels'];
 
                     return $item;
                 });
         });
-    }
-
-    /**
-     * @param Collection $values
-     * @param int $count
-     *
-     * @return Closure
-     */
-    protected function calculate(Collection $values, int $count): Closure
-    {
-        return function (float $quantile) use ($count, $values) {
-            $index = $count * $quantile;
-
-            $value = floor($index) === $index
-                ? ($values[$index - 1] + $values[$index]) / 2
-                : $values[floor($index)];
-
-            return compact('quantile', 'value');
-        };
     }
 
     /**
@@ -72,6 +56,25 @@ class SummarySamplesCollector extends SamplesCollector
             }
 
             return new Sample("{$name}", $item['value'], $labels->put('quantile', $item['quantile']));
+        };
+    }
+
+    /**
+     * @param Collection $values
+     * @param int $count
+     *
+     * @return Closure
+     */
+    private function calculate(Collection $values, int $count): Closure
+    {
+        return function (float $quantile) use ($count, $values) {
+            $index = $count * $quantile;
+
+            $value = floor($index) === $index
+                ? ($values[$index - 1] + $values[$index]) / 2
+                : $values[floor($index)];
+
+            return compact('quantile', 'value');
         };
     }
 }

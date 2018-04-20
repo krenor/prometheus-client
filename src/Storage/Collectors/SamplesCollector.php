@@ -49,11 +49,16 @@ class SamplesCollector
      */
     protected function group(): Collection
     {
-        return $this->stored->mapToGroups(function (string $value, string $key) {
-            $raw = json_decode($key, true);
+        $labels = $this->metric->labels()->toArray();
 
+        return $this->stored->map(function ($value, string $key) {
+            return json_decode($key, true) + compact('value');
+        })->reject(function (array $data) use ($labels) {
+            return !array_key_exists('labels', $data)
+                ?: array_keys($data['labels']) !== $labels;
+        })->mapToGroups(function (array $item) {
             return [
-                json_encode($raw['labels']) => compact('value') + $raw,
+                json_encode($item['labels']) => $item,
             ];
         });
     }
