@@ -84,9 +84,7 @@ class CollectorRegistry
      */
     public function unregister(Metric $metric): self
     {
-        $this->collector($metric)->forget(
-            $metric->key()
-        );
+        $this->collector($metric)->forget(get_class($metric));
 
         return $this;
     }
