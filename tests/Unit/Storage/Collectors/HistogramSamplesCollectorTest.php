@@ -26,19 +26,19 @@ class HistogramSamplesCollectorTest extends TestCase
 
         /** @var Sample[] $samples */
         $samples = (new HistogramSamplesCollector($metric, new Collection([
-            "{\"labels\":{$labels},\"bucket\":150}" => 1,
-            "{\"labels\":{$labels},\"bucket\":400}" => 2,
-            "{\"labels\":{$labels},\"bucket\":850}" => 3,
-            "{\"labels\":{$labels}}"                => 42,
+            "{\"labels\":{$labels},\"bucket\":150}"      => 1,
+            "{\"labels\":{$labels},\"bucket\":600}"      => 2,
+            "{\"labels\":{$labels},\"bucket\":\"+Inf\"}" => 3,
+            "{\"labels\":{$labels}}"                     => 42,
         ])))->collect();
 
         $this->assertCount(9, $samples);
         $this->assertEquals(0, $samples[0]->value()); // 100 Bucket
         $this->assertEquals(1, $samples[1]->value()); // 150 Bucket
         $this->assertEquals(1, $samples[2]->value()); // 250 Bucket
-        $this->assertEquals(3, $samples[3]->value()); // 400 Bucket
+        $this->assertEquals(1, $samples[3]->value()); // 400 Bucket
         $this->assertEquals(3, $samples[4]->value()); // 600 Bucket
-        $this->assertEquals(6, $samples[5]->value()); // 850 Bucket
+        $this->assertEquals(3, $samples[5]->value()); // 850 Bucket
         $this->assertEquals(6, $samples[6]->value()); // +Inf Bucket
         $this->assertSame($samples[6]->value(), $samples[7]->value()); // Count
         $this->assertEquals(42, $samples[8]->value()); // Sum
