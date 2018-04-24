@@ -31,4 +31,9 @@
         <log type="coverage-text" target="phpunit/coverage/text.txt"/>
         <log type="coverage-clover" target="phpunit/coverage/clover.xml"/>
     </logging>
+
+    <php>
+        <env name="REDIS_HOST" value="redis"/>
+        <env name="REDIS_PORT" value="6379"/>
+    </php>
 </phpunit>

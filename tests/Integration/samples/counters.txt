@@ -1,0 +1,10 @@
+# HELP example_counter Example Counter.
+# TYPE example_counter counter
+example_counter{example_label="fizz buzz"} 2
+example_counter{example_label="hello world"} 5
+example_counter{example_label="lorem ipsum"} 7
+# HELP example_multi_labeled_counter Example Counter using multiple labels.
+# TYPE example_multi_labeled_counter counter
+example_multi_labeled_counter{example_label="beep",other_label="boop",yet_another_label="robot"} 1
+example_multi_labeled_counter{example_label="foo",other_label="bar",yet_another_label="baz"} 8
+example_multi_labeled_counter{example_label="one",other_label="two",yet_another_label="three"} 7

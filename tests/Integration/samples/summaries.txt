@@ -1,0 +1,43 @@
+# HELP example_summary Example Summary.
+# TYPE example_summary summary
+example_summary{example_label="fizz buzz",quantile="0.2"} -17
+example_summary{example_label="fizz buzz",quantile="0.4"} -8
+example_summary{example_label="fizz buzz",quantile="0.6"} -5
+example_summary{example_label="fizz buzz",quantile="0.8"} 19
+example_summary_count{example_label="fizz buzz"} 11
+example_summary_sum{example_label="fizz buzz"} -23
+example_summary{example_label="hello world",quantile="0.2"} -2
+example_summary{example_label="hello world",quantile="0.4"} -1
+example_summary{example_label="hello world",quantile="0.6"} 1
+example_summary{example_label="hello world",quantile="0.8"} 4
+example_summary_count{example_label="hello world"} 9
+example_summary_sum{example_label="hello world"} 4
+example_summary{example_label="lorem ipsum",quantile="0.2"} -7.5
+example_summary{example_label="lorem ipsum",quantile="0.4"} -5
+example_summary{example_label="lorem ipsum",quantile="0.6"} -2
+example_summary{example_label="lorem ipsum",quantile="0.8"} 5.5
+example_summary_count{example_label="lorem ipsum"} 10
+example_summary_sum{example_label="lorem ipsum"} -17
+# HELP example_multi_labeled_summary Example Summary using multiple labels.
+# TYPE example_multi_labeled_summary summary
+example_multi_labeled_summary{example_label="beep",other_label="boop",yet_another_label="robot",quantile="0.1"} -30
+example_multi_labeled_summary{example_label="beep",other_label="boop",yet_another_label="robot",quantile="0.3"} -24
+example_multi_labeled_summary{example_label="beep",other_label="boop",yet_another_label="robot",quantile="0.5"} -12
+example_multi_labeled_summary{example_label="beep",other_label="boop",yet_another_label="robot",quantile="0.7"} 4
+example_multi_labeled_summary{example_label="beep",other_label="boop",yet_another_label="robot",quantile="0.9"} 18
+example_multi_labeled_summary_count{example_label="beep",other_label="boop",yet_another_label="robot"} 11
+example_multi_labeled_summary_sum{example_label="beep",other_label="boop",yet_another_label="robot"} -79
+example_multi_labeled_summary{example_label="foo",other_label="bar",yet_another_label="baz",quantile="0.1"} -11
+example_multi_labeled_summary{example_label="foo",other_label="bar",yet_another_label="baz",quantile="0.3"} -2.5
+example_multi_labeled_summary{example_label="foo",other_label="bar",yet_another_label="baz",quantile="0.5"} 7.5
+example_multi_labeled_summary{example_label="foo",other_label="bar",yet_another_label="baz",quantile="0.7"} 12
+example_multi_labeled_summary{example_label="foo",other_label="bar",yet_another_label="baz",quantile="0.9"} 18.5
+example_multi_labeled_summary_count{example_label="foo",other_label="bar",yet_another_label="baz"} 10
+example_multi_labeled_summary_sum{example_label="foo",other_label="bar",yet_another_label="baz"} 49
+example_multi_labeled_summary{example_label="one",other_label="two",yet_another_label="three",quantile="0.1"} -13
+example_multi_labeled_summary{example_label="one",other_label="two",yet_another_label="three",quantile="0.3"} -12
+example_multi_labeled_summary{example_label="one",other_label="two",yet_another_label="three",quantile="0.5"} -5
+example_multi_labeled_summary{example_label="one",other_label="two",yet_another_label="three",quantile="0.7"} 5
+example_multi_labeled_summary{example_label="one",other_label="two",yet_another_label="three",quantile="0.9"} 10
+example_multi_labeled_summary_count{example_label="one",other_label="two",yet_another_label="three"} 9
+example_multi_labeled_summary_sum{example_label="one",other_label="two",yet_another_label="three"} -27

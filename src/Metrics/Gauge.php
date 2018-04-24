@@ -54,14 +54,16 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
 
     /**
      * @param float $value
+     * @param array $labels
      *
      * @throws \Krenor\Prometheus\Exceptions\LabelException
      * @throws \Krenor\Prometheus\Exceptions\StorageException
+     *
      * @return self
      */
-    public function set(float $value): self
+    public function set(float $value, array $labels): self
     {
-        static::$storage->set($this, $value);
+        static::$storage->set($this, $value, $labels);
 
         return $this;
     }

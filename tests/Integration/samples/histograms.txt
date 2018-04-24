@@ -1,0 +1,49 @@
+# HELP example_histogram Example Histogram.
+# TYPE example_histogram histogram
+example_histogram_bucket{example_label="fizz buzz",le="100"} 0
+example_histogram_bucket{example_label="fizz buzz",le="150"} 1
+example_histogram_bucket{example_label="fizz buzz",le="250"} 1
+example_histogram_bucket{example_label="fizz buzz",le="400"} 1
+example_histogram_bucket{example_label="fizz buzz",le="600"} 2
+example_histogram_bucket{example_label="fizz buzz",le="850"} 5
+example_histogram_bucket{example_label="fizz buzz",le="+Inf"} 5
+example_histogram_count{example_label="fizz buzz"} 5
+example_histogram_sum{example_label="fizz buzz"} 2850
+example_histogram_bucket{example_label="hello world",le="100"} 1
+example_histogram_bucket{example_label="hello world",le="150"} 1
+example_histogram_bucket{example_label="hello world",le="250"} 3
+example_histogram_bucket{example_label="hello world",le="400"} 3
+example_histogram_bucket{example_label="hello world",le="600"} 3
+example_histogram_bucket{example_label="hello world",le="850"} 3
+example_histogram_bucket{example_label="hello world",le="+Inf"} 3
+example_histogram_count{example_label="hello world"} 3
+example_histogram_sum{example_label="hello world"} 543
+example_histogram_bucket{example_label="lorem ipsum",le="100"} 0
+example_histogram_bucket{example_label="lorem ipsum",le="150"} 0
+example_histogram_bucket{example_label="lorem ipsum",le="250"} 0
+example_histogram_bucket{example_label="lorem ipsum",le="400"} 2
+example_histogram_bucket{example_label="lorem ipsum",le="600"} 2
+example_histogram_bucket{example_label="lorem ipsum",le="850"} 2
+example_histogram_bucket{example_label="lorem ipsum",le="+Inf"} 4
+example_histogram_count{example_label="lorem ipsum"} 4
+example_histogram_sum{example_label="lorem ipsum"} 2909
+# HELP example_multi_labeled_histogram Example Histogram using multiple labels.
+# TYPE example_multi_labeled_histogram histogram
+example_multi_labeled_histogram_bucket{example_label="beep",other_label="boop",yet_another_label="robot",le="200"} 0
+example_multi_labeled_histogram_bucket{example_label="beep",other_label="boop",yet_another_label="robot",le="400"} 0
+example_multi_labeled_histogram_bucket{example_label="beep",other_label="boop",yet_another_label="robot",le="600"} 1
+example_multi_labeled_histogram_bucket{example_label="beep",other_label="boop",yet_another_label="robot",le="+Inf"} 3
+example_multi_labeled_histogram_count{example_label="beep",other_label="boop",yet_another_label="robot"} 3
+example_multi_labeled_histogram_sum{example_label="beep",other_label="boop",yet_another_label="robot"} 1998
+example_multi_labeled_histogram_bucket{example_label="foo",other_label="bar",yet_another_label="baz",le="200"} 0
+example_multi_labeled_histogram_bucket{example_label="foo",other_label="bar",yet_another_label="baz",le="400"} 0
+example_multi_labeled_histogram_bucket{example_label="foo",other_label="bar",yet_another_label="baz",le="600"} 0
+example_multi_labeled_histogram_bucket{example_label="foo",other_label="bar",yet_another_label="baz",le="+Inf"} 2
+example_multi_labeled_histogram_count{example_label="foo",other_label="bar",yet_another_label="baz"} 2
+example_multi_labeled_histogram_sum{example_label="foo",other_label="bar",yet_another_label="baz"} 1900
+example_multi_labeled_histogram_bucket{example_label="one",other_label="two",yet_another_label="three",le="200"} 1
+example_multi_labeled_histogram_bucket{example_label="one",other_label="two",yet_another_label="three",le="400"} 2
+example_multi_labeled_histogram_bucket{example_label="one",other_label="two",yet_another_label="three",le="600"} 3
+example_multi_labeled_histogram_bucket{example_label="one",other_label="two",yet_another_label="three",le="+Inf"} 5
+example_multi_labeled_histogram_count{example_label="one",other_label="two",yet_another_label="three"} 5
+example_multi_labeled_histogram_sum{example_label="one",other_label="two",yet_another_label="three"} 2250
