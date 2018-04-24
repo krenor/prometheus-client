@@ -60,7 +60,7 @@ class SamplesCollector
             return [
                 json_encode($item['labels']) => $item,
             ];
-        });
+        })->sortKeys();
     }
 
     /**
