@@ -3,11 +3,14 @@
 namespace Krenor\Prometheus\Storage;
 
 use Krenor\Prometheus\Metrics\Gauge;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Contracts\Storage;
+use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
+use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
 
 class ApcuStorage implements Storage
 {
@@ -16,7 +19,7 @@ class ApcuStorage implements Storage
     /**
      * {@inheritdoc}
      */
-    public function collect()
+    public function collect(Metric $metric): Collection
     {
         // TODO: Implement collect() method.
     }
