@@ -4,7 +4,8 @@ namespace Krenor\Prometheus\Tests\Integration;
 
 use Predis\Client as Redis;
 use Krenor\Prometheus\Contracts\Metric;
-use Krenor\Prometheus\Storage\RedisStorage;
+use Krenor\Prometheus\Storage\StorageManager;
+use Krenor\Prometheus\Storage\Repositories\RedisRepository;
 
 class RedisStorageTest extends TestCase
 {
@@ -25,7 +26,7 @@ class RedisStorageTest extends TestCase
             'port' => getenv('REDIS_PORT'),
         ]);
 
-        Metric::storeUsing(new RedisStorage($this->redis));
+        Metric::storeUsing(new StorageManager(new RedisRepository($this->redis)));
     }
 
     /**

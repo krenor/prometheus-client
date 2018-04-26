@@ -3,15 +3,11 @@
 namespace Krenor\Prometheus\Tests\Integration;
 
 use Krenor\Prometheus\Contracts\Metric;
-use Krenor\Prometheus\Storage\InMemoryStorage;
+use Krenor\Prometheus\Storage\StorageManager;
+use Krenor\Prometheus\Storage\Repositories\InMemoryRepository;
 
 class InMemoryStorageTest extends TestCase
 {
-    /**
-     * @var Redis
-     */
-    private $redis;
-
     /**
      * {@inheritdoc}
      */
@@ -19,6 +15,6 @@ class InMemoryStorageTest extends TestCase
     {
         parent::setUp();
 
-        Metric::storeUsing(new InMemoryStorage);
+        Metric::storeUsing(new StorageManager(new InMemoryRepository));
     }
 }
