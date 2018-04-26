@@ -46,7 +46,6 @@ class RedisStorage implements Storage
         try {
             $items = new Collection($this->redis->hgetall($key));
 
-            // TODO: Sort by label values?
             switch (true) {
                 case $metric instanceof Histogram:
                     return $this->samples($metric, $items->merge($this->redis->hgetall("{$key}:SUM")));
