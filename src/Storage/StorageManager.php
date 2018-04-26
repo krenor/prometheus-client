@@ -16,13 +16,10 @@ use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Storage\Collectors\SamplesCollector;
 use Krenor\Prometheus\Storage\Collectors\SummarySamplesCollector;
-use Krenor\Prometheus\Storage\Concerns\InteractsWithStoredMetrics;
 use Krenor\Prometheus\Storage\Collectors\HistogramSamplesCollector;
 
 class StorageManager implements Storage
 {
-    use InteractsWithStoredMetrics;
-
     /**
      * @var Repository
      */
@@ -50,7 +47,7 @@ class StorageManager implements Storage
      */
     public function collect(Metric $metric): Collection
     {
-        $key = $this->prefixed($this->key($metric));
+        $key = "{$this->prefix}:{$metric->key()}";
 
         try {
             $items = $this->repository->get($key);
@@ -80,7 +77,7 @@ class StorageManager implements Storage
     {
         try {
             $this->repository->increment(
-                $this->prefixed($this->key($metric)),
+                "{$this->prefix}:{$metric->key()}",
                 $this->labeled($metric, $labels)->toJson(),
                 $value
             );
@@ -98,7 +95,7 @@ class StorageManager implements Storage
     {
         try {
             $this->repository->decrement(
-                $this->prefixed($this->key($metric)),
+                "{$this->prefix}:{$metric->key()}",
                 $this->labeled($metric, $labels)->toJson(),
                 $value
             );
@@ -114,7 +111,7 @@ class StorageManager implements Storage
      */
     public function observe(Observable $metric, float $value, array $labels): void
     {
-        $key = $this->prefixed($this->key($metric));
+        $key = "{$this->prefix}:{$metric->key()}";
         $labeled = $this->labeled($metric, $labels);
         $field = $labeled->toJson();
 
@@ -144,7 +141,7 @@ class StorageManager implements Storage
     {
         try {
             $this->repository->set(
-                $this->prefixed($this->key($gauge)),
+                "{$this->prefix}:{$gauge->key()}",
                 $this->labeled($gauge, $labels)->toJson(),
                 $value
             );
@@ -153,16 +150,6 @@ class StorageManager implements Storage
 
             throw new StorageException("Failed to set the value of [$class] to `$value`: {$e}", 0, $e);
         }
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function prefixed(string $name)
-    {
-        return "{$this->prefix}:{$name}";
     }
 
     /**

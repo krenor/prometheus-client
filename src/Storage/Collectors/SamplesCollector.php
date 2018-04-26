@@ -6,12 +6,9 @@ use Closure;
 use Krenor\Prometheus\Sample;
 use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Storage\Concerns\InteractsWithStoredMetrics;
 
 class SamplesCollector
 {
-    use InteractsWithStoredMetrics;
-
     /**
      * @var Metric
      */
@@ -40,7 +37,7 @@ class SamplesCollector
     public function collect(): Collection
     {
         return $this->group()->flatMap(function (Collection $group) {
-            return $group->map($this->sample($this->key($this->metric)));
+            return $group->map($this->sample($this->metric->key()));
         });
     }
 

@@ -39,6 +39,14 @@ abstract class Metric
     /**
      * @return string
      */
+    final public function key(): string
+    {
+        return "{$this->namespace()}_{$this->name()}";
+    }
+
+    /**
+     * @return string
+     */
     public function namespace(): string
     {
         return $this->namespace;
