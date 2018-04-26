@@ -10,16 +10,18 @@ use Krenor\Prometheus\Contracts\Storage;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
-use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
+use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
 use Krenor\Prometheus\Storage\Collectors\SamplesCollector;
 use Krenor\Prometheus\Storage\Collectors\SummarySamplesCollector;
 use Krenor\Prometheus\Storage\Collectors\HistogramSamplesCollector;
 
 class StorageManager implements Storage
 {
+    use StoresMetrics;
+    
     /**
      * @var Repository
      */
@@ -168,42 +170,5 @@ class StorageManager implements Storage
             default:
                 return (new SamplesCollector($metric, $items))->collect();
         }
-    }
-
-    /**
-     * @param Metric $metric
-     * @param array $labels
-     *
-     * @throws LabelException
-     *
-     * @return Collection
-     */
-    protected function labeled(Metric $metric, array $labels): Collection
-    {
-        $expected = $metric->labels()->count();
-        $actual = count($labels);
-
-        if ($expected !== $actual) {
-            throw new LabelException("Expected {$expected} label values but only {$actual} were given.");
-        }
-
-        return new Collection([
-            'labels' => $metric->labels()->combine($labels),
-        ]);
-    }
-
-    /**
-     * @param Histogram $histogram
-     * @param float $value
-     *
-     * @return array
-     */
-    protected function bucket(Histogram $histogram, float $value): array
-    {
-        $bucket = $histogram->buckets()->first(function (float $bucket) use ($value) {
-            return $value <= $bucket;
-        }, '+Inf');
-
-        return compact('bucket');
     }
 }
