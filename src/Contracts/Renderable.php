@@ -6,5 +6,10 @@ use Tightenco\Collect\Support\Collection;
 
 interface Renderable
 {
-    public function render(Collection $metrics);
+    /**
+     * @param Collection $metrics
+     *
+     * @return string
+     */
+    public function render(Collection $metrics): string;
 }

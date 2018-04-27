@@ -21,7 +21,7 @@ use Krenor\Prometheus\Storage\Collectors\HistogramSamplesCollector;
 class StorageManager implements Storage
 {
     use StoresMetrics;
-    
+
     /**
      * @var Repository
      */
@@ -67,7 +67,7 @@ class StorageManager implements Storage
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to collect the samples of [$class]: {$e}", 0, $e);
+            throw new StorageException("Failed to collect the samples of [{$class}]: {$e}", 0, $e);
         }
 
     }
@@ -86,7 +86,7 @@ class StorageManager implements Storage
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to increment [$class] by `$value`: {$e}", 0, $e);
+            throw new StorageException("Failed to increment [{$class}] by `{$value}`: {$e}", 0, $e);
         }
     }
 
@@ -104,7 +104,7 @@ class StorageManager implements Storage
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to decrement [$class] by `$value`: {$e}", 0, $e);
+            throw new StorageException("Failed to decrement [{$class}] by `{$value}`: {$e}", 0, $e);
         }
     }
 
@@ -124,7 +124,7 @@ class StorageManager implements Storage
             }
 
             if ($metric instanceof Summary) {
-                $identifier = "$key:" . crc32($field) . ':VALUES';
+                $identifier = "{$key}:" . crc32($field) . ':VALUES';
 
                 $this->repository->set($key, $field, $identifier, false);
                 $this->repository->push($identifier, $value);
@@ -132,7 +132,7 @@ class StorageManager implements Storage
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to observe [$class] with `$value`: {$e}", 0, $e);
+            throw new StorageException("Failed to observe [{$class}] with `{$value}`: {$e}", 0, $e);
         }
     }
 
@@ -150,7 +150,7 @@ class StorageManager implements Storage
         } catch (Exception $e) {
             $class = get_class($gauge);
 
-            throw new StorageException("Failed to set the value of [$class] to `$value`: {$e}", 0, $e);
+            throw new StorageException("Failed to set the value of [{$class}] to `{$value}`: {$e}", 0, $e);
         }
     }
 

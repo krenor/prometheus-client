@@ -79,7 +79,7 @@ abstract class Metric
     /**
      * @param Storage $storage
      */
-    public static function storeUsing(Storage $storage)
+    public static function storeUsing(Storage $storage): void
     {
         static::$storage = $storage;
     }
@@ -87,7 +87,7 @@ abstract class Metric
     /**
      * @return Storage
      */
-    public static function storage()
+    public static function storage(): Storage
     {
         return static::$storage;
     }

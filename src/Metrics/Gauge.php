@@ -3,10 +3,11 @@
 namespace Krenor\Prometheus\Metrics;
 
 use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Contracts\Types\Settable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 
-abstract class Gauge extends Metric implements Incrementable, Decrementable
+abstract class Gauge extends Metric implements Incrementable, Decrementable, Settable
 {
     /**
      * {@inheritdoc}
@@ -53,13 +54,7 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable
     }
 
     /**
-     * @param float $value
-     * @param array $labels
-     *
-     * @throws \Krenor\Prometheus\Exceptions\LabelException
-     * @throws \Krenor\Prometheus\Exceptions\StorageException
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function set(float $value, array $labels): self
     {

@@ -12,7 +12,7 @@ class TextRenderer implements Renderable
     /**
      * {@inheritdoc}
      */
-    public function render(Collection $metrics)
+    public function render(Collection $metrics): string
     {
         $text = $metrics->flatMap(function (MetricFamilySamples $family) {
             return $this->transform($family);

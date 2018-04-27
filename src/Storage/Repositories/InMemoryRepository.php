@@ -72,6 +72,10 @@ class InMemoryRepository implements Repository
     {
         $collection = $this->get($key);
 
-        $this->items->put($key, $collection->push($value));
+        if ($collection->isEmpty()) {
+            $this->items->put($key, $collection);
+        }
+
+        $collection->push($value);
     }
 }
