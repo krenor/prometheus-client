@@ -2,30 +2,18 @@
 
 namespace Krenor\Prometheus\Storage\Repositories;
 
+use RuntimeException;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
 
-class InMemoryRepository implements Repository
+class ApcuRepository implements Repository
 {
-    /**
-     * @var Collection
-     */
-    protected $items;
-
-    /**
-     * InMemoryRepository constructor.
-     */
-    public function __construct()
-    {
-        $this->items = new Collection;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function get(string $key): Collection
     {
-        return $this->items->get($key, new Collection);
+        return new Collection(apcu_fetch($key) ?: []);
     }
 
     /**
@@ -35,10 +23,14 @@ class InMemoryRepository implements Repository
     {
         $collection = $this->get($key);
 
-        $this->items->put($key, $collection->put(
+        $stored = apcu_store($key, $collection->put(
             $field,
             $collection->get($field, 0) + $value
         ));
+
+        if (!$stored) {
+            throw new RuntimeException('The store method returned false.');
+        }
     }
 
     /**
@@ -56,13 +48,15 @@ class InMemoryRepository implements Repository
     {
         $collection = $this->get($key);
 
-        if (!$override && $this->get($key)->get($field) !== null) {
+        if (!$override && $collection->get($field) !== null) {
             return;
         }
 
-        $this->items->put($key,
-            $collection->put($field, $value)
-        );
+        $stored = apcu_store($key, $collection->put($field, $value));
+
+        if (!$stored) {
+            throw new RuntimeException('The store method returned false.');
+        }
     }
 
     /**
@@ -72,11 +66,11 @@ class InMemoryRepository implements Repository
     {
         $collection = $this->get($key);
 
-        if ($collection->isEmpty()) {
-            $this->items->put($key, $collection);
-        }
+        $stored = apcu_store($key, $collection->push($value));
 
-        $collection->push($value);
+        if (!$stored) {
+            throw new RuntimeException('The store method returned false.');
+        }
     }
 
     /**
@@ -84,8 +78,6 @@ class InMemoryRepository implements Repository
      */
     public function flush(): bool
     {
-        $this->items = new Collection;
-
-        return true;
+        return apcu_clear_cache();
     }
 }

@@ -10,9 +10,9 @@ use Krenor\Prometheus\Storage\Repositories\RedisRepository;
 class RedisStorageTest extends TestCase
 {
     /**
-     * @var Redis
+     * @var RedisRepository
      */
-    private $redis;
+    private $repository;
 
     /**
      * {@inheritdoc}
@@ -21,12 +21,12 @@ class RedisStorageTest extends TestCase
     {
         parent::setUp();
 
-        $this->redis = new Redis([
+        $this->repository = new RedisRepository(new Redis([
             'host' => getenv('REDIS_HOST'),
             'port' => getenv('REDIS_PORT'),
-        ]);
+        ]));
 
-        Metric::storeUsing(new StorageManager(new RedisRepository($this->redis)));
+        Metric::storeUsing(new StorageManager($this->repository));
     }
 
     /**
@@ -36,6 +36,6 @@ class RedisStorageTest extends TestCase
     {
         parent::tearDown();
 
-        $this->redis->flushall();
+        $this->repository->flush();
     }
 }

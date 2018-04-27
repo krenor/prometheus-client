@@ -29,7 +29,7 @@ interface Repository
      *
      * @return void
      */
-    public function decrement(string $key, string $field, float $value);
+    public function decrement(string $key, string $field, float $value): void;
 
     /**
      * @param string $key
@@ -39,7 +39,7 @@ interface Repository
      *
      * @return void
      */
-    public function set(string $key, string $field, $value, $override = true);
+    public function set(string $key, string $field, $value, $override = true): void;
 
     /**
      * @param string $key
@@ -47,5 +47,10 @@ interface Repository
      *
      * @return void
      */
-    public function push(string $key, float $value);
+    public function push(string $key, float $value): void;
+
+    /**
+     * @return bool
+     */
+    public function flush(): bool;
 }

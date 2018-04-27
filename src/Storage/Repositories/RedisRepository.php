@@ -68,4 +68,15 @@ class RedisRepository implements Repository
     {
         $this->redis->rpush($key, $value);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): bool
+    {
+        /** @var \Predis\Response\Status $response */
+        $response = $this->redis->flushdb();
+
+        return $response->getPayload() === 'OK';
+    }
 }

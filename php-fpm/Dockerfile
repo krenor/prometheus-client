@@ -4,9 +4,12 @@ RUN apk upgrade --update && \
     apk add --no-cache --virtual build-dependencies ${PHPIZE_DEPS}
 
 RUN pecl install \
+      apcu \
       xdebug && \
     docker-php-ext-enable \
-      xdebug
+      apcu \
+      xdebug && \
+    echo "apc.enable_cli=1" >> /usr/local/etc/php/conf.d/apc.ini
 
 RUN apk del \
       build-dependencies
