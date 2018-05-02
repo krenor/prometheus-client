@@ -2,8 +2,8 @@
 
 namespace Krenor\Prometheus\Contracts;
 
-use Krenor\Prometheus\Metrics\Gauge;
 use Tightenco\Collect\Support\Collection;
+use Krenor\Prometheus\Contracts\Types\Settable;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
@@ -58,7 +58,7 @@ interface Storage
     public function observe(Observable $metric, float $value, array $labels): void;
 
     /**
-     * @param Gauge $gauge
+     * @param Settable $metric
      * @param float $value
      * @param array $labels
      *
@@ -67,5 +67,5 @@ interface Storage
      *
      * @return void
      */
-    public function set(Gauge $gauge, float $value, array $labels): void;
+    public function set(Settable $metric, float $value, array $labels): void;
 }

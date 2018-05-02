@@ -3,14 +3,16 @@
 namespace Krenor\Prometheus\Storage;
 
 use Exception;
-use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Summary;
 use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Contracts\Storage;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
+use Krenor\Prometheus\Contracts\Types\Settable;
+use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
+use Krenor\Prometheus\Exceptions\StorageException;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
@@ -67,7 +69,7 @@ class StorageManager implements Storage
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to collect the samples of [{$class}]: {$e}", 0, $e);
+            throw new StorageException("Failed to collect the samples of [{$class}]: {$e->getMessage()}", 0, $e);
         }
 
     }
@@ -83,10 +85,12 @@ class StorageManager implements Storage
                 $this->labeled($metric, $labels)->toJson(),
                 $value
             );
+        } catch (LabelException $e) {
+            throw $e;
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to increment [{$class}] by `{$value}`: {$e}", 0, $e);
+            throw new StorageException("Failed to increment [{$class}] by `{$value}`: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -101,10 +105,12 @@ class StorageManager implements Storage
                 $this->labeled($metric, $labels)->toJson(),
                 $value
             );
+        } catch (LabelException $e) {
+            throw $e;
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to decrement [{$class}] by `{$value}`: {$e}", 0, $e);
+            throw new StorageException("Failed to decrement [{$class}] by `{$value}`: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -132,25 +138,27 @@ class StorageManager implements Storage
         } catch (Exception $e) {
             $class = get_class($metric);
 
-            throw new StorageException("Failed to observe [{$class}] with `{$value}`: {$e}", 0, $e);
+            throw new StorageException("Failed to observe [{$class}] with `{$value}`: {$e->getMessage()}", 0, $e);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function set(Gauge $gauge, float $value, array $labels): void
+    public function set(Settable $metric, float $value, array $labels): void
     {
         try {
             $this->repository->set(
-                "{$this->prefix}:{$gauge->key()}",
-                $this->labeled($gauge, $labels)->toJson(),
+                "{$this->prefix}:{$metric->key()}",
+                $this->labeled($metric, $labels)->toJson(),
                 $value
             );
+        } catch (LabelException $e) {
+            throw $e;
         } catch (Exception $e) {
-            $class = get_class($gauge);
+            $class = get_class($metric);
 
-            throw new StorageException("Failed to set the value of [{$class}] to `{$value}`: {$e}", 0, $e);
+            throw new StorageException("Failed to set [{$class}] to `{$value}`: {$e->getMessage()}", 0, $e);
         }
     }
 

@@ -23,7 +23,7 @@ trait StoresMetrics
         $actual = count($labels);
 
         if ($expected !== $actual) {
-            throw new LabelException("Expected {$expected} label values but only {$actual} were given.");
+            throw new LabelException("Expected {$expected} label values but {$actual} were given.");
         }
 
         return new Collection([
