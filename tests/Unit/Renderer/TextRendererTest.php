@@ -19,20 +19,20 @@ class TextRendererTest extends TestCase
     public function it_should_render_metric_family_samples()
     {
         $metric = new MultipleLabelsCounterStub;
-        $name = "{$metric->namespace()}_{$metric->name()}";
+        $identifier = $metric->key();
 
         $samples = new MetricFamilySamples($metric, new Collection([
-            new Sample($name, 2, $metric->labels()->combine(['foo', 'bar', 'baz'])),
-            new Sample($name, 5, $metric->labels()->combine(['one', 'two', 'three'])),
-            new Sample($name, 11, $metric->labels()->combine(['lorem', 'ipsum', 'dolor'])),
+            new Sample($identifier, 2, $metric->labels()->combine(['foo', 'bar', 'baz'])),
+            new Sample($identifier, 5, $metric->labels()->combine(['one', 'two', 'three'])),
+            new Sample($identifier, 11, $metric->labels()->combine(['lorem', 'ipsum', 'dolor'])),
         ]));
 
         $expected = (new Collection)
-            ->push("# HELP {$name} {$metric->description()}")
-            ->push("# TYPE {$name} {$metric->type()}")
-            ->push("{$name}{example_label=\"foo\",other_label=\"bar\",yet_another_label=\"baz\"} 2")
-            ->push("{$name}{example_label=\"one\",other_label=\"two\",yet_another_label=\"three\"} 5")
-            ->push("{$name}{example_label=\"lorem\",other_label=\"ipsum\",yet_another_label=\"dolor\"} 11")
+            ->push("# HELP {$identifier} {$metric->description()}")
+            ->push("# TYPE {$identifier} {$metric->type()}")
+            ->push("{$identifier}{example_label=\"foo\",other_label=\"bar\",yet_another_label=\"baz\"} 2")
+            ->push("{$identifier}{example_label=\"one\",other_label=\"two\",yet_another_label=\"three\"} 5")
+            ->push("{$identifier}{example_label=\"lorem\",other_label=\"ipsum\",yet_another_label=\"dolor\"} 11")
             ->implode("\n");
 
         $this->assertSame("{$expected}\n", (new TextRenderer)->render(new Collection([$samples])));

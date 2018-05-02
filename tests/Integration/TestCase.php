@@ -5,9 +5,12 @@ namespace Krenor\Prometheus\Tests\Integration;
 use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Metrics\Summary;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\CollectorRegistry;
 use Krenor\Prometheus\Metrics\Histogram;
+use Krenor\Prometheus\Contracts\Repository;
 use Krenor\Prometheus\Renderer\TextRenderer;
+use Krenor\Prometheus\Storage\StorageManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelGaugeStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
@@ -20,6 +23,11 @@ use Krenor\Prometheus\Tests\Stubs\MultipleLabelsHistogramStub;
 
 abstract class TestCase extends BaseTestCase
 {
+    /**
+     * @var Repository
+     */
+    protected static $repository;
+
     /**
      * @var CollectorRegistry
      */
@@ -49,6 +57,8 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->registry = new CollectorRegistry;
+
+        Metric::storeUsing(new StorageManager(static::$repository));
     }
 
     /** @test */
@@ -201,6 +211,16 @@ abstract class TestCase extends BaseTestCase
         $observe($multi, [18, 4, -30, -30, -12, -27, 30, -4, -24, 12, -16], $this->labels['multi']['beep']);
 
         $this->compare('summaries');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        static::$repository->flush();
     }
 
     /**

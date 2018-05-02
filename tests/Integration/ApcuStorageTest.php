@@ -2,8 +2,6 @@
 
 namespace Krenor\Prometheus\Tests\Integration;
 
-use Krenor\Prometheus\Contracts\Metric;
-use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Storage\Repositories\ApcuRepository;
 
 class ApcuStorageTest extends TestCase
@@ -11,27 +9,15 @@ class ApcuStorageTest extends TestCase
     /**
      * @var ApcRepository
      */
-    private $repository;
+    protected static $repository;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        parent::setUp();
+        parent::setUpBeforeClass();
 
-        $this->repository = new ApcuRepository;
-
-        Metric::storeUsing(new StorageManager($this->repository));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->repository->flush();
+        self::$repository = new ApcuRepository;
     }
 }

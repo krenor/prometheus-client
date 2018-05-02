@@ -37,16 +37,27 @@ class CollectorRegistryTest extends TestCase
      *
      * @group registry
      */
-    public function it_should_register_counters_and_make_them_accessible_via_its_collector()
+    public function it_should_register_metrics_and_make_them_accessible_via_its_collector()
     {
         $counter = new MultipleLabelsCounterStub;
+        $gauge = new MultipleLabelsGaugeStub;
+        $histogram = new MultipleLabelsHistogramStub;
+        $summary = new MultipleLabelsSummaryStub;
 
         $this->assertSame($counter, $this->registry->register($counter));
+        $this->assertSame($gauge, $this->registry->register($gauge));
+        $this->assertSame($histogram, $this->registry->register($histogram));
+        $this->assertSame($summary, $this->registry->register($summary));
+
         $this->assertSame($counter, $this->registry->counter(MultipleLabelsCounterStub::class));
+        $this->assertSame($gauge, $this->registry->gauge(MultipleLabelsGaugeStub::class));
+        $this->assertSame($histogram, $this->registry->histogram(MultipleLabelsHistogramStub::class));
+        $this->assertSame($summary, $this->registry->summary(MultipleLabelsSummaryStub::class));
+
         $this->assertCount(1, $this->registry->counters());
-        $this->assertCount(0, $this->registry->gauges());
-        $this->assertCount(0, $this->registry->histograms());
-        $this->assertCount(0, $this->registry->summaries());
+        $this->assertCount(1, $this->registry->gauges());
+        $this->assertCount(1, $this->registry->histograms());
+        $this->assertCount(1, $this->registry->summaries());
     }
 
     /**
