@@ -30,6 +30,7 @@
   },
   "suggest": {
     "ext-apcu": "Required to use the APCu storage.",
+    "ext-memcached": "Required to use the Memcached storage.",
     "predis/predis": "Required to use the Redis storage."
   },
   "autoload": {

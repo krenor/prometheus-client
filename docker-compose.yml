@@ -17,7 +17,12 @@ services:
     volumes:
       - ./:/var/www
     depends_on:
+      - memcached
       - redis
+
+  ## Memcached Container ###########
+  memcached:
+    image: memcached:1.5-alpine
 
   ## Redis Container ###########
   redis:
