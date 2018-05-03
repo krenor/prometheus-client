@@ -3,9 +3,8 @@
 namespace Krenor\Prometheus\Storage\Repositories;
 
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Contracts\Repository;
 
-class InMemoryRepository implements Repository
+class InMemoryRepository extends SimpleRepository
 {
     /**
      * @var Collection
@@ -23,68 +22,27 @@ class InMemoryRepository implements Repository
     /**
      * {@inheritdoc}
      */
-    public function get(string $key): Collection
-    {
-        return $this->items->get($key, new Collection);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function increment(string $key, string $field, float $value): void
-    {
-        $collection = $this->get($key);
-
-        $this->items->put($key, $collection->put(
-            $field,
-            $collection->get($field, 0) + $value
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function decrement(string $key, string $field, float $value): void
-    {
-        $this->increment($key, $field, -abs($value));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function set(string $key, string $field, $value, $override = true): void
-    {
-        $collection = $this->get($key);
-
-        if (!$override && $this->get($key)->get($field) !== null) {
-            return;
-        }
-
-        $this->items->put($key,
-            $collection->put($field, $value)
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function push(string $key, float $value): void
-    {
-        $collection = $this->get($key);
-
-        if ($collection->isEmpty()) {
-            $this->items->put($key, $collection);
-        }
-
-        $collection->push($value);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function flush(): bool
     {
         $this->items = new Collection;
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function retrieve(string $key)
+    {
+        return $this->items->get($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function store(string $key, Collection $collection): bool
+    {
+        $this->items->put($key, $collection);
 
         return true;
     }

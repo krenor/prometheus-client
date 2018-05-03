@@ -2,9 +2,9 @@
 
 namespace Krenor\Prometheus\Exceptions;
 
-use Exception;
+use RuntimeException;
 
-class StorageException extends Exception
+class StorageException extends RuntimeException
 {
     //
 }
