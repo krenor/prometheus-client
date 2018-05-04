@@ -30,6 +30,14 @@ As long as it's not tagged in a >= 1.* version I **could** commit incompatible c
 Especially since I'll start working towards the [guidelines](https://prometheus.io/docs/instrumenting/writing_clientlibs/) 
 of writing a prometheus client and implement at least all **MUST** and **SHOULD** requirements. If some of them can't be met I'll add them to a list explaining why.
 
+## Unmet guidelines
+
+#### Labels
+
+>A client library MUST allow for optionally specifying a list of label names at Gauge/Counter/Summary/Histogram creation time.
+  
+This library takes the approach of labels already being defined on the metrics rather than via a constructor/setter/options class.
+
 ## Example
 
 ```php

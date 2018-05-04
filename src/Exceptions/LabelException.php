@@ -2,9 +2,9 @@
 
 namespace Krenor\Prometheus\Exceptions;
 
-use Exception;
+use InvalidArgumentException;
 
-class LabelException extends Exception
+class LabelException extends InvalidArgumentException
 {
     //
 }
