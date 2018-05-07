@@ -74,9 +74,6 @@ class RedisRepository implements Repository
      */
     public function flush(): bool
     {
-        /** @var \Predis\Response\Status $response */
-        $response = $this->redis->flushdb();
-
-        return $response->getPayload() === 'OK';
+        return (bool) $this->redis->flushdb();
     }
 }
