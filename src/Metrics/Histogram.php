@@ -38,6 +38,8 @@ abstract class Histogram extends Metric implements Observable
                 throw new LabelException('The label `le` is used internally to designate buckets.');
             }
         }
+
+        sort($this->buckets);
     }
 
     /**
