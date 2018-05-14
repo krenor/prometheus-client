@@ -54,8 +54,8 @@ $registry = new CollectorRegistry;
 
 $counter = $registry->register(new ExampleCounter);
 
-$counter->inc(['some', 'example', 'labels']);
-$counter->incBy(3, ['diffent', 'label', 'values']);
+$counter->increment(['some', 'example', 'labels']);
+$counter->incrementBy(3, ['diffent', 'label', 'values']);
 ```
 
 ~~For more detailed examples, please see the [API Documentation](docs/README.md)~~  
