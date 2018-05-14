@@ -32,6 +32,8 @@ abstract class Summary extends Metric implements Observable
                 throw new LabelException('The label `quantile` is used internally to designate summary quantiles.');
             }
         }
+
+        sort($this->quantiles);
     }
 
     /**

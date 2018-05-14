@@ -32,4 +32,28 @@ class SummaryTest extends TestCase
             ];
         };
     }
+
+    /**
+     * @test
+     *
+     * @group summaries
+     */
+    public function it_should_sort_quantiles_automatically()
+    {
+        $summary = new class extends Summary
+        {
+            protected $namespace = '';
+
+            protected $name = '';
+
+            protected $quantiles = [
+                .4,
+                .3,
+                .2,
+                .1,
+            ];
+        };
+
+        $this->assertSame([.1, .2, .3, .4], $summary->quantiles()->toArray());
+    }
 }
