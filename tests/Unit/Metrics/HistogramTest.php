@@ -5,6 +5,7 @@ namespace Krenor\Prometheus\Tests\Unit\Metrics;
 use PHPUnit\Framework\TestCase;
 use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Exceptions\LabelException;
+use Krenor\Prometheus\Exceptions\PrometheusException;
 
 class HistogramTest extends TestCase
 {
@@ -30,6 +31,27 @@ class HistogramTest extends TestCase
                 'le',
                 'lul',
             ];
+        };
+    }
+
+    /**
+     * @test
+     *
+     * @group exceptions
+     * @group histograms
+     */
+    public function it_should_throw_an_exception_if_the_minimum_required_bucket_count_is_not_met()
+    {
+        $this->expectException(PrometheusException::class);
+        $this->expectExceptionMessage('Histograms must contain at least one bucket.');
+
+        new class extends Histogram
+        {
+            protected $namespace = '';
+
+            protected $name = '';
+
+            protected $buckets = [];
         };
     }
 

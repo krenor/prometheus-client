@@ -6,11 +6,12 @@ use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
+use Krenor\Prometheus\Exceptions\PrometheusException;
 
 abstract class Histogram extends Metric implements Observable
 {
     /**
-     * @var int[]
+     * @var float[]
      */
     protected $buckets = [
         .005,
@@ -37,6 +38,10 @@ abstract class Histogram extends Metric implements Observable
             if (preg_match('/^le$/', $label)) {
                 throw new LabelException('The label `le` is used internally to designate buckets.');
             }
+        }
+
+        if (count($this->buckets) < 1) {
+            throw new PrometheusException('Histograms must contain at least one bucket.');
         }
 
         sort($this->buckets);
