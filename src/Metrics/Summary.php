@@ -6,11 +6,12 @@ use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
+use Krenor\Prometheus\Exceptions\PrometheusException;
 
 abstract class Summary extends Metric implements Observable
 {
     /**
-     * @var int[]
+     * @var float[]
      */
     protected $quantiles = [
         .01,
@@ -30,6 +31,12 @@ abstract class Summary extends Metric implements Observable
         foreach ($this->labels as $label) {
             if (preg_match('/^quantile$/', $label)) {
                 throw new LabelException('The label `quantile` is used internally to designate summary quantiles.');
+            }
+        }
+
+        foreach ($this->quantiles as $quantile) {
+            if ($quantile < 0 || $quantile > 1) {
+                throw new PrometheusException('Quantiles have to be in the range between 0 and 1.');
             }
         }
 

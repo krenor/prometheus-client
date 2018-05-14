@@ -5,6 +5,7 @@ namespace Krenor\Prometheus\Tests\Unit\Metrics;
 use PHPUnit\Framework\TestCase;
 use Krenor\Prometheus\Metrics\Summary;
 use Krenor\Prometheus\Exceptions\LabelException;
+use Krenor\Prometheus\Exceptions\PrometheusException;
 
 class SummaryTest extends TestCase
 {
@@ -29,6 +30,31 @@ class SummaryTest extends TestCase
                 'quentin',
                 'quantum',
                 'quantile',
+            ];
+        };
+    }
+
+    /**
+     * @test
+     *
+     * @group exceptions
+     * @group summaries
+     */
+    public function it_should_throw_an_exception_if_a_quantile_is_outside_the_valid_range()
+    {
+        $this->expectException(PrometheusException::class);
+        $this->expectExceptionMessage('Quantiles have to be in the range between 0 and 1.');
+
+        new class extends Summary
+        {
+            protected $namespace = '';
+
+            protected $name = '';
+
+            protected $quantiles = [
+                .5,
+                1.5,
+                3,
             ];
         };
     }
