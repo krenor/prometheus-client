@@ -3,10 +3,8 @@ Metrics
 
 ## Introduction
 
-The way metrics are handled differs from known libraries like 
-[Jimdo/prometheus_client_php](https://github.com/Jimdo/prometheus_client_php).  
-This library is heavily inspired by the approach of the 
-[Laravel Eloquent ORM](https://laravel.com/docs/master/eloquent).  
+The way metrics are handled differs from known libraries like [Jimdo/prometheus_client_php][jimdo-prom].  
+This library is heavily inspired by the approach of the [Laravel Eloquent ORM][laravel-eloquent].  
 All metric data besides their values is read-only to prevent altering during runtime.  
 That is, unless you use reflections or the like. 
 
@@ -70,3 +68,6 @@ Returns the type of this metric.
 Set the storage for this and all extending metrics.
 
 **All other methods are getters named exactly like the property itself.**
+
+[jimdo-prom]: https://github.com/Jimdo/prometheus_client_php
+[laravel-eloquent]: https://laravel.com/docs/master/eloquent

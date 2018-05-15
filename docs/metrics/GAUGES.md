@@ -21,7 +21,7 @@ Alias for [`incrementBy(1, $labels)`](#incrementby(float-$value,-array-$labels))
 
 #### `incrementBy(float $value, array $labels)`
 
-Pass a call to the [Storage](#) to increment this gauge by `$value` with the given **label values**.
+Pass a call to the [Storage][storage-docs] to increment this gauge by `$value` with the given **label values**.
 
 #### `decrement(array $labels)`
 
@@ -29,11 +29,11 @@ Alias for [`decrementBy(1, $labels)`](#decrementby(float-$value,-array-$labels))
 
 #### `decrementBy(float $value, array $labels)`
 
-Pass a call to the [Storage](#) to decrement this gauge by `$value` with the given **label values**.
+Pass a call to the [Storage][storage-docs] to decrement this gauge by `$value` with the given **label values**.
 
 #### `set(float $value, array $labels)`
 
-Pass a call to the [Storage](#) to set this gauge to the given `$value` with the given **label values**.
+Pass a call to the [Storage][storage-docs] to set this gauge to the given `$value` with the given **label values**.
 
 ## Example
 
@@ -56,3 +56,5 @@ $gauge = new class extends Gauge {
     ];
 }
 ``` 
+
+[storage-docs]: ../storage/README.md

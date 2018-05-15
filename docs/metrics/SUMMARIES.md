@@ -13,7 +13,7 @@ A summary with a base metric name of `<basename>` exposes multiple time series d
 * the total sum of all observed values, exposed as `<basename>_sum`
 * the count of events that have been observed, exposed as `<basename>_count`
 
-See [histograms and summaries](https://prometheus.io/docs/practices/histograms/) for differences to histograms.
+See [histograms and summaries][histograms-summaries] for differences to histograms.
 
 ## Properties
 
@@ -34,7 +34,7 @@ Besides a `quantiles()` getter they offer the following additional functionality
 
 #### `observe(float $value, array $labels)`
 
-Pass a call to the [Storage](#) to observe this summary by `$value` with the given **label values**.
+Pass a call to the [Storage][storage-docs] to observe this summary by `$value` with the given **label values**.
 
 ## Example
 
@@ -63,3 +63,6 @@ $summary = new class extends Summary {
     ];
 }
 ```
+
+[histograms-summaries]: https://prometheus.io/docs/practices/histograms/
+[storage-docs]: ../storage/README.md

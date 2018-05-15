@@ -23,7 +23,7 @@ Alias for [`incrementBy(1, $labels)`](#incrementby(float-$value,-array-$labels))
 
 #### `incrementBy(float $value, array $labels)`
 
-Pass a call to the [Storage](#) to increment this counter by `$value` with the given **label values**.
+Pass a call to the [Storage][storage-docs] to increment this counter by `$value` with the given **label values**.
 
 ## Example
 
@@ -46,3 +46,5 @@ $counter = new class extends Counter {
     ];
 }
 ```
+
+[storage-docs]: ../storage/README.md

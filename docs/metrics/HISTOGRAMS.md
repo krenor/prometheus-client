@@ -28,8 +28,7 @@ are intended to cover a typical web/rpc request in seconds.
 Sorting the buckets isn't required as its done silently.  
 You **shouldn't** include an `+Inf` bucket as 
 * it's added dynamically during collection
-* the buckets are internally treated as 
-[floats](http://php.net/manual/en/language.types.string.php#language.types.string.conversion)
+* the buckets are internally treated as [floats][string-to-float]
 
 **Each bucket is one timeseries.** Many buckets and/or many dimensions with labels can produce  
 large amount of time series, that may cause performance problems.
@@ -41,7 +40,7 @@ Besides a `buckets()` getter they offer the following additional functionality:
 
 #### `observe(float $value, array $labels)`
 
-Pass a call to the [Storage](#) to observe this histogram by `$value` with the given **label values**.
+Pass a call to the [Storage][storage-docs] to observe this histogram by `$value` with the given **label values**.
 
 ## Example
 
@@ -70,3 +69,5 @@ $histogram = new class extends Histogram {
     ];
 }
 ```
+[string-to-float]: http://php.net/manual/en/language.types.string.php#language.types.string.conversion
+[storage-docs]: ../storage/README.md
