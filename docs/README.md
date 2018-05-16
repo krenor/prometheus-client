@@ -6,6 +6,6 @@ Components
 
 * [`Metrics`](metrics/README.md)
 * [`Storage`](storage/README.md)
-* [`Renderer`](RENDERER.md)
-* [`Exceptions`](EXCEPTIONS.md)
 * [`CollectorRegistry`](COLLECTOR_REGISTRY.md)
+* [`TextRenderer`](TEXT_RENDERER.md)
+* [`Exceptions`](EXCEPTIONS.md)
