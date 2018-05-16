@@ -11,17 +11,14 @@ Monitor your PHP applications using [Prometheus](https://prometheus.io).
 
 ## Features
 
-- Support for all four metric types (Counters, Gauges, Histograms, Summaries)
-- Various storage adapters (APCU, In-memory, Memcached, Redis)
-- Rendering to text format.
-- Easy usage (in Laravels [Eloquent](https://laravel.com/docs/5.6/eloquent) style)
-- Initialization of Counters (**WIP**)
+- Support for Counters, Gauges, Histograms, Summaries
+- Various storage adapters (APCU, In-Memory, Memcached, Redis)
+- Easy usage in style of [Laravels Eloquent ORM](https://laravel.com/docs/5.6/eloquent)
+- Initialization of Counters (**W.I.P.**)
 
 ## Missing features
 
 - Pushing metrics to a Pushgateway
-- Rendering to Protocol buffer format
-
   
 ## Project State
 
@@ -41,25 +38,25 @@ This library takes the approach of labels already being defined on the metrics r
 ## Example
 
 ```php
-$predis = new \Predis\Client([
-    'host' => getenv('REDIS_HOST'),
-    'port' => getenv('REDIS_PORT'),
-]);
-
-$repository = new RedisRepository($predis);
-
-Metric::storeUsing(new StorageManager($repository);
+Metric::storeUsing(new StorageManager(new InMemoryRepository);
 
 $registry = new CollectorRegistry;
 
+/** @var Counter $counter */
 $counter = $registry->register(new ExampleCounter);
 
 $counter->increment(['some', 'example', 'labels']);
 $counter->incrementBy(3, ['diffent', 'label', 'values']);
+
+$samples = $registry->collect();
+$metrics = (new TextRenderer)->render($samples);
 ```
 
-~~For more detailed examples, please see the [API Documentation](docs/README.md)~~  
-**In the works, but for now [read the tests](tests/Integration/TestCase.php).**
+
+For more detailed examples, please see the [API Documentation](docs/README.md).
+    
+**Note: As this project is in the works, some parts might not be documented yet.  
+You can always [read the tests](tests/Integration/TestCase.php) if something is unclear.**
 
 ## Contributing
 
@@ -80,4 +77,3 @@ The MIT License. Please see [LICENSE](LICENSE.md) for more information.
 [link-code-quality]: https://scrutinizer-ci.com/g/krenor/prometheus-client
 [link-code-coverage]: https://scrutinizer-ci.com/g/krenor/prometheus-client
 [link-license]: https://github.com/krenor/prometheus-client/blob/master/LICENSE.md
-
