@@ -2,9 +2,7 @@
 
 namespace Krenor\Prometheus\Exceptions;
 
-use Exception;
-
-class LabelException extends Exception
+class LabelException extends PrometheusException
 {
     //
 }

@@ -51,12 +51,8 @@ class CollectorRegistry
             ->merge($this->gauges)
             ->merge($this->histograms)
             ->merge($this->summaries)
-            ->mapWithKeys(function (Metric $metric) {
-                return [
-                    get_class($metric) => $metric::storage()->collect($metric),
-                ];
-            })->map(function (Collection $samples, string $namespace) {
-                return new MetricFamilySamples(new $namespace, $samples);
+            ->map(function (Metric $metric) {
+                return new MetricFamilySamples($metric, $metric::storage()->collect($metric));
             })->values();
     }
 

@@ -3,6 +3,8 @@
 namespace Krenor\Prometheus\Contracts;
 
 use Tightenco\Collect\Support\Collection;
+use Krenor\Prometheus\Exceptions\LabelException;
+use Krenor\Prometheus\Exceptions\PrometheusException;
 
 abstract class Metric
 {
@@ -24,7 +26,7 @@ abstract class Metric
     /**
      * @var string[]
      */
-    protected $labels = []; // TODO: What about injecting the values, if any, through the constructor?
+    protected $labels = [];
 
     /**
      * @var Storage
@@ -32,9 +34,22 @@ abstract class Metric
     protected static $storage;
 
     /**
-     * @return string
+     * Metric constructor.
+     *
+     * @throws LabelException
      */
-    abstract public function type(): string;
+    public function __construct()
+    {
+        foreach ($this->labels as $label) {
+            if (!preg_match('/^(?![_]{2})[a-zA-Z_][a-zA-Z0-9_]*$/', $label)) {
+                throw new LabelException("The label `{$label}` contains invalid characters.");
+            }
+        }
+
+        if (!preg_match('/^[a-zA-Z_:][a-zA-Z0-9_:]*$/', $this->key())) {
+            throw new PrometheusException("The metric name `{$this->key()}` contains invalid characters.");
+        }
+    }
 
     /**
      * @return string
@@ -43,6 +58,11 @@ abstract class Metric
     {
         return "{$this->namespace()}_{$this->name()}";
     }
+
+    /**
+     * @return string
+     */
+    abstract public function type(): string;
 
     /**
      * @return string
