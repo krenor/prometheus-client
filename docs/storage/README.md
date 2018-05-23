@@ -11,7 +11,7 @@ Currently these storages are supported:
 * [APCU](APCU.md)
 * [InMemory](IN_MEMORY.md)
 * [Memcached](MEMCACHED.md)
-* [Redis](REDIS.md)
+* [Redis](REDIS.md) (both Predis and native)
 
 ## StorageManager
  
@@ -62,7 +62,7 @@ Identical to Counters
 ##### Track of Observations
 ```
 <prefix>:<name> =>
-  <labels as json> => <prefix>:<name>:<crc32(json(labels))>:VALUES
+  <json(labels)> => <prefix>:<name>:<crc32(json(labels))>:VALUES
 ````
 
 ## Repositories

@@ -12,7 +12,7 @@ Monitor your PHP applications using [Prometheus](https://prometheus.io).
 ## Features
 
 - Support for Counters, Gauges, Histograms, Summaries
-- Various storage adapters (APCU, In-Memory, Memcached, Redis)
+- Various [storage adapters](docs/storage/README.md)
 - Easy usage in style of [Laravels Eloquent ORM](https://laravel.com/docs/5.6/eloquent)
 - Initialization of Counters (**W.I.P.**)
 

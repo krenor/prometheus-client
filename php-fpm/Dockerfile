@@ -15,10 +15,12 @@ RUN apk upgrade --update && \
 RUN pecl install \
       apcu \
       memcached \
+      redis \
       xdebug && \
     docker-php-ext-enable \
       apcu \
       memcached \
+      redis \
       xdebug && \
     echo "apc.enable_cli=1" >> /usr/local/etc/php/conf.d/apc.ini
 

@@ -3,9 +3,10 @@
 namespace Krenor\Prometheus\Tests\Integration;
 
 use Predis\Client as Redis;
+use Krenor\Prometheus\Storage\Redis\PredisConnection;
 use Krenor\Prometheus\Storage\Repositories\RedisRepository;
 
-class RedisStorageTest extends TestCase
+class PredisStorageTest extends TestCase
 {
     /**
      * @var RedisRepository
@@ -19,9 +20,13 @@ class RedisStorageTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$repository = new RedisRepository(new Redis([
+        $redis = new Redis([
             'host' => getenv('REDIS_HOST'),
             'port' => getenv('REDIS_PORT'),
-        ]));
+        ]);
+
+        self::$repository = new RedisRepository(
+            new PredisConnection($redis)
+        );
     }
 }

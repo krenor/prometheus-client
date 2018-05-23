@@ -22,7 +22,7 @@ env:
     - REDIS_HOST="127.0.0.1"
 
 before_install:
-  - printf "\n" | pecl install --force apcu
+  - printf "\n" | pecl install --force apcu redis
   - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension=memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - travis_retry composer self-update
