@@ -68,4 +68,9 @@ interface Storage
      * @return void
      */
     public function set(Settable $metric, float $value, array $labels): void;
+
+    /**
+     * @return bool
+     */
+    public function flush(): bool;
 }

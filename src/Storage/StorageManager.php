@@ -71,7 +71,6 @@ class StorageManager implements Storage
 
             throw new StorageException("Failed to collect the samples of [{$class}]: {$e->getMessage()}", 0, $e);
         }
-
     }
 
     /**
@@ -163,6 +162,14 @@ class StorageManager implements Storage
     }
 
     /**
+     * @return bool
+     */
+    public function flush(): bool
+    {
+        return $this->repository->flush();
+    }
+
+    /**
      * @param Metric $metric
      * @param Collection $items
      *
@@ -179,4 +186,5 @@ class StorageManager implements Storage
                 return (new SamplesCollector($metric, $items))->collect();
         }
     }
+
 }
