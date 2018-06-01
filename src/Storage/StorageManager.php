@@ -16,9 +16,6 @@ use Krenor\Prometheus\Exceptions\StorageException;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
-use Krenor\Prometheus\Storage\Collectors\SamplesCollector;
-use Krenor\Prometheus\Storage\Collectors\SummarySamplesCollector;
-use Krenor\Prometheus\Storage\Collectors\HistogramSamplesCollector;
 
 class StorageManager implements Storage
 {
@@ -58,13 +55,15 @@ class StorageManager implements Storage
 
             switch (true) {
                 case $metric instanceof Histogram:
-                    return $this->samples($metric, $items->merge($this->repository->get("{$key}:SUM")));
+                    return $metric->builder($items->merge($this->repository->get("{$key}:SUM")))
+                                  ->samples();
                 case $metric instanceof Summary:
-                    return $this->samples($metric, $items->map(function (string $key) {
+                    return $metric->builder($items->map(function (string $key) {
                         return $this->repository->get($key);
-                    }));
+                    }))->samples();
                 default:
-                    return $this->samples($metric, $items);
+                    return $metric->builder($items)
+                                  ->samples();
             }
         } catch (Exception $e) {
             $class = get_class($metric);
@@ -168,23 +167,4 @@ class StorageManager implements Storage
     {
         return $this->repository->flush();
     }
-
-    /**
-     * @param Metric $metric
-     * @param Collection $items
-     *
-     * @return Collection
-     */
-    protected function samples(Metric $metric, Collection $items): Collection
-    {
-        switch (true) {
-            case $metric instanceof Histogram:
-                return (new HistogramSamplesCollector($metric, $items))->collect();
-            case $metric instanceof Summary:
-                return (new SummarySamplesCollector($metric, $items))->collect();
-            default:
-                return (new SamplesCollector($metric, $items))->collect();
-        }
-    }
-
 }

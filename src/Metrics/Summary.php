@@ -4,9 +4,11 @@ namespace Krenor\Prometheus\Metrics;
 
 use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
+use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\PrometheusException;
+use Krenor\Prometheus\Storage\Builders\SummarySamplesBuilder;
 
 abstract class Summary extends Metric implements Observable
 {
@@ -41,6 +43,14 @@ abstract class Summary extends Metric implements Observable
         }
 
         sort($this->quantiles);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function builder(Collection $items): SamplesBuilder
+    {
+        return new SummarySamplesBuilder($this, $items);
     }
 
     /**

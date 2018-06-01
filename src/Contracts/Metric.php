@@ -60,6 +60,13 @@ abstract class Metric
     }
 
     /**
+     * @param Collection $items
+     *
+     * @return SamplesBuilder
+     */
+    abstract public function builder(Collection $items): SamplesBuilder;
+
+    /**
      * @return string
      */
     abstract public function type(): string;

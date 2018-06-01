@@ -3,12 +3,23 @@
 namespace Krenor\Prometheus\Metrics;
 
 use Krenor\Prometheus\Contracts\Metric;
+use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Types\Settable;
+use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
+use Krenor\Prometheus\Storage\Builders\GaugeSamplesBuilder;
 
 abstract class Gauge extends Metric implements Incrementable, Decrementable, Settable
 {
+    /**
+     * {@inheritdoc}
+     */
+    final public function builder(Collection $items): SamplesBuilder
+    {
+        return new GaugeSamplesBuilder($this, $items);
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -3,6 +3,8 @@
 namespace Krenor\Prometheus\Tests\Unit\Metrics;
 
 use Krenor\Prometheus\Contracts\Metric;
+use Tightenco\Collect\Support\Collection;
+use Krenor\Prometheus\Contracts\SamplesBuilder;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Exceptions\PrometheusException;
@@ -26,6 +28,8 @@ class ValidationTest extends BaseTestCase
                 '__in-val:id',
             ];
 
+            public function builder(Collection $items): SamplesBuilder {}
+
             public function type(): string {}
         };
     }
@@ -47,6 +51,8 @@ class ValidationTest extends BaseTestCase
             protected $name = 'învälíd';
 
             protected $labels = [];
+
+            public function builder(Collection $items): SamplesBuilder {}
 
             public function type(): string {}
         };
