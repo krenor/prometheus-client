@@ -32,9 +32,13 @@ class TextRenderer implements Renderable
             return "\"{$value}\"";
         });
 
-        return urldecode(
+        $serialized = urldecode(
             http_build_query($quoted->toArray(), '', ',')
         );
+
+        return !$serialized
+            ? $serialized
+            : "{{$serialized}}";
     }
 
     /**
@@ -52,9 +56,7 @@ class TextRenderer implements Renderable
         ]);
 
         $metrics = $family->samples()->map(function (Sample $sample) {
-            $labels = $this->serialize($sample->labels());
-
-            return "{$sample->name()}{{$labels}} {$sample->value()}";
+            return "{$sample->name()}{$this->serialize($sample->labels())} {$sample->value()}";
         })->values();
 
         return $lines->merge($metrics);
