@@ -52,9 +52,10 @@ abstract class SamplesBuilder
     {
         if ($this->metric->labels()->isEmpty() && $this->items->isEmpty()) {
             return new Collection([
-                new Collection([
-                    ['value' => $this->initialize()],
-                ]),
+                new Collection([[
+                    'labels' => null,
+                    'value'  => $this->initialize(),
+                ]]),
             ]);
         }
 

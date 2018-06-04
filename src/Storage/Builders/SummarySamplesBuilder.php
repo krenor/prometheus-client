@@ -87,11 +87,12 @@ class SummarySamplesBuilder extends SamplesBuilder
     private function calculate(Collection $values, int $count): Closure
     {
         return function (float $quantile) use ($count, $values) {
-            $index = $count * $quantile;
+            $position = $count * $quantile;
+            $index = (int) $position;
 
-            $value = floor($index) === $index
-                ? ($values[$index - 1] + $values[$index]) / 2
-                : $values[floor($index)];
+            $value = floor($position) === $position
+                ? ($values->get($index - 1) + $values->get($index)) / 2
+                : $values->get($index);
 
             return compact('quantile', 'value');
         };

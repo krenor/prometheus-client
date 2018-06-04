@@ -21,13 +21,13 @@ RUN pecl install \
       apcu \
       memcached \
       redis \
-      xdebug && \
-    echo "apc.enable_cli=1" >> /usr/local/etc/php/conf.d/apc.ini
+      xdebug
 
 RUN apk del \
       build-dependencies
 
 COPY php-fpm/xdebug.ini \
+     php-fpm/php.ini \
      /usr/local/etc/php/conf.d/
 
 WORKDIR /var/www
