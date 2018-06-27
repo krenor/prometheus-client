@@ -42,6 +42,10 @@ Besides a `buckets()` getter they offer the following additional functionality:
 
 Pass a call to the [Storage][storage-docs] to observe this histogram by `$value` with the given **label values**.
 
+#### `chronometer(array $labels, int $precision)`
+
+Returns a closure to track execution time. See the [TracksExecutionTime Trait][tracking-code-docs] for more information.
+
 ## Example
 
 ```php
@@ -71,3 +75,4 @@ $histogram = new class extends Histogram {
 ```
 [string-to-float]: http://php.net/manual/en/language.types.string.php#language.types.string.conversion
 [storage-docs]: ../storage/README.md
+[tracking-code-docs]: TRACKING_EXECUTION_TIME.md

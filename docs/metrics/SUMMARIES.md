@@ -36,6 +36,10 @@ Besides a `quantiles()` getter they offer the following additional functionality
 
 Pass a call to the [Storage][storage-docs] to observe this summary by `$value` with the given **label values**.
 
+#### `chronometer(array $labels, int $precision)`
+
+Returns a closure to track execution time. See the [TracksExecutionTime Trait][tracking-code-docs] for more information.
+
 ## Example
 
 ```php
@@ -66,3 +70,4 @@ $summary = new class extends Summary {
 
 [histograms-summaries]: https://prometheus.io/docs/practices/histograms/
 [storage-docs]: ../storage/README.md
+[tracking-code-docs]: TRACKING_EXECUTION_TIME.md

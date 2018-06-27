@@ -35,6 +35,10 @@ Pass a call to the [Storage][storage-docs] to decrement this gauge by `$value` w
 
 Pass a call to the [Storage][storage-docs] to set this gauge to the given `$value` with the given **label values**.
 
+#### `chronometer(array $labels, int $precision)`
+
+Returns a closure to track execution time. See the [TracksExecutionTime Trait][tracking-code-docs] for more information.
+
 ## Example
 
 ```php
@@ -58,3 +62,4 @@ $gauge = new class extends Gauge {
 ``` 
 
 [storage-docs]: ../storage/README.md
+[tracking-code-docs]: TRACKING_EXECUTION_TIME.md

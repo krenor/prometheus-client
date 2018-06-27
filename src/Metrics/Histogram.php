@@ -8,10 +8,13 @@ use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\PrometheusException;
+use Krenor\Prometheus\Metrics\Concerns\TracksExecutionTime;
 use Krenor\Prometheus\Storage\Builders\HistogramSamplesBuilder;
 
 abstract class Histogram extends Metric implements Observable
 {
+    use TracksExecutionTime;
+
     /**
      * @var float[]
      */
@@ -81,5 +84,13 @@ abstract class Histogram extends Metric implements Observable
     public function buckets(): Collection
     {
         return new Collection($this->buckets);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function track(float $value, array $labels): void
+    {
+        $this->observe($value, $labels);
     }
 }

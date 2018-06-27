@@ -15,6 +15,10 @@ That is, unless you use reflections or the like.
 * [`Histogram`](HISTOGRAMS.md)
 * [`Summary`](SUMMARIES.md)
 
+## Traits
+
+* [`TracksExecutionTime`](TRACKING_EXECUTION_TIME.md) 
+
 ## Properties
 
 #### `namespace`

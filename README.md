@@ -14,7 +14,8 @@ Monitor your PHP applications using [Prometheus](https://prometheus.io).
 - Support for Counters, Gauges, Histograms, Summaries
 - Various [storage adapters](docs/storage/README.md)
 - Easy usage in style of [Laravels Eloquent ORM](https://laravel.com/docs/5.6/eloquent)
-- Initialization of Counters (**W.I.P.**)
+- Initialization of Metrics without labels
+- Support of float values
 
 ## Missing features
 

@@ -8,10 +8,13 @@ use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\PrometheusException;
+use Krenor\Prometheus\Metrics\Concerns\TracksExecutionTime;
 use Krenor\Prometheus\Storage\Builders\SummarySamplesBuilder;
 
 abstract class Summary extends Metric implements Observable
 {
+    use TracksExecutionTime;
+
     /**
      * @var float[]
      */
@@ -77,5 +80,13 @@ abstract class Summary extends Metric implements Observable
     public function quantiles(): Collection
     {
         return new Collection($this->quantiles);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function track(float $value, array $labels): void
+    {
+        $this->observe($value, $labels);
     }
 }

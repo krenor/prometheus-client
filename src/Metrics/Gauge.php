@@ -8,10 +8,13 @@ use Krenor\Prometheus\Contracts\Types\Settable;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
+use Krenor\Prometheus\Metrics\Concerns\TracksExecutionTime;
 use Krenor\Prometheus\Storage\Builders\GaugeSamplesBuilder;
 
 abstract class Gauge extends Metric implements Incrementable, Decrementable, Settable
 {
+    use TracksExecutionTime;
+
     /**
      * {@inheritdoc}
      */
@@ -72,5 +75,13 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable, Set
         static::$storage->set($this, $value, $labels);
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function track(float $value, array $labels): void
+    {
+        $this->set($value, $labels);
     }
 }
