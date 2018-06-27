@@ -6,6 +6,7 @@ use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
+use Krenor\Prometheus\Exceptions\PrometheusException;
 use Krenor\Prometheus\Storage\Builders\CounterSamplesBuilder;
 
 abstract class Counter extends Metric implements Incrementable
@@ -39,6 +40,10 @@ abstract class Counter extends Metric implements Incrementable
      */
     public function incrementBy(float $value, array $labels = []): self
     {
+        if ($value < 0) {
+            throw new PrometheusException('Counters can only be incremented by non-negative amounts.');
+        }
+
         static::$storage->increment($this, $value, $labels);
 
         return $this;
