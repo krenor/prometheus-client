@@ -26,14 +26,9 @@ class SamplesBuilderTest extends TestCase
         $this->metric = m::mock(Metric::class);
 
         $this->metric
-            ->shouldReceive('namespace')
+            ->shouldReceive('key')
             ->zeroOrMoreTimes()
-            ->andReturn('mocked');
-
-        $this->metric
-            ->shouldReceive('name')
-            ->zeroOrMoreTimes()
-            ->andReturn('metric');
+            ->andReturn('mocked_metric');
     }
 
     /**

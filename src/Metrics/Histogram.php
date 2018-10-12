@@ -55,7 +55,7 @@ abstract class Histogram extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    final public function builder(Collection $items): SamplesBuilder
+    public function builder(Collection $items): SamplesBuilder
     {
         return new HistogramSamplesBuilder($this, $items);
     }
@@ -63,7 +63,7 @@ abstract class Histogram extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    final public function type(): string
+    public function type(): string
     {
         return 'histogram';
     }

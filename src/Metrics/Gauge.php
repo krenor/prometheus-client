@@ -18,7 +18,7 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable, Set
     /**
      * {@inheritdoc}
      */
-    final public function builder(Collection $items): SamplesBuilder
+    public function builder(Collection $items): SamplesBuilder
     {
         return new GaugeSamplesBuilder($this, $items);
     }
@@ -26,7 +26,7 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable, Set
     /**
      * {@inheritdoc}
      */
-    final public function type(): string
+    public function type(): string
     {
         return 'gauge';
     }

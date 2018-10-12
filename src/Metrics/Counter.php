@@ -13,7 +13,7 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
-    final public function builder(Collection $items): SamplesBuilder
+    public function builder(Collection $items): SamplesBuilder
     {
         return new CounterSamplesBuilder($this, $items);
     }
@@ -21,7 +21,7 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
-    final public function type(): string
+    public function type(): string
     {
         return 'counter';
     }

@@ -51,7 +51,7 @@ abstract class Summary extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    final public function builder(Collection $items): SamplesBuilder
+    public function builder(Collection $items): SamplesBuilder
     {
         return new SummarySamplesBuilder($this, $items);
     }
@@ -59,7 +59,7 @@ abstract class Summary extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    final public function type(): string
+    public function type(): string
     {
         return 'summary';
     }
