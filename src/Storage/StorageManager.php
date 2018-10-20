@@ -75,7 +75,7 @@ class StorageManager implements Storage
     /**
      * {@inheritdoc}
      */
-    public function increment(Incrementable $metric, float $value, array $labels): void
+    public function increment(Incrementable $metric, float $value, array $labels = []): void
     {
         try {
             $this->repository->increment(
@@ -95,7 +95,7 @@ class StorageManager implements Storage
     /**
      * {@inheritdoc}
      */
-    public function decrement(Decrementable $metric, float $value, array $labels): void
+    public function decrement(Decrementable $metric, float $value, array $labels = []): void
     {
         try {
             $this->repository->decrement(
@@ -115,7 +115,7 @@ class StorageManager implements Storage
     /**
      * {@inheritdoc}
      */
-    public function observe(Observable $metric, float $value, array $labels): void
+    public function observe(Observable $metric, float $value, array $labels = []): void
     {
         $key = "{$this->prefix}:{$metric->key()}";
         $labeled = $this->labeled($metric, $labels);
@@ -143,7 +143,7 @@ class StorageManager implements Storage
     /**
      * {@inheritdoc}
      */
-    public function set(Settable $metric, float $value, array $labels): void
+    public function set(Settable $metric, float $value, array $labels = []): void
     {
         try {
             $this->repository->set(

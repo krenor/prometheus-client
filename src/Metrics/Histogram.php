@@ -71,7 +71,7 @@ abstract class Histogram extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    public function observe(float $value, array $labels): self
+    public function observe(float $value, array $labels = []): self
     {
         static::$storage->observe($this, $value, $labels);
 
@@ -89,7 +89,7 @@ abstract class Histogram extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    protected function track(float $value, array $labels): void
+    protected function track(float $value, array $labels = []): void
     {
         $this->observe($value, $labels);
     }

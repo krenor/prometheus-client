@@ -32,5 +32,5 @@ trait TracksExecutionTime
      *
      * @return void
      */
-    abstract protected function track(float $value, array $labels): void;
+    abstract protected function track(float $value, array $labels = []): void;
 }

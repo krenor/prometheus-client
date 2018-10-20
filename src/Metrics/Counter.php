@@ -29,7 +29,7 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
-    public function increment(array $labels): self
+    public function increment(array $labels = []): self
     {
         return $this->incrementBy(1, $labels);
     }
@@ -37,7 +37,7 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
-    public function incrementBy(float $value, array $labels): self
+    public function incrementBy(float $value, array $labels = []): self
     {
         static::$storage->increment($this, $value, $labels);
 
