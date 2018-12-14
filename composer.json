@@ -20,12 +20,12 @@
   },
   "require": {
     "php": "^7.1",
-    "tightenco/collect": "^5.6"
+    "tightenco/collect": "^5.7"
   },
   "require-dev": {
-    "codedungeon/phpunit-result-printer": "^0.16",
-    "mockery/mockery": "^1.0",
-    "phpunit/phpunit": "^7.0",
+    "codedungeon/phpunit-result-printer": "^0.23.4",
+    "mockery/mockery": "^1.2",
+    "phpunit/phpunit": "^7.5",
     "predis/predis": "^1.1"
   },
   "suggest": {
