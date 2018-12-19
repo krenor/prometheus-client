@@ -2,6 +2,7 @@
 
 namespace Krenor\Prometheus;
 
+use InvalidArgumentException;
 use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Metrics\Summary;
@@ -47,13 +48,12 @@ class CollectorRegistry
      */
     public function collect(): Collection
     {
-        return $this->counters
-            ->merge($this->gauges)
-            ->merge($this->histograms)
-            ->merge($this->summaries)
+        return $this
+            ->collectible()
+            ->collapse()
             ->map(function (Metric $metric) {
                 return new MetricFamilySamples($metric, $metric::storage()->collect($metric));
-            })->values();
+            });
     }
 
     /**
@@ -80,7 +80,8 @@ class CollectorRegistry
      */
     public function unregister(Metric $metric): self
     {
-        $this->collector($metric)->forget(get_class($metric));
+        $this->collector($metric)
+             ->forget(get_class($metric));
 
         return $this;
     }
@@ -173,6 +174,21 @@ class CollectorRegistry
                 return $this->histograms;
             case $metric instanceof Summary:
                 return $this->summaries;
+            default:
+                throw new InvalidArgumentException("Could not determine collector of unknown metric type.");
         }
+    }
+
+    /**
+     * @return Collection|Collection[]
+     */
+    protected function collectible(): Collection
+    {
+        return new Collection([
+            $this->counters,
+            $this->gauges,
+            $this->histograms,
+            $this->summaries,
+        ]);
     }
 }
