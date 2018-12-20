@@ -20,18 +20,23 @@
   },
   "require": {
     "php": "^7.1",
-    "tightenco/collect": "^5.7"
+    "tightenco/collect": "^5.7",
+    "ext-json": "*"
   },
   "require-dev": {
     "codedungeon/phpunit-result-printer": "^0.23.4",
     "mockery/mockery": "^1.2",
     "phpunit/phpunit": "^7.5",
-    "predis/predis": "^1.1"
+    "predis/predis": "^1.1",
+    "ext-redis": "*",
+    "ext-apcu": "*",
+    "ext-memcached": "*"
   },
   "suggest": {
     "ext-apcu": "Required to use the APCu storage.",
     "ext-memcached": "Required to use the Memcached storage.",
-    "predis/predis": "Required to use the Redis storage."
+    "ext-redis": "Required to use the Redis storage with a native client.",
+    "predis/predis": "Required to use the Redis storage with the predis client."
   },
   "autoload": {
     "psr-4": {
