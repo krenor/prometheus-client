@@ -7,7 +7,7 @@ use Krenor\Prometheus\Storage\Repositories\ApcuRepository;
 class ApcuStorageTest extends TestCase
 {
     /**
-     * @var ApcRepository
+     * @var ApcuRepository
      */
     protected static $repository;
 

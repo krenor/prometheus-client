@@ -13,7 +13,7 @@ To use this repository either the [phpredis][phpredis] extension or the [predis 
 <?php
 
 use Redis;
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Metric;
 use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Storage\Redis\PhpRedisConnection;
 use Krenor\Prometheus\Storage\Repositories\RedisRepository;
@@ -38,7 +38,7 @@ Metric::storeUsing(new StorageManager(
 <?php
 
 use Predis\Client as Redis;
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Metric;
 use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Storage\Redis\PredisConnection;
 use Krenor\Prometheus\Storage\Repositories\RedisRepository;

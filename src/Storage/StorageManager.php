@@ -5,16 +5,16 @@ namespace Krenor\Prometheus\Storage;
 use Exception;
 use Krenor\Prometheus\Metrics\Summary;
 use Krenor\Prometheus\Contracts\Metric;
-use Krenor\Prometheus\Contracts\Storage;
 use Krenor\Prometheus\Metrics\Histogram;
+use Krenor\Prometheus\Contracts\Storage;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
 use Krenor\Prometheus\Contracts\Types\Settable;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
-use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
+use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
 
 class StorageManager implements Storage

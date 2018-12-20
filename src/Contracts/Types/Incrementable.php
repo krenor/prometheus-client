@@ -4,20 +4,20 @@ namespace Krenor\Prometheus\Contracts\Types;
 
 use Krenor\Prometheus\Contracts\Metric;
 
-interface Incrementable
+interface Incrementable extends Metric
 {
     /**
-     * @param array $values
+     * @param array $labels = []
      *
-     * @return Metric
+     * @return self
      */
-    public function increment(array $values);
+    public function increment(array $labels = []): self;
 
     /**
      * @param float $value
      * @param array $labels
      *
-     * @return Metric
+     * @return self
      */
-    public function incrementBy(float $value, array $labels);
+    public function incrementBy(float $value, array $labels = []): self;
 }

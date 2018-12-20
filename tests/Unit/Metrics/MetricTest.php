@@ -2,7 +2,7 @@
 
 namespace Krenor\Prometheus\Tests\Unit\Metrics;
 
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Metric;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
 use PHPUnit\Framework\TestCase as BaseTestCase;

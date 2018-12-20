@@ -6,7 +6,7 @@ use Mockery as m;
 use InvalidArgumentException;
 use Krenor\Prometheus\Sample;
 use PHPUnit\Framework\TestCase;
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Metric;
 use Krenor\Prometheus\Contracts\Storage;
 use Krenor\Prometheus\CollectorRegistry;
 use Tightenco\Collect\Support\Collection;
@@ -146,15 +146,9 @@ class CollectorRegistryTest extends TestCase
             protected $namespace = 'custom';
             protected $name = 'metric';
 
-            public function builder(Collection $items): SamplesBuilder
-            {
-                //
-            }
+            public function builder(Collection $items): SamplesBuilder {}
 
-            public function type(): string
-            {
-                //
-            }
+            public function type(): string {}
         };
 
         $this->expectException(InvalidArgumentException::class);

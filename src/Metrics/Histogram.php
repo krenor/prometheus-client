@@ -2,7 +2,6 @@
 
 namespace Krenor\Prometheus\Metrics;
 
-use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Exceptions\LabelException;
@@ -70,8 +69,10 @@ abstract class Histogram extends Metric implements Observable
 
     /**
      * {@inheritdoc}
+     *
+     * @return self
      */
-    public function observe(float $value, array $labels = []): self
+    public function observe(float $value, array $labels = []): Observable
     {
         static::$storage->observe($this, $value, $labels);
 

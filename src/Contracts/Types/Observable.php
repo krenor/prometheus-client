@@ -4,13 +4,13 @@ namespace Krenor\Prometheus\Contracts\Types;
 
 use Krenor\Prometheus\Contracts\Metric;
 
-interface Observable
+interface Observable extends Metric
 {
     /**
      * @param float $value
      * @param array $labels
      *
-     * @return Metric
+     * @return self
      */
-    public function observe(float $value, array $labels);
+    public function observe(float $value, array $labels = []): self;
 }

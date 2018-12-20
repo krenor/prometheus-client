@@ -11,7 +11,7 @@ To use this repository the `memcached` extension has to be installed.
 <?php
 
 use Memcached;
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Metric;
 use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Storage\Repositories\MemcachedRepository;
 

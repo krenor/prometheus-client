@@ -76,7 +76,7 @@ class CollectorRegistry
     /**
      * @param Metric $metric
      *
-     * @return CollectorRegistry
+     * @return self
      */
     public function unregister(Metric $metric): self
     {
