@@ -4,7 +4,6 @@ namespace Krenor\Prometheus\Metrics;
 
 use Krenor\Prometheus\Contracts\Storage;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Exceptions\PrometheusException;
 use Krenor\Prometheus\Contracts\Metric as MetricContract;
@@ -61,13 +60,6 @@ abstract class Metric implements MetricContract
     {
         return "{$this->namespace()}_{$this->name()}";
     }
-
-    /**
-     * @param Collection $items
-     *
-     * @return SamplesBuilder
-     */
-    abstract public function builder(Collection $items): SamplesBuilder;
 
     /**
      * @return string

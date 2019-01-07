@@ -3,6 +3,9 @@
 namespace Krenor\Prometheus\Storage;
 
 use Exception;
+use RuntimeException;
+use Krenor\Prometheus\Metrics\Gauge;
+use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Metrics\Summary;
 use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Metrics\Histogram;
@@ -13,9 +16,14 @@ use Krenor\Prometheus\Contracts\Types\Settable;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
-use Krenor\Prometheus\Contracts\Types\Incrementable;
+use Krenor\Prometheus\Contracts\Bindings\Collector;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
+use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
+use Krenor\Prometheus\Storage\Bindings\GaugeCollector;
+use Krenor\Prometheus\Storage\Bindings\CounterCollector;
+use Krenor\Prometheus\Storage\Bindings\SummaryCollector;
+use Krenor\Prometheus\Storage\Bindings\HistogramCollector;
 
 class StorageManager implements Storage
 {
@@ -30,6 +38,18 @@ class StorageManager implements Storage
      * @var string
      */
     protected $prefix;
+
+    /**
+     * @var array
+     */
+    protected $bindings = [
+        'collect' => [
+            Counter::class   => CounterCollector::class,
+            Gauge::class     => GaugeCollector::class,
+            Histogram::class => HistogramCollector::class,
+            Summary::class   => SummaryCollector::class,
+        ],
+    ];
 
     /**
      * StorageManager constructor.
@@ -53,18 +73,25 @@ class StorageManager implements Storage
         try {
             $items = $this->repository->get($key);
 
-            switch (true) {
-                case $metric instanceof Histogram:
-                    return $metric->builder($items->merge($this->repository->get("{$key}:SUM")))
-                                  ->samples();
-                case $metric instanceof Summary:
-                    return $metric->builder($items->map(function (string $key) {
-                        return $this->repository->get($key);
-                    }))->samples();
-                default:
-                    return $metric->builder($items)
-                                  ->samples();
+            $bindings = Collection::make($this->bindings['collect']);
+            $type = $bindings->keys()->first(function (string $type) use ($metric) {
+                return is_subclass_of($metric, $type);
+            });
+
+            if ($type === null) {
+                throw new RuntimeException("Could not find collector for metric.");
             }
+
+            /** @var Collector|mixed $collector */
+            $collector = new $bindings[$type]($this->repository, $key);
+
+            if (!$collector instanceof Collector) {
+                throw new RuntimeException("The collector does not fulfill the collector contract.");
+            }
+
+            return $collector
+                ->collect($metric, $items)
+                ->samples();
         } catch (Exception $e) {
             $class = get_class($metric);
 
@@ -166,5 +193,18 @@ class StorageManager implements Storage
     public function flush(): bool
     {
         return $this->repository->flush();
+    }
+
+    /**
+     * @param string $metric
+     * @param string $collector
+     *
+     * @return self
+     */
+    public function bind(string $metric, string $collector): self
+    {
+        $this->bindings['collect'][$metric] = $collector;
+
+        return $this;
     }
 }

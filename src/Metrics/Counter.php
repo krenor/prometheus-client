@@ -2,22 +2,11 @@
 
 namespace Krenor\Prometheus\Metrics;
 
-use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Exceptions\PrometheusException;
-use Krenor\Prometheus\Storage\Builders\CounterSamplesBuilder;
 
 abstract class Counter extends Metric implements Incrementable
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function builder(Collection $items): SamplesBuilder
-    {
-        return new CounterSamplesBuilder($this, $items);
-    }
-
     /**
      * {@inheritdoc}
      */
