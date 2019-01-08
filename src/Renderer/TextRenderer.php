@@ -28,6 +28,10 @@ class TextRenderer implements Renderable
      */
     protected function serialize(Collection $labels): string
     {
+        if ($labels->isEmpty()) {
+            return '';
+        }
+
         $quoted = $labels->map(function (string $value) {
             return "\"{$value}\"";
         });
@@ -36,9 +40,7 @@ class TextRenderer implements Renderable
             http_build_query($quoted->toArray(), '', ',')
         );
 
-        return !$serialized
-            ? $serialized
-            : "{{$serialized}}";
+        return "{{$serialized}}";
     }
 
     /**
