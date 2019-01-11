@@ -23,12 +23,4 @@ class PhpRedisConnection extends Connection
     {
         return (int) $this->client->hset($key, $field, $value);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hsetnx(string $key, string $field, $value): int
-    {
-        return (int) $this->client->hsetnx($key, $field, $value);
-    }
 }

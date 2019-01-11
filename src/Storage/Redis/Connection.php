@@ -64,20 +64,6 @@ abstract class Connection
     }
 
     /**
-     * @see https://redis.io/commands/hsetnx
-     *
-     * @param string $key
-     * @param string $field
-     * @param mixed $value
-     *
-     * @return int
-     */
-    public function hsetnx(string $key, string $field, $value): int
-    {
-        return $this->client->hsetnx($key, $field, $value);
-    }
-
-    /**
      * @see https://redis.io/commands/rpush
      *
      * @param string $key
@@ -98,16 +84,5 @@ abstract class Connection
     public function flushdb(): bool
     {
         return $this->client->flushdb();
-    }
-
-    /**
-     * @param string $method
-     * @param array $parameters
-     *
-     * @return mixed
-     */
-    public function __call(string $method, array $parameters = [])
-    {
-        return $this->client->{strtolower($method)}(...$parameters);
     }
 }

@@ -54,11 +54,9 @@ class RedisRepository implements Repository
     /**
      * {@inheritdoc}
      */
-    public function set(string $key, string $field, $value, $override = true): void
+    public function set(string $key, string $field, $value): void
     {
-        $override
-            ? $this->redis->hset($key, $field, $value)
-            : $this->redis->hsetnx($key, $field, $value);
+        $this->redis->hset($key, $field, $value);
     }
 
     /**

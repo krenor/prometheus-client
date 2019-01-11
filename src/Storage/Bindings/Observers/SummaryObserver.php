@@ -19,7 +19,7 @@ class SummaryObserver extends Binding
     {
         $identifier = "{$this->key}:" . crc32($labels->toJson()) . ':VALUES';
 
-        $this->repository->set($this->key, $labels->toJson(), $identifier, false);
+        $this->repository->set($this->key, $labels->toJson(), $identifier);
         $this->repository->push($identifier, $value);
     }
 }

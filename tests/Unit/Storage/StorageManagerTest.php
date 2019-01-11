@@ -498,7 +498,6 @@ class StorageManagerTest extends TestCase
                 'PHPUNIT:example_summary',
                 $field,
                 "PHPUNIT:example_summary:{$identifier}:VALUES",
-                false,
             ]);
 
         $repository
