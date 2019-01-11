@@ -12,21 +12,26 @@ use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Storage;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
+use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Contracts\Types\Settable;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\StorageException;
-use Krenor\Prometheus\Contracts\Bindings\Collector;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
 use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Storage\Concerns\StoresMetrics;
-use Krenor\Prometheus\Storage\Bindings\GaugeCollector;
-use Krenor\Prometheus\Storage\Bindings\CounterCollector;
-use Krenor\Prometheus\Storage\Bindings\SummaryCollector;
-use Krenor\Prometheus\Storage\Bindings\HistogramCollector;
+use Krenor\Prometheus\Storage\Bindings\Collectors\GaugeCollector;
+use Krenor\Prometheus\Storage\Bindings\Observers\SummaryObserver;
+use Krenor\Prometheus\Storage\Bindings\Collectors\CounterCollector;
+use Krenor\Prometheus\Storage\Bindings\Collectors\SummaryCollector;
+use Krenor\Prometheus\Storage\Bindings\Observers\HistogramObserver;
+use Krenor\Prometheus\Storage\Bindings\Collectors\HistogramCollector;
 
 class StorageManager implements Storage
 {
+    const COLLECTOR_BINDING_KEY = 'collect';
+    const OBSERVER_BINDING_KEY = 'observe';
+
     use StoresMetrics;
 
     /**
@@ -43,11 +48,15 @@ class StorageManager implements Storage
      * @var array
      */
     protected $bindings = [
-        'collect' => [
+        self::COLLECTOR_BINDING_KEY => [
             Counter::class   => CounterCollector::class,
             Gauge::class     => GaugeCollector::class,
             Histogram::class => HistogramCollector::class,
             Summary::class   => SummaryCollector::class,
+        ],
+        self::OBSERVER_BINDING_KEY  => [
+            Histogram::class => HistogramObserver::class,
+            Summary::class   => SummaryObserver::class,
         ],
     ];
 
@@ -68,30 +77,20 @@ class StorageManager implements Storage
      */
     public function collect(Metric $metric): Collection
     {
-        $key = "{$this->prefix}:{$metric->key()}";
-
         try {
-            $items = $this->repository->get($key);
+            $items = $this->repository->get("{$this->prefix}:{$metric->key()}");
+            $collector = $this->binding(self::COLLECTOR_BINDING_KEY, $metric);
 
-            $bindings = Collection::make($this->bindings['collect']);
-            $type = $bindings->keys()->first(function (string $type) use ($metric) {
-                return is_subclass_of($metric, $type);
-            });
+            /** @var SamplesBuilder $builder */
+            $builder = $collector($metric, $items);
 
-            if ($type === null) {
-                throw new RuntimeException("Could not find collector for metric.");
+            if (!$builder instanceof SamplesBuilder) {
+                throw new RuntimeException("The collector did not resolve into a SamplesBuilder.");
             }
 
-            /** @var Collector|mixed $collector */
-            $collector = new $bindings[$type]($this->repository, $key);
-
-            if (!$collector instanceof Collector) {
-                throw new RuntimeException("The collector does not fulfill the collector contract.");
-            }
-
-            return $collector
-                ->collect($metric, $items)
-                ->samples();
+            return $builder->samples();
+        } catch (LabelException $e) {
+            throw $e;
         } catch (Exception $e) {
             $class = get_class($metric);
 
@@ -144,22 +143,11 @@ class StorageManager implements Storage
      */
     public function observe(Observable $metric, float $value, array $labels = []): void
     {
-        $key = "{$this->prefix}:{$metric->key()}";
-        $labeled = $this->labeled($metric, $labels);
-        $field = $labeled->toJson();
-
         try {
-            if ($metric instanceof Histogram) {
-                $this->repository->increment($key, $labeled->merge($this->bucket($metric, $value))->toJson(), 1);
-                $this->repository->increment("{$key}:SUM", $field, $value);
-            }
-
-            if ($metric instanceof Summary) {
-                $identifier = "{$key}:" . crc32($field) . ':VALUES';
-
-                $this->repository->set($key, $field, $identifier, false);
-                $this->repository->push($identifier, $value);
-            }
+            $this->binding(self::OBSERVER_BINDING_KEY, $metric)
+                ($metric, $this->labeled($metric, $labels), $value);
+        } catch (LabelException $e) {
+            throw $e;
         } catch (Exception $e) {
             $class = get_class($metric);
 
@@ -196,15 +184,36 @@ class StorageManager implements Storage
     }
 
     /**
+     * @param string $key
      * @param string $metric
-     * @param string $collector
+     * @param string $binding
      *
      * @return self
      */
-    public function bind(string $metric, string $collector): self
+    public function bind(string $key, string $metric, string $binding): self
     {
-        $this->bindings['collect'][$metric] = $collector;
+        $this->bindings[$key][$metric] = $binding;
 
         return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param Metric $metric
+     *
+     * @return callable
+     */
+    protected function binding(string $key, Metric $metric): callable
+    {
+        $bindings = Collection::make($this->bindings[$key]);
+        $type = $bindings->keys()->first(function (string $type) use ($metric) {
+            return is_subclass_of($metric, $type);
+        });
+
+        if ($type === null) {
+            throw new RuntimeException("Could not find [{$key}] binding for metric.");
+        }
+
+        return new $bindings[$type]($this->repository, "{$this->prefix}:{$metric->key()}");
     }
 }

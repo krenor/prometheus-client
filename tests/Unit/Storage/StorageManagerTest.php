@@ -4,7 +4,6 @@ namespace Krenor\Prometheus\Tests\Unit\Storage;
 
 use Mockery as m;
 use ReflectionClass;
-use RuntimeException;
 use PHPUnit\Framework\TestCase;
 use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Counter;
@@ -15,11 +14,10 @@ use Krenor\Prometheus\Contracts\Repository;
 use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Exceptions\StorageException;
-use Krenor\Prometheus\Contracts\Bindings\Collector;
 use Krenor\Prometheus\Tests\Stubs\InvalidCollectorStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelGaugeStub;
-use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub;
+use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelHistogramStub;
 
 class StorageManagerTest extends TestCase
@@ -141,10 +139,16 @@ class StorageManagerTest extends TestCase
         $this->assertNotEmpty($storage->collect($metric));
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @group bindings
+     * @group exceptions
+     * @group storage
+     */
     public function it_should_throw_an_exception_if_no_collector_binding_was_found_for_the_metric()
     {
-        $error = 'Could not find collector for metric.';
+        $error = 'Could not find [collect] binding for metric.';
         $repository = m::mock(Repository::class);
         $storage = new StorageManager($repository);
 
@@ -162,20 +166,26 @@ class StorageManagerTest extends TestCase
 
         $reflection->setValue($storage, $bindings);
 
-        // FIXME: This is kinda tricky as the StorageException extends RuntimeException.
-        // FIXME: The error is there, but it's being wrapped. Might have to revisit this later on.
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage($error);
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage(
+            "Failed to collect the samples of [Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub]: {$error}"
+        );
 
         $metric = new SingleLabelCounterStub;
 
         $storage->collect($metric);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @group bindings
+     * @group exceptions
+     * @group storage
+     */
     public function it_should_throw_an_exception_if_the_collector_binding_is_invalid()
     {
-        $error = 'The collector does not fulfill the collector contract.';
+        $error = 'The collector did not resolve into a SamplesBuilder.';
         $repository = m::mock(Repository::class);
         $storage = new StorageManager($repository);
 
@@ -188,14 +198,16 @@ class StorageManagerTest extends TestCase
 
         /** @var array $bindings */
         $bindings = $reflection->getValue($storage);
-        $bindings['collect'][Counter::class] = InvalidCollectorStub::class;
+        $bindings['collect'][Counter::class] = new class {
+            public function __invoke(){}
+        };
 
         $reflection->setValue($storage, $bindings);
 
-        // FIXME: This is kinda tricky as the StorageException extends RuntimeException.
-        // FIXME: The error is there, but it's being wrapped. Might have to revisit this later on.
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage($error);
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage(
+            "Failed to collect the samples of [Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub]: {$error}"
+        );
 
         $metric = new SingleLabelCounterStub;
 
@@ -395,7 +407,7 @@ class StorageManagerTest extends TestCase
      * @group exceptions
      * @group storage
      */
-    public function it_should_throw_a_storage_exception_when_seting_a_metric_fails()
+    public function it_should_throw_a_storage_exception_when_setting_a_metric_fails()
     {
         $error = 'A wittle fucko boingo!';
         $repository = m::mock(Repository::class);
@@ -547,14 +559,16 @@ class StorageManagerTest extends TestCase
         $storage->observe($metric, 1, [null, null, null]);
     }
 
-    /** @test
+    /**
+     * @test
      *
+     * @group bindings
      * @group storage
      */
     public function it_should_be_possible_to_bind_custom_collectors_to_metric_types()
     {
         $storage = new StorageManager(m::mock(Repository::class));
-        $collector = get_class(m::mock(Collector::class));
+        $collector = get_class(new class{});
 
         $reflection = (new ReflectionClass($storage))->getProperty('bindings');
         $reflection->setAccessible(true);
@@ -568,7 +582,7 @@ class StorageManagerTest extends TestCase
         $this->assertArrayHasKey(Histogram::class, $bindings['collect']);
         $this->assertArrayHasKey(Summary::class, $bindings['collect']);
 
-        $storage->bind(Counter::class, $collector);
+        $storage->bind(StorageManager::COLLECTOR_BINDING_KEY, Counter::class, $collector);
 
         $bindings = $reflection->getValue($storage);
 

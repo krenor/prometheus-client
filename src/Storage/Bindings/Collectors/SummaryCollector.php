@@ -1,23 +1,21 @@
 <?php
 
-namespace Krenor\Prometheus\Storage\Bindings;
+namespace Krenor\Prometheus\Storage\Bindings\Collectors;
 
 use Krenor\Prometheus\Metrics\Summary;
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Contracts\Binding;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Contracts\SamplesBuilder;
-use Krenor\Prometheus\Contracts\Bindings\Collector;
 use Krenor\Prometheus\Storage\Builders\SummarySamplesBuilder;
 
-class SummaryCollector extends Collector
+class SummaryCollector extends Binding
 {
     /**
-     * @param Summary|Metric $summary
+     * @param Summary $summary
      * @param Collection $items
      *
-     * @return SummarySamplesBuilder|SamplesBuilder
+     * @return SummarySamplesBuilder
      */
-    public function collect(Metric $summary, Collection $items): SamplesBuilder
+    public function __invoke(Summary $summary, Collection $items): SummarySamplesBuilder
     {
         return new SummarySamplesBuilder(
             $summary,
