@@ -17,10 +17,7 @@ use Krenor\Prometheus\Storage\Repositories\MemcachedRepository;
 
 $memcached = new Memcached;
 
-$memcached->addServer(
-    getenv('MEMCACHED_HOST'),
-    getenv('MEMCACHED_PORT')
-);
+$memcached->addServer(...);
 
 Metric::storeUsing(new StorageManager(
     new MemcachedRepository($memcached)

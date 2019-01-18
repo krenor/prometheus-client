@@ -3,8 +3,7 @@ Tracking execution time
 
 ## Introduction
 The `TracksExecutionTime` trait offers the possibility to track execution time of code.  
-Only the [Counters](COUNTERS.md) don't implement this trait.
-
+Only [Counters](COUNTERS.md) don't implement this trait.
 
 ## Methods
 

@@ -10,20 +10,22 @@ as [gauges](GAUGES.md) are better suited for this.
 
 ## Properties
 
-As counters extend the [Metric class](README.md) they offer the same properties.
+As counters extend the [abstract Metric](README.md) they offer the same [properties](README.md#properties).
 
 ## Methods
 
-As counters extend the [Metric class](README.md) they offer the same methods.  
+As counters extend the [abstract Metric](README.md) they offer the same [methods](README.md#methods).  
 Additionally they offer following functionality:
 
-#### `increment(array $labels)`
+#### `increment(array $labels = [])`
 
-Alias for [`incrementBy(1, $labels)`](#incrementby(float-$value,-array-$labels)).
+Alias for [`incrementBy(1, $labels)`](#incrementbyfloat-value-array-labels--)
 
-#### `incrementBy(float $value, array $labels)`
+#### `incrementBy(float $value, array $labels = [])`
 
-Pass a call to the [Storage][storage-docs] to increment this counter by `$value` with the given **label values**.
+Pass a call to the underlying [Storage](../storage/README.md) to increment this counter by `$value` 
+with given **label values**.  
+Incrementing by a negative amount will result in an exception.
 
 ## Example
 
@@ -45,6 +47,6 @@ $counter = new class extends Counter {
         'yet_another_label',
     ];
 }
-```
 
-[storage-docs]: ../storage/README.md
+$counter->increment(['foo', 'bar', 'baz']);
+```

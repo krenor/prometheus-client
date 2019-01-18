@@ -1,9 +1,11 @@
 Exceptions
 ==========
 
+#### :exclamation: This section is subject to change as exceptions will be improved or changed in a later release :exclamation: 
+
 ## PrometheusException
 
-Thrown when prometheus specific errors happen, e.g. [a metric name is invalid](metrics/README.md#name).  
+Thrown when prometheus specific errors happen, e.g. [a metric name is invalid](metrics/README.md#string-name).  
 Extends [InvalidArgumentException](http://php.net/manual/en/class.invalidargumentexception.php).
 
 ## LabelException

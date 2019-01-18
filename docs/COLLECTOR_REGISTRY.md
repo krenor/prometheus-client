@@ -1,29 +1,29 @@
-CollectorRegistry
-=================
+Collector Registry
+==================
 
 ## Introduction
 
-The `CollectorRegistry` is.. well, a collector registry. It registers metrics and collects  
-`MetricFamilySamples` from them.  By default only the [supported metric](metrics/README.md#Children) are handled.  
-If you want to use custom metrics you'll have to extend the functionality.
+The `CollectorRegistry` is.. well, it's a collector registry. It collects samples of registered metrics.  
+By default only the [supported metric](metrics/README.md#classes) are handled. Custom metrics require [a few additional steps](metrics/CUSTOM.md).
 
 ## Methods
 
 #### `collect()`
 
-Collects `Samples` from all registered metrics and maps them to a collection of `MetricFamilySamples`.
+Collects `Samples` collections of each registered metrics and maps them to `MetricFamilySamples`
 
 #### `register(Metric $metric)`
 
-Registers the metric by its namespace if its not already registered, returning the given `$metric`.
+Registers the metric by its namespace, if it's not already registered, and returning `$metric` back.  
+Samples are collected only from registered metrics.
 
 #### `unregister(Metric $metric)`
 
-Lets the registry forget this metric from its registry.
+Unregisters the metric and therefore ignores it while collecting samples
 
-**For each metric there is an equally named plural/singular getter** as to access either
-* the collection of a metric type 
-* or a metric from said collection by its namespace
+**For each [default supported metric](metrics/README.md) there's an equally named plural/singular getter** to access either
+* The collection of a metric type 
+* A metric from said collection by its namespace
 
 ## Example
 
@@ -43,7 +43,7 @@ $counter = $registry->register(new class extends Counter {
 $counters = $registry->counters();
 $identical = $counter === $registry->counter(get_class($counter));
 
-// increment counter..
+// Fiddle with counter..
 
 $samples = $registry->collect();
 ```

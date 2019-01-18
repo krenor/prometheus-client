@@ -11,34 +11,36 @@ Monitor your PHP applications using [Prometheus](https://prometheus.io).
 
 ## Features
 
-- Support for Counters, Gauges, Histograms, Summaries
-- Various [storage adapters](docs/storage/README.md)
-- Easy usage in style of [Laravels Eloquent ORM](https://laravel.com/docs/5.6/eloquent)
+- Support for Counters, Gauges, Histograms, Summaries and custom metrics
+- Various [storage repositories](docs/storage/repositories/README.md)
+- Easy usage in style of [Laravels Eloquent ORM](https://laravel.com/docs/master/eloquent)
 - Initialization of Metrics without labels
 - Support of float values
 
-## Missing features
+## Planned features
 
 - Pushing metrics to a Pushgateway
+- Status collectors (for stuff like `opcache_get_status()` etc.)
   
 ## Project State
 
-**This library is currently under development.**  
-As long as it's not tagged in a >= 1.* version I **could** commit incompatible changes.  
-Especially since I'll start working towards the [guidelines](https://prometheus.io/docs/instrumenting/writing_clientlibs/) 
-of writing a prometheus client and implement at least all **MUST** and **SHOULD** requirements. If some of them can't be met I'll add them to a list explaining why.
+### This library is currently under development.
 
-## Unmet guidelines
+As long as it's not tagged in a >= 1.* version I **could** commit incompatible changes!  
 
-#### Labels
-
->A client library MUST allow for optionally specifying a list of label names at Gauge/Counter/Summary/Histogram creation time.
-  
-This library takes the approach of labels already being defined on the metrics rather than via a constructor/setter/options class.
-
-## Example
+## Quickstart
 
 ```php
+<?php
+
+use Krenor\Prometheus\Metrics\Metric;
+use Krenor\Prometheus\Metrics\Counter;
+use Krenor\Prometheus\CollectorRegistry;
+use Krenor\Prometheus\Renderer\TextRenderer;
+use Krenor\Prometheus\Storage\StorageManager;
+use Krenor\Prometheus\Storage\Repositories\InMemoryRepository;
+use Krenor\Prometheus\Tests\Stubs\MultipleLabelsCounterStub as ExampleCounter;
+
 Metric::storeUsing(new StorageManager(new InMemoryRepository);
 
 $registry = new CollectorRegistry;
@@ -46,18 +48,17 @@ $registry = new CollectorRegistry;
 /** @var Counter $counter */
 $counter = $registry->register(new ExampleCounter);
 
-$counter->increment(['some', 'example', 'labels']);
-$counter->incrementBy(3, ['diffent', 'label', 'values']);
+$counter->increment(['some', 'label', 'values']);
+$counter->incrementBy(3, ['foo', 'bar', 'baz']);
 
 $samples = $registry->collect();
 $metrics = (new TextRenderer)->render($samples);
 ```
 
-
-For more detailed examples, please see the [API Documentation](docs/README.md).
+A more detailed documentation can be [found here](docs/README.md).
     
-**Note: As this project is in the works, some parts might not be documented yet.  
-You can always [read the tests](tests/Integration/TestCase.php) if something is unclear.**
+**Note: Since this project is in the works, some parts may lack documentation.  
+You can [orient yourself on the tests](tests/Integration/TestCase.php) if something's unclear.**
 
 ## Contributing
 

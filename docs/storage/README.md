@@ -3,26 +3,53 @@ Storage
 
 ## Introduction
 
-Usually PHP processes don't share any state so metrics have to be stored elsewhere. Some of the  
-provided storages might require additional extensions (e.g. APCU) and/or packages (e.g. Predis).  
-
-Currently these storages are supported: 
-
-* [APCU](APCU.md)
-* [InMemory](IN_MEMORY.md)
-* [Memcached](MEMCACHED.md)
-* [Redis](REDIS.md) (both Predis and native)
+Usually PHP processes don't share any state so metrics have to be stored elsewhere.  
+Storages are an abstraction of [repositories][repository-docs] which interact with metrics.
 
 ## StorageManager
  
-The `StorageManager` implements the `Storage` interface by taking a [`Repository`](#repositories) implementation  
-and gets rid of all the things like error handling, prefixing and such. 
+Implements the `Storage` interface by taking a [`Repository`][repository-docs] implementation and helps with  
+of all the annoying little things, e.g. error handling, extensibility through [bindings][bindings-docs], prefixing etc.
 
-### How are metrics stored?
+### Methods
+
+#### `collect(Metric $metric)`
+
+Retrieve samples of a metric
+
+#### `increment(Incrementable $metric, float $value, array $labels = [])`
+
+Increment a metric with given label values by `$value`
+
+#### `decrement(Decrementable $metric, float $value, array $labels = [])`
+
+Decrement a metric with given label values by `$value`
+
+#### `observe(Observable $metric, float $value, array $labels = [])`
+
+Observe a metric with given label values with `$value`
+
+#### `set(Settable $metric, float $value, array $labels = [])`
+
+Set a metric with given label values to `$value`
+
+#### `flush()`
+
+Flush the underlying [repository][repository-docs]
+
+#### `bind(string $key, string $metric, string $collector)`
+
+Associate the [`$binding`][bindings-docs] namespace for `$metric` instances
+
+Available keys are:
+* [`StorageManager::COLLECTOR_BINDING_KEY`](BINDINGS.md#collectors)
+* [`StorageManager::OBSERVER_BINDING_KEY`](BINDINGS.md#observers)
+
+### Inner workings - how are metrics stored?
 
 #### Legend
 
-* `<name>`: Fully-qualified metric name (`namespace`_`name`)
+* `<name>`: Fully-qualified metric name (`{namespace}_{name}`)
 * `<labels>`: Label names and values combined.
 * `<prev>`: Previously stored value or 0 (summaries use an empty array instead)
 
@@ -63,11 +90,7 @@ Identical to Counters
 ```
 <prefix>:<name> =>
   <json(labels)> => <prefix>:<name>:<crc32(json(labels))>:VALUES
-````
+```
 
-## Repositories
-
-Repositories are the implementation used by the [StorageManager](#storagemanager) to store (metrics) data.  
-For storages that don't offer complex data types such as Redis or return `false` rather than  
-throwing exceptions (APCU, Memcached, ...)  there's the `SimpleRepository`.  By extending  
-it you only have to take care of the actual calls to retrieve, store and flush data. 
+[repository-docs]: repositories/README.md
+[bindings-docs]: BINDINGS.md

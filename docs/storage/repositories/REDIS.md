@@ -7,7 +7,7 @@ To use this repository either the [phpredis][phpredis] extension or the [predis 
 
 ## Example
 
-### PhpRedis
+### [PhpRedis][phpredis]
 
 ```php
 <?php
@@ -20,10 +20,7 @@ use Krenor\Prometheus\Storage\Repositories\RedisRepository;
 
 $redis = new Redis;
 
-$redis->connect(
-    getenv('REDIS_HOST'),
-    getenv('REDIS_PORT')
-);
+$redis->connect(...);
 
 $connection = new PhpRedisConnection($redis);
 
@@ -32,7 +29,7 @@ Metric::storeUsing(new StorageManager(
 ));
 ```
 
-### Predis
+### [Predis][predis]
 
 ```php
 <?php
@@ -43,10 +40,7 @@ use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Storage\Redis\PredisConnection;
 use Krenor\Prometheus\Storage\Repositories\RedisRepository;
 
-$redis = new Redis([
-    'host' => getenv('REDIS_HOST'),
-    'port' => getenv('REDIS_PORT'),
-]);
+$redis = new Redis(...);
 
 $connection = new PredisConnection($client);
 
