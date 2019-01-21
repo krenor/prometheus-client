@@ -20,8 +20,9 @@
   },
   "require": {
     "php": "^7.1",
-    "tightenco/collect": "^5.7",
-    "ext-json": "*"
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "^6.3",
+    "tightenco/collect": "^5.7"
   },
   "require-dev": {
     "codedungeon/phpunit-result-printer": "^0.23.4",

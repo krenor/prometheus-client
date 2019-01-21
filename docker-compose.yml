@@ -27,3 +27,6 @@ services:
   ## Redis Container ###########
   redis:
     image: redis:5.0-alpine3.8
+
+  pushgateway:
+    image: prom/pushgateway
