@@ -35,11 +35,10 @@ interface Repository
      * @param string $key
      * @param string $field
      * @param mixed $value
-     * @param bool $override
      *
      * @return void
      */
-    public function set(string $key, string $field, $value, $override = true): void;
+    public function set(string $key, string $field, $value): void;
 
     /**
      * @param string $key

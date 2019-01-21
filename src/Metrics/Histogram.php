@@ -2,14 +2,16 @@
 
 namespace Krenor\Prometheus\Metrics;
 
-use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Contracts\Types\Observable;
 use Krenor\Prometheus\Exceptions\PrometheusException;
+use Krenor\Prometheus\Metrics\Concerns\TracksExecutionTime;
 
 abstract class Histogram extends Metric implements Observable
 {
+    use TracksExecutionTime;
+
     /**
      * @var float[]
      */
@@ -50,15 +52,17 @@ abstract class Histogram extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    final public function type(): string
+    public function type(): string
     {
         return 'histogram';
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return self
      */
-    public function observe(float $value, array $labels): self
+    public function observe(float $value, array $labels = []): Observable
     {
         static::$storage->observe($this, $value, $labels);
 
@@ -71,5 +75,13 @@ abstract class Histogram extends Metric implements Observable
     public function buckets(): Collection
     {
         return new Collection($this->buckets);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function track(float $value, array $labels = []): void
+    {
+        $this->observe($value, $labels);
     }
 }

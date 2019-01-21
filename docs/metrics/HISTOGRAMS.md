@@ -16,10 +16,10 @@ A histogram with a base metric name of `<basename>` exposes multiple time series
 
 ## Properties
 
-As histograms extend the [Metric class](README.md) they offer the same properties.  
+As histograms extend the [abstract Metric](README.md) they offer the same [properties](README.md#properties).  
 Additionally they have the following properties:
 
-#### `buckets`
+#### `array $buckets`
 
 An array of inclusive upper bounds to count observations.  This property can be omitted to  
 use the default buckets (`.005`, `.01`, `.025`, `.05`, `.1`, `.25`, `.5`, `1`, `2.5`, `5`, `10`) which  
@@ -28,19 +28,24 @@ are intended to cover a typical web/rpc request in seconds.
 Sorting the buckets isn't required as its done silently.  
 You **shouldn't** include an `+Inf` bucket as 
 * it's added dynamically during collection
-* the buckets are internally treated as [floats][string-to-float]
+* the buckets are internally [treated as floats][string-to-float-conversion]
 
-**Each bucket is one timeseries.** Many buckets and/or many dimensions with labels can produce  
-large amount of time series, that may cause performance problems.
+**Each bucket is one timeseries.** Many buckets and/or many dimensions with labels can  
+produce large amount of time series, that may cause performance problems.
 
 ## Methods
 
-As histograms extend the [Metric class](README.md) they offer the same methods.    
-Besides a `buckets()` getter they offer the following additional functionality:
+As histograms extend the [abstract Metric](README.md) they offer the same [methods](README.md#methods).    
+Besides a `buckets()` getter they offer the following additional methods:
 
-#### `observe(float $value, array $labels)`
+#### `observe(float $value, array $labels = [])`
 
-Pass a call to the [Storage][storage-docs] to observe this histogram by `$value` with the given **label values**.
+Pass a call to the underlying [Storage](../storage/README.md) to observe this histogram with `$value` and 
+given **label values**
+
+#### `chronometer(array $labels = [], int $precision = 4)`
+
+[Returns a closure to track execution time](TRACKING_EXECUTION_TIME.md)
 
 ## Example
 
@@ -68,6 +73,8 @@ $histogram = new class extends Histogram {
         2.25,
     ];
 }
+
+$histogram->observe(42, ['foo', 'bar', 'baz']);
 ```
-[string-to-float]: http://php.net/manual/en/language.types.string.php#language.types.string.conversion
-[storage-docs]: ../storage/README.md
+
+[string-to-float-conversion]: http://php.net/manual/en/language.types.string.php#language.types.string.conversion

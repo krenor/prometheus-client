@@ -1,13 +1,14 @@
 <?php
 
-namespace Krenor\Prometheus\Storage\Collectors;
+namespace Krenor\Prometheus\Storage\Builders;
 
 use Closure;
 use Krenor\Prometheus\Sample;
 use Krenor\Prometheus\Metrics\Summary;
 use Tightenco\Collect\Support\Collection;
+use Krenor\Prometheus\Contracts\SamplesBuilder;
 
-class SummarySamplesCollector extends SamplesCollector
+class SummarySamplesBuilder extends SamplesBuilder
 {
     /**
      * @var Summary
@@ -15,24 +16,42 @@ class SummarySamplesCollector extends SamplesCollector
     protected $metric;
 
     /**
+     * SummarySamplesBuilder constructor.
+     *
+     * @param Summary $summary
+     * @param Collection $items
+     */
+    public function __construct(Summary $summary, Collection $items)
+    {
+        parent::__construct($summary, $items);
+    }
+
+    /**
+     * @return Collection
+     */
+    protected function initialize(): Collection
+    {
+        return new Collection;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function group(): Collection
     {
-        return parent::group()->map(function (Collection $stored) {
-            return $stored->first();
-        })->map(function (array $stored) {
+        return parent::group()->collapse()->map(function ($item) {
             /** @var Collection $values */
-            $values = $stored['value'];
+            $values = $item['value'];
             $count = $values->count();
+            $labels = $item['labels'];
 
             return $this->metric
                 ->quantiles()
                 ->map($this->calculate($values->sort()->values(), $count))
                 ->push(compact('count'))
                 ->push(['sum' => $values->sum()])
-                ->map(function ($item) use ($stored) {
-                    $item['labels'] = $stored['labels'];
+                ->map(function ($item) use ($labels) {
+                    $item['labels'] = $labels;
 
                     return $item;
                 });
@@ -42,7 +61,7 @@ class SummarySamplesCollector extends SamplesCollector
     /**
      * {@inheritdoc}
      */
-    protected function sample(string $name): Closure
+    protected function build(string $name): Closure
     {
         return function (array $item) use ($name) {
             $labels = new Collection($item['labels']);
@@ -68,11 +87,12 @@ class SummarySamplesCollector extends SamplesCollector
     private function calculate(Collection $values, int $count): Closure
     {
         return function (float $quantile) use ($count, $values) {
-            $index = $count * $quantile;
+            $position = $count * $quantile;
+            $index = (int) $position;
 
-            $value = floor($index) === $index
-                ? ($values[$index - 1] + $values[$index]) / 2
-                : $values[floor($index)];
+            $value = floor($position) === $position
+                ? ($values->get($index - 1) + $values->get($index)) / 2
+                : $values->get($index);
 
             return compact('quantile', 'value');
         };

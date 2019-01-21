@@ -3,13 +3,15 @@
 namespace Krenor\Prometheus\Tests\Unit;
 
 use Mockery as m;
+use InvalidArgumentException;
 use Krenor\Prometheus\Sample;
 use PHPUnit\Framework\TestCase;
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Metric;
 use Krenor\Prometheus\Contracts\Storage;
 use Krenor\Prometheus\CollectorRegistry;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\MetricFamilySamples;
+use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsGaugeStub;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsCounterStub;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsSummaryStub;
@@ -89,17 +91,16 @@ class CollectorRegistryTest extends TestCase
 
         Metric::storeUsing($storage);
 
-        $metrics = [
-            new MultipleLabelsCounterStub,
-            new MultipleLabelsGaugeStub,
-            new MultipleLabelsHistogramStub,
-            new MultipleLabelsSummaryStub,
-        ];
+        $metrics = new Collection([
+            MultipleLabelsCounterStub::class   => new MultipleLabelsCounterStub,
+            MultipleLabelsGaugeStub::class     => new MultipleLabelsGaugeStub,
+            MultipleLabelsHistogramStub::class => new MultipleLabelsHistogramStub,
+            MultipleLabelsSummaryStub::class   => new MultipleLabelsSummaryStub,
+        ]);
 
-        $this->registry->register($metrics[0]);
-        $this->registry->register($metrics[1]);
-        $this->registry->register($metrics[2]);
-        $this->registry->register($metrics[3]);
+        $metrics->each(function (Metric $metric) {
+            $this->registry->register($metric);
+        });
 
         $sample = function (string $name) {
             return new Collection([
@@ -136,5 +137,23 @@ class CollectorRegistryTest extends TestCase
             $this->assertEquals($metrics[$index], $family->metric());
             $this->assertCount(1, $family->samples());
         }
+    }
+
+    /** @test */
+    public function it_should_throw_an_invalid_argument_exception_when_registering_unknown_metric_types()
+    {
+        $custom = new class extends Metric {
+            protected $namespace = 'custom';
+            protected $name = 'metric';
+
+            public function builder(Collection $items): SamplesBuilder {}
+
+            public function type(): string {}
+        };
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Could not determine collector of unknown metric type.");
+
+        $this->registry->register($custom);
     }
 }

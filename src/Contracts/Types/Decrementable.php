@@ -4,20 +4,20 @@ namespace Krenor\Prometheus\Contracts\Types;
 
 use Krenor\Prometheus\Contracts\Metric;
 
-interface Decrementable
+interface Decrementable extends Metric
 {
     /**
-     * @param array $values
+     * @param array $labels
      *
-     * @return Metric
+     * @return self
      */
-    public function decrement(array $values);
+    public function decrement(array $labels = []): self;
 
     /**
      * @param float $value
      * @param array $labels
      *
-     * @return Metric
+     * @return self
      */
-    public function decrementBy(float $value, array $labels);
+    public function decrementBy(float $value, array $labels = []): self;
 }

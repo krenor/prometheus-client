@@ -28,13 +28,19 @@ class TextRenderer implements Renderable
      */
     protected function serialize(Collection $labels): string
     {
+        if ($labels->isEmpty()) {
+            return '';
+        }
+
         $quoted = $labels->map(function (string $value) {
             return "\"{$value}\"";
         });
 
-        return urldecode(
+        $serialized = urldecode(
             http_build_query($quoted->toArray(), '', ',')
         );
+
+        return "{{$serialized}}";
     }
 
     /**
@@ -52,9 +58,7 @@ class TextRenderer implements Renderable
         ]);
 
         $metrics = $family->samples()->map(function (Sample $sample) {
-            $labels = $this->serialize($sample->labels());
-
-            return "{$sample->name()}{{$labels}} {$sample->value()}";
+            return "{$sample->name()}{$this->serialize($sample->labels())} {$sample->value()}";
         })->values();
 
         return $lines->merge($metrics);

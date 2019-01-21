@@ -1,19 +1,39 @@
 <?php
 
-namespace Krenor\Prometheus\Storage\Collectors;
+namespace Krenor\Prometheus\Storage\Builders;
 
 use Closure;
+use InvalidArgumentException;
 use Krenor\Prometheus\Sample;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\Exceptions\SamplesCollectorException;
+use Krenor\Prometheus\Contracts\SamplesBuilder;
 
-class HistogramSamplesCollector extends SamplesCollector
+class HistogramSamplesBuilder extends SamplesBuilder
 {
     /**
      * @var Histogram
      */
     protected $metric;
+
+    /**
+     * HistogramSamplesBuilder constructor.
+     *
+     * @param Histogram $histogram
+     * @param Collection $items
+     */
+    public function __construct(Histogram $histogram, Collection $items)
+    {
+        parent::__construct($histogram, $items);
+    }
+
+    /**
+     * @return int
+     */
+    protected function initialize(): int
+    {
+        return 0;
+    }
 
     /**
      * {@inheritdoc}
@@ -22,18 +42,18 @@ class HistogramSamplesCollector extends SamplesCollector
     {
         $buckets = $this->metric->buckets()->push('+Inf');
 
-        return parent::group()->map(function (Collection $stored) use ($buckets) {
-            $sum = $stored->pop();
+        return parent::group()->map(function (Collection $items) use ($buckets) {
+            $sum = $items->pop();
 
             if (array_key_exists('bucket', $sum)) {
-                throw new SamplesCollectorException('The last element has to be the sum of all bucket values.');
+                throw new InvalidArgumentException('The last element has to be the sum of all bucket observations.');
             }
 
-            $labels = $stored->first()['labels'];
+            $labels = $items->first()['labels'];
 
             return $this
-                ->fill($this->all($buckets, $stored), new Collection)
-                ->push(['count' => $stored->sum('value')])
+                ->fill($this->all($buckets, $items), new Collection)
+                ->push(['count' => $items->sum('value')])
                 ->push(['sum' => $sum['value']])
                 ->map(function ($item) use ($labels) {
                     $item['labels'] = $labels;
@@ -46,7 +66,7 @@ class HistogramSamplesCollector extends SamplesCollector
     /**
      * {@inheritdoc}
      */
-    protected function sample(string $name): Closure
+    protected function build(string $name): Closure
     {
         return function (array $item) use ($name) {
             $labels = new Collection($item['labels']);
@@ -65,19 +85,19 @@ class HistogramSamplesCollector extends SamplesCollector
 
     /**
      * @param Collection $buckets
-     * @param Collection $stored
+     * @param Collection $items
      *
      * @return Collection
      */
-    private function all(Collection $buckets, Collection $stored): Collection
+    private function all(Collection $buckets, Collection $items): Collection
     {
         $missing = $buckets
-            ->diff($stored->pluck('bucket'))
+            ->diff($items->pluck('bucket'))
             ->map(function ($bucket) {
                 return compact('bucket') + ['value' => 0];
             });
 
-        return $stored
+        return $items
             ->reject(function (array $item) use ($buckets) {
                 return !$buckets->contains($item['bucket']);
             })->merge($missing)
@@ -107,24 +127,24 @@ class HistogramSamplesCollector extends SamplesCollector
     }
 
     /**
-     * @param Collection $original
+     * @param Collection $items
      * @param Collection $result
      * @param int $sum
      * @param int $i
      *
      * @return Collection
      */
-    private function fill(Collection $original, Collection $result, int $sum = 0, int $i = 0): Collection
+    private function fill(Collection $items, Collection $result, int $sum = 0, int $i = 0): Collection
     {
-        if ($i >= $original->count()) {
+        if ($i >= $items->count()) {
             return $result;
         }
 
-        $value = $original[$i]['value'] + $sum;
-        $bucket = $original[$i]['bucket'];
+        $value = $items[$i]['value'] + $sum;
+        $bucket = $items[$i]['bucket'];
 
         $result->push(compact('bucket', 'value'));
 
-        return $this->fill($original, $result, $value, ++$i);
+        return $this->fill($items, $result, $value, ++$i);
     }
 }

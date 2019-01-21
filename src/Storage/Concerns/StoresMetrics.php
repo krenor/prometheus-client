@@ -3,7 +3,6 @@
 namespace Krenor\Prometheus\Storage\Concerns;
 
 use Krenor\Prometheus\Contracts\Metric;
-use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Exceptions\LabelException;
 
@@ -29,20 +28,5 @@ trait StoresMetrics
         return new Collection([
             'labels' => $metric->labels()->combine($labels),
         ]);
-    }
-
-    /**
-     * @param Histogram $histogram
-     * @param float $value
-     *
-     * @return array
-     */
-    protected function bucket(Histogram $histogram, float $value): array
-    {
-        $bucket = $histogram->buckets()->first(function (float $bucket) use ($value) {
-            return $value <= $bucket;
-        }, '+Inf');
-
-        return compact('bucket');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Krenor\Prometheus\Tests\Unit\Metrics;
 
-use Krenor\Prometheus\Contracts\Metric;
+use Krenor\Prometheus\Metrics\Metric;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Exceptions\PrometheusException;

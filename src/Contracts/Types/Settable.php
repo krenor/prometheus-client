@@ -4,13 +4,13 @@ namespace Krenor\Prometheus\Contracts\Types;
 
 use Krenor\Prometheus\Contracts\Metric;
 
-interface Settable
+interface Settable extends Metric
 {
     /**
      * @param float $value
      * @param array $labels
      *
-     * @return Metric
+     * @return self
      */
-    public function set(float $value, array $labels);
+    public function set(float $value, array $labels = []): self;
 }

@@ -31,7 +31,7 @@ interface Storage
      *
      * @return void
      */
-    public function increment(Incrementable $metric, float $value, array $labels): void;
+    public function increment(Incrementable $metric, float $value, array $labels = []): void;
 
     /**
      * @param Decrementable $metric
@@ -43,7 +43,7 @@ interface Storage
      *
      * @return void
      */
-    public function decrement(Decrementable $metric, float $value, array $labels): void;
+    public function decrement(Decrementable $metric, float $value, array $labels = []): void;
 
     /**
      * @param Observable $metric
@@ -55,7 +55,7 @@ interface Storage
      *
      * @return void
      */
-    public function observe(Observable $metric, float $value, array $labels): void;
+    public function observe(Observable $metric, float $value, array $labels = []): void;
 
     /**
      * @param Settable $metric
@@ -67,5 +67,10 @@ interface Storage
      *
      * @return void
      */
-    public function set(Settable $metric, float $value, array $labels): void;
+    public function set(Settable $metric, float $value, array $labels = []): void;
+
+    /**
+     * @return bool
+     */
+    public function flush(): bool;
 }

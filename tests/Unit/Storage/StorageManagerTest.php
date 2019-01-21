@@ -3,15 +3,21 @@
 namespace Krenor\Prometheus\Tests\Unit\Storage;
 
 use Mockery as m;
+use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use Krenor\Prometheus\Metrics\Gauge;
+use Krenor\Prometheus\Metrics\Counter;
+use Krenor\Prometheus\Metrics\Summary;
+use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
 use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Exceptions\StorageException;
+use Krenor\Prometheus\Tests\Stubs\InvalidCollectorStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelGaugeStub;
-use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub;
+use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelHistogramStub;
 
 class StorageManagerTest extends TestCase
@@ -19,9 +25,10 @@ class StorageManagerTest extends TestCase
     /**
      * @test
      *
+     * @group counters
      * @group storage
      */
-    public function it_should_collect_default_metric_samples()
+    public function it_should_collect_counter_metric_samples()
     {
         $repository = m::mock(Repository::class);
 
@@ -35,6 +42,30 @@ class StorageManagerTest extends TestCase
 
         $storage = new StorageManager($repository, 'PHPUNIT');
         $metric = new SingleLabelCounterStub;
+
+        $this->assertNotEmpty($storage->collect($metric));
+    }
+
+    /**
+     * @test
+     *
+     * @group gauges
+     * @group storage
+     */
+    public function it_should_collect_gauge_metric_samples()
+    {
+        $repository = m::mock(Repository::class);
+
+        $repository
+            ->expects('get')
+            ->once()
+            ->with('PHPUNIT:example_gauge')
+            ->andReturn(new Collection([
+                '{"labels":{"example_label":"hello world"}}' => 1,
+            ]));
+
+        $storage = new StorageManager($repository, 'PHPUNIT');
+        $metric = new SingleLabelGaugeStub;
 
         $this->assertNotEmpty($storage->collect($metric));
     }
@@ -106,6 +137,81 @@ class StorageManagerTest extends TestCase
         $metric = new SingleLabelSummaryStub;
 
         $this->assertNotEmpty($storage->collect($metric));
+    }
+
+    /**
+     * @test
+     *
+     * @group bindings
+     * @group exceptions
+     * @group storage
+     */
+    public function it_should_throw_an_exception_if_no_collector_binding_was_found_for_the_metric()
+    {
+        $error = 'Could not find [collect] binding for metric.';
+        $repository = m::mock(Repository::class);
+        $storage = new StorageManager($repository);
+
+        $repository->shouldReceive('get')
+                   ->once()
+                   ->andReturn(new Collection);
+
+        $reflection = (new ReflectionClass($storage))->getProperty('bindings');
+        $reflection->setAccessible(true);
+
+        /** @var array $bindings */
+        $bindings = $reflection->getValue($storage);
+
+        unset($bindings['collect'][Counter::class]);
+
+        $reflection->setValue($storage, $bindings);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage(
+            "Failed to collect the samples of [Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub]: {$error}"
+        );
+
+        $metric = new SingleLabelCounterStub;
+
+        $storage->collect($metric);
+    }
+
+    /**
+     * @test
+     *
+     * @group bindings
+     * @group exceptions
+     * @group storage
+     */
+    public function it_should_throw_an_exception_if_the_collector_binding_is_invalid()
+    {
+        $error = 'The collector did not resolve into a SamplesBuilder.';
+        $repository = m::mock(Repository::class);
+        $storage = new StorageManager($repository);
+
+        $repository->shouldReceive('get')
+                   ->once()
+                   ->andReturn(new Collection);
+
+        $reflection = (new ReflectionClass($storage))->getProperty('bindings');
+        $reflection->setAccessible(true);
+
+        /** @var array $bindings */
+        $bindings = $reflection->getValue($storage);
+        $bindings['collect'][Counter::class] = new class {
+            public function __invoke(){}
+        };
+
+        $reflection->setValue($storage, $bindings);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage(
+            "Failed to collect the samples of [Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub]: {$error}"
+        );
+
+        $metric = new SingleLabelCounterStub;
+
+        $storage->collect($metric);
     }
 
     /**
@@ -301,7 +407,7 @@ class StorageManagerTest extends TestCase
      * @group exceptions
      * @group storage
      */
-    public function it_should_throw_a_storage_exception_when_seting_a_metric_fails()
+    public function it_should_throw_a_storage_exception_when_setting_a_metric_fails()
     {
         $error = 'A wittle fucko boingo!';
         $repository = m::mock(Repository::class);
@@ -392,7 +498,6 @@ class StorageManagerTest extends TestCase
                 'PHPUNIT:example_summary',
                 $field,
                 "PHPUNIT:example_summary:{$identifier}:VALUES",
-                false,
             ]);
 
         $repository
@@ -451,5 +556,35 @@ class StorageManagerTest extends TestCase
         $this->expectExceptionMessage('Expected 1 label values but 3 were given.');
 
         $storage->observe($metric, 1, [null, null, null]);
+    }
+
+    /**
+     * @test
+     *
+     * @group bindings
+     * @group storage
+     */
+    public function it_should_be_possible_to_bind_custom_collectors_to_metric_types()
+    {
+        $storage = new StorageManager(m::mock(Repository::class));
+        $collector = get_class(new class{});
+
+        $reflection = (new ReflectionClass($storage))->getProperty('bindings');
+        $reflection->setAccessible(true);
+
+        /** @var array $bindings */
+        $bindings = $reflection->getValue($storage);
+
+        $this->assertArrayHasKey('collect', $bindings);
+        $this->assertArrayHasKey(Counter::class, $bindings['collect']);
+        $this->assertArrayHasKey(Gauge::class, $bindings['collect']);
+        $this->assertArrayHasKey(Histogram::class, $bindings['collect']);
+        $this->assertArrayHasKey(Summary::class, $bindings['collect']);
+
+        $storage->bind(StorageManager::COLLECTOR_BINDING_KEY, Counter::class, $collector);
+
+        $bindings = $reflection->getValue($storage);
+
+        $this->assertSame($bindings['collect'][Counter::class], $collector);
     }
 }

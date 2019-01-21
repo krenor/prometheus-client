@@ -8,7 +8,7 @@ use Krenor\Prometheus\Storage\Repositories\MemcachedRepository;
 class MemcachedStorageTest extends TestCase
 {
     /**
-     * @var ApcRepository
+     * @var MemcachedRepository
      */
     protected static $repository;
 

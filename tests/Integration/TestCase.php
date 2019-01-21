@@ -3,9 +3,9 @@
 namespace Krenor\Prometheus\Tests\Integration;
 
 use Krenor\Prometheus\Metrics\Gauge;
+use Krenor\Prometheus\Metrics\Metric;
 use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Metrics\Summary;
-use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\CollectorRegistry;
 use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Repository;
@@ -64,6 +64,8 @@ abstract class TestCase extends BaseTestCase
     /** @test */
     public function it_should_increment_counters_and_render_their_samples()
     {
+        /** @var Counter $single */
+        /** @var Counter $multi */
         $single = $this->registry->register(new SingleLabelCounterStub);
         $multi = $this->registry->register(new MultipleLabelsCounterStub);
 
@@ -87,6 +89,8 @@ abstract class TestCase extends BaseTestCase
     /** @test */
     public function it_should_increment_gauges_and_render_their_samples()
     {
+        /** @var Gauge $single */
+        /** @var Gauge $multi */
         $single = $this->registry->register(new SingleLabelGaugeStub);
         $multi = $this->registry->register(new MultipleLabelsGaugeStub);
 
@@ -110,6 +114,8 @@ abstract class TestCase extends BaseTestCase
     /** @test */
     public function it_should_decrement_gauges_and_render_their_samples()
     {
+        /** @var Gauge $single */
+        /** @var Gauge $multi */
         $single = $this->registry->register(new SingleLabelGaugeStub);
         $multi = $this->registry->register(new MultipleLabelsGaugeStub);
 
@@ -170,6 +176,8 @@ abstract class TestCase extends BaseTestCase
     /** @test */
     public function it_should_observe_histograms_and_render_their_samples()
     {
+        /** @var Histogram $single */
+        /** @var Histogram $multi */
         $single = $this->registry->register(new SingleLabelHistogramStub);
         $multi = $this->registry->register(new MultipleLabelsHistogramStub);
 
@@ -193,6 +201,8 @@ abstract class TestCase extends BaseTestCase
     /** @test */
     public function it_should_observe_summaries_and_render_their_samples()
     {
+        /** @var Summary $single */
+        /** @var Summary $multi */
         $single = $this->registry->register(new SingleLabelSummaryStub);
         $multi = $this->registry->register(new MultipleLabelsSummaryStub);
 

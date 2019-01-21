@@ -43,13 +43,9 @@ abstract class SimpleRepository implements Repository
     /**
      * {@inheritdoc}
      */
-    public function set(string $key, string $field, $value, $override = true): void
+    public function set(string $key, string $field, $value): void
     {
         $collection = $this->get($key);
-
-        if (!$override && $collection->get($field) !== null) {
-            return;
-        }
 
         if (!$this->store($key, $collection->put($field, $value))) {
             throw new StorageException('The storage returned `false`.');

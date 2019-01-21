@@ -2,9 +2,9 @@
 
 namespace Krenor\Prometheus\Storage\Repositories;
 
-use Predis\Client as Redis;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
+use Krenor\Prometheus\Storage\Redis\Connection as Redis;
 
 class RedisRepository implements Repository
 {
@@ -54,11 +54,9 @@ class RedisRepository implements Repository
     /**
      * {@inheritdoc}
      */
-    public function set(string $key, string $field, $value, $override = true): void
+    public function set(string $key, string $field, $value): void
     {
-        $override
-            ? $this->redis->hset($key, $field, $value)
-            : $this->redis->hsetnx($key, $field, $value);
+        $this->redis->hset($key, $field, $value);
     }
 
     /**
@@ -66,7 +64,7 @@ class RedisRepository implements Repository
      */
     public function push(string $key, float $value): void
     {
-        $this->redis->rpush($key, $value);
+        $this->redis->rpush($key, [$value]);
     }
 
     /**
@@ -74,6 +72,6 @@ class RedisRepository implements Repository
      */
     public function flush(): bool
     {
-        return (bool) $this->redis->flushdb();
+        return $this->redis->flushdb();
     }
 }
