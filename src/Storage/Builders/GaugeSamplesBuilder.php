@@ -23,12 +23,4 @@ class GaugeSamplesBuilder extends SamplesBuilder
     {
         parent::__construct($gauge, $items);
     }
-
-    /**
-     * @return int
-     */
-    protected function initialize(): int
-    {
-        return 0;
-    }
 }

@@ -33,7 +33,7 @@ class HistogramSamplesBuilderTest extends TestCase
         ]));
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The last element has to be the sum of all bucket observations.');
+        $this->expectExceptionMessage('Sum of bucket observations missing.');
 
         $builder->samples();
     }
@@ -143,7 +143,7 @@ class HistogramSamplesBuilderTest extends TestCase
      * @group builders
      * @group histograms
      */
-    public function it_should_initialize_histograms_except_labels()
+    public function it_should_initialize_histograms_without_labels()
     {
         $histogram = new SingleLabelHistogramStub;
 
