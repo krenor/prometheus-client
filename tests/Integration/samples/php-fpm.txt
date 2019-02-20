@@ -1,0 +1,49 @@
+# HELP php_fpm_uptime_seconds The number of seconds since FPM has started.
+# TYPE php_fpm_uptime_seconds counter
+php_fpm_uptime_seconds{pool="www"} 302035
+# HELP php_fpm_connections_total The number of requests accepted.
+# TYPE php_fpm_connections_total counter
+php_fpm_connections_total{pool="www"} 44144
+# HELP php_fpm_connections_max_queued_count The maximum number of requests in the queue of pending connections.
+# TYPE php_fpm_connections_max_queued_count counter
+php_fpm_connections_max_queued_count{pool="www"} 1
+# HELP php_fpm_processes_max_active_count The maximum number of active processes since FPM has started.
+# TYPE php_fpm_processes_max_active_count counter
+php_fpm_processes_max_active_count{pool="www"} 2
+# HELP php_fpm_processes_limit_reached_count The number of times the process limit has been reached when trying to start more children.
+# TYPE php_fpm_processes_limit_reached_count counter
+php_fpm_processes_limit_reached_count{pool="www"} 0
+# HELP php_fpm_connections_slow_count The number of requests exceeding the configured 'request_slowlog_timeout' value.
+# TYPE php_fpm_connections_slow_count counter
+php_fpm_connections_slow_count{pool="www"} 0
+# HELP php_fpm_process_requests_total The number of requests the process has served.
+# TYPE php_fpm_process_requests_total counter
+php_fpm_process_requests_total{pool="www",pid="23"} 22071
+php_fpm_process_requests_total{pool="www",pid="24"} 22073
+# HELP php_fpm_connections_queued_count The number of request in the queue of pending connections.
+# TYPE php_fpm_connections_queued_count gauge
+php_fpm_connections_queued_count{pool="www"} 0
+# HELP php_fpm_connections_queue_size The size of the socket queue for pending connections.
+# TYPE php_fpm_connections_queue_size gauge
+php_fpm_connections_queue_size{pool="www"} 128
+# HELP php_fpm_processes_idle_count The number of idle processes.
+# TYPE php_fpm_processes_idle_count gauge
+php_fpm_processes_idle_count{pool="www"} 1
+# HELP php_fpm_processes_active_count The number of active processes.
+# TYPE php_fpm_processes_active_count gauge
+php_fpm_processes_active_count{pool="www"} 1
+# HELP php_fpm_processes_total The number of idle and active processes.
+# TYPE php_fpm_processes_total gauge
+php_fpm_processes_total{pool="www"} 2
+# HELP php_fpm_process_requests_duration_microseconds The duration in microseconds of the requests.
+# TYPE php_fpm_process_requests_duration_microseconds gauge
+php_fpm_process_requests_duration_microseconds{pool="www",pid="23"} 295
+php_fpm_process_requests_duration_microseconds{pool="www",pid="24"} 1.844674407371E+19
+# HELP php_fpm_process_last_cpu_percent The percentage of cpu the last request consumed.
+# TYPE php_fpm_process_last_cpu_percent gauge
+php_fpm_process_last_cpu_percent{pool="www",pid="23"} 0
+php_fpm_process_last_cpu_percent{pool="www",pid="24"} 0
+# HELP php_fpm_process_last_memory_bytes The amount of memory the last request consumed.
+# TYPE php_fpm_process_last_memory_bytes gauge
+php_fpm_process_last_memory_bytes{pool="www",pid="23"} 2097152
+php_fpm_process_last_memory_bytes{pool="www",pid="24"} 0
