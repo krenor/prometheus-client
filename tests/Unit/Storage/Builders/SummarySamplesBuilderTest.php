@@ -51,11 +51,11 @@ class SummarySamplesBuilderTest extends TestCase
         $this->assertSame(.8, $samples[3]->labels()->get('quantile'));
         $this->assertEquals(8, $samples[3]->value());
 
-        $this->assertContains('_count', $samples[4]->name());
+        $this->assertStringContainsString('_count', $samples[4]->name());
         $this->assertNull($samples[4]->labels()->get('quantile'));
         $this->assertEquals($values->count(), $samples[4]->value());
 
-        $this->assertContains('_sum', $samples[5]->name());
+        $this->assertStringContainsString('_sum', $samples[5]->name());
         $this->assertNull($samples[5]->labels()->get('quantile'));
         $this->assertEquals($values->sum(), $samples[5]->value());
     }

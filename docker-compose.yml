@@ -12,8 +12,6 @@ services:
       - PHP_IDE_CONFIG=serverName=localhost
     env_file:
       - .env
-    extra_hosts:
-      - XDEBUG_HOST:${XDEBUG_HOST}
     volumes:
       - ./:/var/www
     depends_on:

@@ -3,3 +3,4 @@ vendor/
 phpunit/
 
 .env
+.phpunit.result.cache

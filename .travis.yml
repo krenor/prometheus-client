@@ -3,9 +3,9 @@ dist: trusty
 sudo: false
 
 php:
-  - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
 services:
   - memcached-server
@@ -18,7 +18,7 @@ cache:
 env:
   global:
     - COMPOSER_UPDATE_FLAGS="--no-interaction --no-suggest --prefer-dist"
-    - COVER_PHP_VERSION="7.1"
+    - COVER_PHP_VERSION="7.2"
     - MEMCACHED_HOST="127.0.0.1"
     - REDIS_HOST="127.0.0.1"
 
