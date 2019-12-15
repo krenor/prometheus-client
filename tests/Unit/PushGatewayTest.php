@@ -39,7 +39,7 @@ class PushGatewayTest extends TestCase
     /** @test */
     public function it_should_send_metrics_through_a_post_request()
     {
-        $this->handler->append(new Response(202));
+        $this->handler->append(new Response(200));
 
         $this->assertTrue($this->gateway->add('example', 'default'));
 
@@ -67,7 +67,7 @@ class PushGatewayTest extends TestCase
     /** @test */
     public function it_should_send_a_deletion_request()
     {
-        $this->handler->append(new Response(202));
+        $this->handler->append(new Response(200));
 
         $this->assertTrue($this->gateway->delete('example'));
 
