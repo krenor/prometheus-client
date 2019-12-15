@@ -1,14 +1,12 @@
 language: php
-dist: trusty
+dist: xenial
 sudo: false
 
 php:
-  - 7.2
-  - 7.3
   - 7.4
 
 services:
-  - memcached-server
+  - memcached
   - redis-server
 
 cache:
@@ -18,7 +16,6 @@ cache:
 env:
   global:
     - COMPOSER_UPDATE_FLAGS="--no-interaction --no-suggest --prefer-dist"
-    - COVER_PHP_VERSION="7.2"
     - MEMCACHED_HOST="127.0.0.1"
     - REDIS_HOST="127.0.0.1"
 
@@ -27,9 +24,6 @@ before_install:
   - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension=memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - travis_retry composer self-update
-  - if [ "${TRAVIS_PHP_VERSION}" != "${COVER_PHP_VERSION}" ]; then
-      phpenv config-rm xdebug.ini
-    ;fi
 
 before_script:
   - travis_retry composer update ${COMPOSER_UPDATE_FLAGS}
@@ -38,7 +32,5 @@ script:
   - vendor/bin/phpunit
 
 after_script:
-  - if [ "${TRAVIS_PHP_VERSION}" == "${COVER_PHP_VERSION}" ]; then
-      wget https://scrutinizer-ci.com/ocular.phar &&
-      php ocular.phar code-coverage:upload --format=php-clover phpunit/coverage/clover.xml;
-    fi
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover phpunit/coverage/clover.xml;

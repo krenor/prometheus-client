@@ -19,15 +19,15 @@
     "sort-packages": true
   },
   "require": {
-    "php": "^7.2",
+    "php": "^7.4",
     "ext-json": "*",
-    "guzzlehttp/guzzle": "^6.3",
-    "tightenco/collect": "^6.0"
+    "guzzlehttp/guzzle": "^6.5",
+    "tightenco/collect": "^6.7"
   },
   "require-dev": {
     "codedungeon/phpunit-result-printer": "^0.26.2",
-    "mockery/mockery": "^1.2",
-    "phpunit/phpunit": "^8.3",
+    "mockery/mockery": "^1.3",
+    "phpunit/phpunit": "^8.5",
     "predis/predis": "^1.1",
     "ext-redis": "*",
     "ext-apcu": "*",
@@ -52,7 +52,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Krenor\\Preometheus\\Providers\\LaravelServiceProvider"
+        "Krenor\\Prometheus\\Providers\\LaravelServiceProvider"
       ]
     }
   }
