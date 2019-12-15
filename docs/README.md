@@ -14,5 +14,7 @@ Components
 * [`CollectorRegistry`](COLLECTOR_REGISTRY.md)
 * [`TextRenderer`](TEXT_RENDERER.md)
 * [`Exceptions`](EXCEPTIONS.md)
+* [`PushGateway`](PUSH_GATEWAY.md)
+* [`Exporters`](EXPORTERS.md)
 
 [collections]: https://laravel.com/docs/master/collections

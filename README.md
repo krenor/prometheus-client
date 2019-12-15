@@ -3,11 +3,11 @@
 Monitor your PHP applications using [Prometheus](https://prometheus.io).  
 
 [![Packagist][icon-version]][link-version]
+[![icon-php]][link-version]
 [![Travis][icon-travis]][link-travis]
 [![Quality][icon-code-quality]][link-code-quality]
 [![Coverage][icon-code-coverage]][link-code-coverage]
 [![License][icon-license]][link-license]
-
 
 ## Features
 
@@ -16,11 +16,13 @@ Monitor your PHP applications using [Prometheus](https://prometheus.io).
 - Easy usage in style of [Laravels Eloquent ORM](https://laravel.com/docs/master/eloquent)
 - Initialization of Metrics without labels
 - Support of float values
+- Push Gateway
+- State exporters (for `fpm_get_status()` or `opcache_get_status()`)
 
 ## Planned features
 
-- Pushing metrics to a Pushgateway
-- Status collectors (for stuff like `opcache_get_status()` etc.)
+- PHP 7.4 rewrite
+- Laravel integration
   
 ## Project State
 
@@ -41,7 +43,7 @@ use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Storage\Repositories\InMemoryRepository;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsCounterStub as ExampleCounter;
 
-Metric::storeUsing(new StorageManager(new InMemoryRepository);
+Metric::storeUsing(new StorageManager(new InMemoryRepository));
 
 $registry = new CollectorRegistry;
 
@@ -68,6 +70,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
 The MIT License. Please see [LICENSE](LICENSE.md) for more information.
 
+[icon-php]: https://img.shields.io/packagist/php-v/krenor/prometheus-client?color=%234F5B93&label=PHP&style=flat-square
 [icon-version]: https://img.shields.io/packagist/v/krenor/prometheus-client.svg?style=flat-square
 [icon-travis]: https://img.shields.io/travis/krenor/prometheus-client.svg?style=flat-square
 [icon-code-quality]: https://img.shields.io/scrutinizer/g/krenor/prometheus-client.svg?style=flat-square
