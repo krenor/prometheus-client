@@ -136,7 +136,7 @@ class StorageManager implements Storage
     {
         try {
             $this->binding(self::OBSERVER_BINDING_KEY, $metric)
-            ($metric, $this->labeled($metric, $labels), $value);
+                ($metric, $this->labeled($metric, $labels), $value);
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {
@@ -197,9 +197,7 @@ class StorageManager implements Storage
     protected function binding(string $key, Metric $metric): callable
     {
         $bindings = Collection::make($this->bindings[$key]);
-        $type = $bindings->keys()->first(function (string $type) use ($metric) {
-            return is_subclass_of($metric, $type);
-        });
+        $type = $bindings->keys()->first(fn(string $type) => is_subclass_of($metric, $type));
 
         if ($type === null) {
             throw new RuntimeException("Could not find [{$key}] binding for metric.");

@@ -63,12 +63,8 @@ class HistogramSamplesBuilderTest extends TestCase
         $samples = $builder->samples();
 
         $this->assertNotEmpty($samples);
-        $this->assertNull($samples->first(function (Sample $sample) {
-            return $sample->labels()->get('le') === 42;
-        }));
-        $this->assertNull($samples->first(function (Sample $sample) {
-            return $sample->labels()->get('le') === 1337;
-        }));
+        $this->assertNull($samples->first(fn (Sample $sample) => $sample->labels()->get('le') === 42));
+        $this->assertNull($samples->first(fn (Sample $sample) => $sample->labels()->get('le') === 1337));
     }
 
     /**

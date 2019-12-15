@@ -33,13 +33,7 @@ abstract class SamplesBuilder
     {
         return $this
             ->parse()
-            ->map(function (array $data) {
-                return new Sample(
-                    $data['name'],
-                    $data['value'],
-                    new Collection($data['labels'])
-                );
-            });
+            ->map(fn(array $data) => new Sample($data['name'], $data['value'], new Collection($data['labels'])));
     }
 
     /**
@@ -57,14 +51,13 @@ abstract class SamplesBuilder
 
         return $this
             ->items
+            // TODO: Find out how to make this an arrow function.. compact doesnt work with outer scoped $name variable
             ->map(function ($value, string $field) use ($name) {
                 // Merge stored fields with the value and name to an array.
                 return compact('name', 'value') + json_decode($field, true);
-            })->reject(function (array $data) use ($labels) {
-                // Filter out items lacking the key "labels" or where labels names don't match.
-                return !array_key_exists('labels', $data)
-                    ?: array_keys($data['labels']) !== $labels;
-            })->sortBy('labels')
+            })->reject(fn(array $data) => !array_key_exists('labels', $data) ?: array_keys($data['labels']) !== $labels)
+            // Filter out items lacking the key "labels" or where labels names don't match.
+            ->sortBy('labels')
             ->values();
     }
 }

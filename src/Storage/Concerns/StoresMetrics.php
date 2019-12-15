@@ -25,6 +25,7 @@ trait StoresMetrics
             throw new LabelException("Expected {$expected} label values but {$actual} were given.");
         }
 
+        // FIXME: Only return the value.
         return new Collection([
             'labels' => $metric->labels()->combine($labels),
         ]);

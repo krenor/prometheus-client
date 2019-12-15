@@ -16,11 +16,9 @@ class TextRenderer implements Renderable
      */
     public function render(Collection $metrics): string
     {
-        $text = $metrics->flatMap(function (MetricFamilySamples $family) {
-            return $this->transform($family);
-        })->implode("\n");
-
-        return "{$text}\n";
+        return $metrics
+            ->flatMap(fn(MetricFamilySamples $family) => $this->transform($family))
+            ->implode(PHP_EOL) . PHP_EOL;
     }
 
     /**
@@ -34,9 +32,7 @@ class TextRenderer implements Renderable
             return '';
         }
 
-        $quoted = $labels->map(function (string $value) {
-            return "\"{$value}\"";
-        });
+        $quoted = $labels->map(fn(string $value) => "\"{$value}\"");
 
         $serialized = urldecode(
             http_build_query($quoted->toArray(), '', ',')
@@ -59,9 +55,10 @@ class TextRenderer implements Renderable
             "# TYPE {$metric->key()} {$metric->type()}",
         ]);
 
-        $metrics = $family->samples()->map(function (Sample $sample) {
-            return "{$sample->name()}{$this->serialize($sample->labels())} {$sample->value()}";
-        })->values();
+        $metrics = $family
+            ->samples()
+            ->map(fn(Sample $sample) => "{$sample->name()}{$this->serialize($sample->labels())} {$sample->value()}")
+            ->values();
 
         return $lines->merge($metrics);
     }

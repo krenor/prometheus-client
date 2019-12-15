@@ -3,15 +3,12 @@
 namespace Krenor\Prometheus\Storage\Builders;
 
 use InvalidArgumentException;
-use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
 
 class HistogramSamplesBuilder extends SamplesBuilder
 {
-    protected Metric $metric;
-
     /**
      * HistogramSamplesBuilder constructor.
      *
@@ -33,9 +30,8 @@ class HistogramSamplesBuilder extends SamplesBuilder
 
         return parent
             ::parse()
-            ->groupBy(function ($data) {
-                return json_encode($data['labels']);
-            })->flatMap(function (Collection $data) use ($name, $buckets) {
+            ->groupBy(fn($data) => json_encode($data['labels']))
+            ->flatMap(function (Collection $data) use ($name, $buckets) {
                 $labels = $data->first()['labels'];
 
                 /** @var $sum Collection */
@@ -77,14 +73,10 @@ class HistogramSamplesBuilder extends SamplesBuilder
     {
         $missing = $buckets
             ->diff($observations->pluck('bucket'))
-            ->map(function ($bucket) {
-                return compact('bucket') + ['value' => 0];
-            });
+            ->map(fn($bucket) => compact('bucket') + ['value' => 0]);
 
         return $observations
-            ->reject(function (array $observation) use ($buckets) {
-                return !$buckets->contains($observation['bucket']);
-            })->merge($missing)
+            ->reject(fn(array $observation) => !$buckets->contains($observation['bucket']))->merge($missing)
             ->sort(function (array $left, array $right) {
                 // Due to http://php.net/manual/en/language.types.string.php#language.types.string.conversion the
                 // bucket containing "+Inf" will be cast to 0. Sorting regularly would end up with it incorrectly

@@ -19,9 +19,7 @@ class SummaryCollector extends Binding
     {
         return new SummarySamplesBuilder(
             $summary,
-            $items->map(function (string $key) {
-                return $this->repository->get($key);
-            })
+            $items->map(fn(string $key) => $this->repository->get($key))
         );
     }
 }

@@ -19,9 +19,7 @@ class HistogramObserver extends Binding
     {
         $bucket = $histogram
             ->buckets()
-            ->first(function (float $bucket) use ($value) {
-                return $value <= $bucket;
-            }, '+Inf');
+            ->first(fn(float $bucket) => $value <= $bucket, '+Inf');
 
         $this->repository->increment($this->key, $labels->merge(compact('bucket'))->toJson(), 1);
         $this->repository->increment("{$this->key}:SUM", $labels->toJson(), $value);

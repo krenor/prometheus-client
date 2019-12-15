@@ -23,7 +23,8 @@ abstract class SimpleRepository implements Repository
     {
         $collection = $this->get($key);
 
-        $collection->put($field,
+        $collection->put(
+            $field,
             $collection->get($field, 0) + $value
         );
 

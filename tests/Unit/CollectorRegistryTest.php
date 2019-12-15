@@ -95,15 +95,11 @@ class CollectorRegistryTest extends TestCase
             MultipleLabelsSummaryStub::class   => new MultipleLabelsSummaryStub,
         ]);
 
-        $metrics->each(function (Metric $metric) {
-            $this->registry->register($metric);
-        });
+        $metrics->each(fn(Metric $metric) => $this->registry->register($metric));
 
-        $sample = function (string $name) {
-            return new Collection([
-                new Sample($name, 1, new Collection),
-            ]);
-        };
+        $sample = fn(string $name) => new Collection([
+            new Sample($name, 1, new Collection),
+        ]);
 
         $storage->expects('collect')
                 ->once()

@@ -39,9 +39,7 @@ class CollectorRegistry
         return $this
             ->collectible()
             ->collapse()
-            ->map(function (Metric $metric) {
-                return new MetricFamilySamples($metric, $metric::storage()->collect($metric));
-            });
+            ->map(fn(Metric $metric) => new MetricFamilySamples($metric, $metric::storage()->collect($metric)));
     }
 
     /**
