@@ -33,7 +33,7 @@ class HistogramSamplesBuilderTest extends TestCase
         ]));
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The last element has to be the sum of all bucket observations.');
+        $this->expectExceptionMessage('Sum of bucket observations missing.');
 
         $builder->samples();
     }
@@ -98,41 +98,41 @@ class HistogramSamplesBuilderTest extends TestCase
 
         $this->assertCount($histogram->buckets()->count() + 3, $samples);
 
-        $this->assertContains('_bucket', $samples[0]->name());
+        $this->assertStringContainsString('_bucket', $samples[0]->name());
         $this->assertEquals(100, $samples[0]->labels()->get('le'));
         // Only needs to match for the first one since the following ones reuse them
         $this->assertSame($labels, $samples[0]->labels()->except('le')->toJson());
         $this->assertEquals(0, $samples[0]->value());
 
-        $this->assertContains('_bucket', $samples[1]->name());
+        $this->assertStringContainsString('_bucket', $samples[1]->name());
         $this->assertEquals(150, $samples[1]->labels()->get('le'));
         $this->assertEquals(2, $samples[1]->value());
 
-        $this->assertContains('_bucket', $samples[2]->name());
+        $this->assertStringContainsString('_bucket', $samples[2]->name());
         $this->assertEquals(250, $samples[2]->labels()->get('le'));
         $this->assertEquals(2, $samples[2]->value());
 
-        $this->assertContains('_bucket', $samples[3]->name());
+        $this->assertStringContainsString('_bucket', $samples[3]->name());
         $this->assertEquals(400, $samples[3]->labels()->get('le'));
         $this->assertEquals(2, $samples[3]->value());
 
-        $this->assertContains('_bucket', $samples[4]->name());
+        $this->assertStringContainsString('_bucket', $samples[4]->name());
         $this->assertEquals(600, $samples[4]->labels()->get('le'));
         $this->assertEquals(7, $samples[4]->value());
 
-        $this->assertContains('_bucket', $samples[5]->name());
+        $this->assertStringContainsString('_bucket', $samples[5]->name());
         $this->assertEquals(850, $samples[5]->labels()->get('le'));
         $this->assertEquals(7, $samples[5]->value());
 
-        $this->assertContains('_bucket', $samples[6]->name());
+        $this->assertStringContainsString('_bucket', $samples[6]->name());
         $this->assertEquals('+Inf', $samples[6]->labels()->get('le'));
         $this->assertEquals(14, $samples[6]->value());
 
-        $this->assertContains('_count', $samples[7]->name());
+        $this->assertStringContainsString('_count', $samples[7]->name());
         $this->assertNull($samples[7]->labels()->get('le'));
         $this->assertSame($samples[6]->value(), $samples[7]->value());
 
-        $this->assertContains('_sum', $samples[8]->name());
+        $this->assertStringContainsString('_sum', $samples[8]->name());
         $this->assertNull($samples[8]->labels()->get('le'));
         $this->assertEquals(42, $samples[8]->value());
     }
@@ -143,7 +143,7 @@ class HistogramSamplesBuilderTest extends TestCase
      * @group builders
      * @group histograms
      */
-    public function it_should_initialize_histograms_except_labels()
+    public function it_should_initialize_histograms_without_labels()
     {
         $histogram = new SingleLabelHistogramStub;
 

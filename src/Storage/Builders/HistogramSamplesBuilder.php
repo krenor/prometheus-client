@@ -2,9 +2,7 @@
 
 namespace Krenor\Prometheus\Storage\Builders;
 
-use Closure;
 use InvalidArgumentException;
-use Krenor\Prometheus\Sample;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
@@ -28,123 +26,102 @@ class HistogramSamplesBuilder extends SamplesBuilder
     }
 
     /**
-     * @return int
-     */
-    protected function initialize(): int
-    {
-        return 0;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    protected function group(): Collection
+    protected function parse(): Collection
     {
+        $name = $this->metric->key();
         $buckets = $this->metric->buckets()->push('+Inf');
 
-        return parent::group()->map(function (Collection $items) use ($buckets) {
-            $sum = $items->pop();
+        return parent
+            ::parse()
+            ->groupBy(function ($data) {
+                return json_encode($data['labels']);
+            })->flatMap(function (Collection $data) use ($name, $buckets) {
+                $labels = $data->first()['labels'];
 
-            if (array_key_exists('bucket', $sum)) {
-                throw new InvalidArgumentException('The last element has to be the sum of all bucket observations.');
-            }
+                /** @var $sum Collection */
+                /** @var $observations Collection */
+                [$sum, $observations] = $data->partition('bucket', null);
 
-            $labels = $items->first()['labels'];
+                if ($sum->count() !== 1) {
+                    throw new InvalidArgumentException('Sum of bucket observations missing.');
+                }
 
-            return $this
-                ->fill($this->all($buckets, $items), new Collection)
-                ->push(['count' => $items->sum('value')])
-                ->push(['sum' => $sum['value']])
-                ->map(function ($item) use ($labels) {
-                    $item['labels'] = $labels;
+                return $this
+                    ->pad($this->complete($buckets, $observations), new Collection)
+                    ->map(function (array $items) use ($name, $labels) {
+                        $items['name'] = "{$name}_bucket";
+                        $items['labels'] = $labels + [
+                            'le' => $items['bucket'],
+                        ];
 
-                    return $item;
-                });
-        });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function build(string $name): Closure
-    {
-        return function (array $item) use ($name) {
-            $labels = new Collection($item['labels']);
-
-            if (array_key_exists('count', $item)) {
-                return new Sample("{$name}_count", $item['count'], $labels);
-            }
-
-            if (array_key_exists('sum', $item)) {
-                return new Sample("{$name}_sum", $item['sum'], $labels);
-            }
-
-            return new Sample("{$name}_bucket", $item['value'], $labels->put('le', $item['bucket']));
-        };
+                        return $items;
+                    })->push([
+                        'name'   => "{$name}_count",
+                        'value'  => $observations->sum('value'),
+                        'labels' => $labels,
+                    ])->push([
+                        'name'   => "{$name}_sum",
+                        'value'  => $sum->first()['value'],
+                        'labels' => $labels,
+                    ]);
+            });
     }
 
     /**
      * @param Collection $buckets
-     * @param Collection $items
+     * @param Collection $observations
      *
      * @return Collection
      */
-    private function all(Collection $buckets, Collection $items): Collection
+    private function complete(Collection $buckets, Collection $observations): Collection
     {
         $missing = $buckets
-            ->diff($items->pluck('bucket'))
+            ->diff($observations->pluck('bucket'))
             ->map(function ($bucket) {
                 return compact('bucket') + ['value' => 0];
             });
 
-        return $items
-            ->reject(function (array $item) use ($buckets) {
-                return !$buckets->contains($item['bucket']);
+        return $observations
+            ->reject(function (array $observation) use ($buckets) {
+                return !$buckets->contains($observation['bucket']);
             })->merge($missing)
-            ->sort($this->sort())
-            ->values();
+            ->sort(function (array $left, array $right) {
+                // Due to http://php.net/manual/en/language.types.string.php#language.types.string.conversion the
+                // bucket containing "+Inf" will be cast to 0. Sorting regularly would end up with it incorrectly
+                // sitting at the very first spot instead of where it belongs - at the end.
+                if ($left['bucket'] === '+Inf') {
+                    return 1;
+                }
+
+                if ($right['bucket'] === '+Inf') {
+                    return -1;
+                }
+
+                return $left['bucket'] <=> $right['bucket'];
+            })->values();
     }
 
     /**
-     * @return Closure
-     */
-    private function sort(): Closure
-    {
-        return function (array $left, array $right) {
-            // Due to http://php.net/manual/en/language.types.string.php#language.types.string.conversion the
-            // bucket containing "+Inf" will be cast to 0. Sorting regularly would end up with it incorrectly
-            // sitting at the very first spot instead of where it belongs - at the end.
-            if ($left['bucket'] === '+Inf') {
-                return 1;
-            }
-
-            if ($right['bucket'] === '+Inf') {
-                return -1;
-            }
-
-            return $left['bucket'] <=> $right['bucket'];
-        };
-    }
-
-    /**
-     * @param Collection $items
+     * @param Collection $data
      * @param Collection $result
      * @param int $sum
      * @param int $i
      *
      * @return Collection
      */
-    private function fill(Collection $items, Collection $result, int $sum = 0, int $i = 0): Collection
+    private function pad(Collection $data, Collection $result, int $sum = 0, int $i = 0): Collection
     {
-        if ($i >= $items->count()) {
+        if ($i >= $data->count()) {
             return $result;
         }
 
-        $value = $items[$i]['value'] + $sum;
-        $bucket = $items[$i]['bucket'];
+        $value = $data[$i]['value'] + $sum;
+        $bucket = $data[$i]['bucket'];
 
         $result->push(compact('bucket', 'value'));
 
-        return $this->fill($items, $result, $value, ++$i);
+        return $this->pad($data, $result, $value, ++$i);
     }
 }

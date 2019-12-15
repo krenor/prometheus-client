@@ -23,12 +23,4 @@ class CounterSamplesBuilder extends SamplesBuilder
     {
         parent::__construct($counter, $items);
     }
-
-    /**
-     * @return int
-     */
-    protected function initialize(): int
-    {
-        return 0;
-    }
 }

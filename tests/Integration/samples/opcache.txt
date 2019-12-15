@@ -1,0 +1,75 @@
+# HELP php_opcache_enabled Indicator if opcache is enabled.
+# TYPE php_opcache_enabled gauge
+php_opcache_enabled 1
+# HELP php_opcache_out_of_memory Indicator if cache is full.
+# TYPE php_opcache_out_of_memory gauge
+php_opcache_out_of_memory 0
+# HELP php_opcache_restart_pending Indicator if a restart is pending
+# TYPE php_opcache_restart_pending gauge
+php_opcache_restart_pending 0
+# HELP php_opcache_is_restarting Indicator if a restart is in progress.
+# TYPE php_opcache_is_restarting gauge
+php_opcache_is_restarting 0
+# HELP php_opcache_memory_used_bytes The amount of memory consumed.
+# TYPE php_opcache_memory_used_bytes gauge
+php_opcache_memory_used_bytes 12028872
+# HELP php_opcache_memory_free_bytes The amount of memory available for consumption.
+# TYPE php_opcache_memory_free_bytes gauge
+php_opcache_memory_free_bytes 4235696
+# HELP php_opcache_memory_wasted_bytes The amount of memory wasted.
+# TYPE php_opcache_memory_wasted_bytes gauge
+php_opcache_memory_wasted_bytes 512648
+# HELP php_opcache_memory_wasted_percent The percentage of currently wasted memory.
+# TYPE php_opcache_memory_wasted_percent gauge
+php_opcache_memory_wasted_percent 3.0556201934814
+# HELP php_opcache_strings_buffer_size_bytes The buffer size of interned strings.
+# TYPE php_opcache_strings_buffer_size_bytes counter
+php_opcache_strings_buffer_size_bytes 8388608
+# HELP php_opcache_strings_memory_used_bytes The amount of memory used by interned strings.
+# TYPE php_opcache_strings_memory_used_bytes gauge
+php_opcache_strings_memory_used_bytes 458480
+# HELP php_opcache_strings_memory_free_bytes The amount of memory available for interned strings.
+# TYPE php_opcache_strings_memory_free_bytes gauge
+php_opcache_strings_memory_free_bytes 7930128
+# HELP php_opcache_strings_count The amount of used interned strings
+# TYPE php_opcache_strings_count counter
+php_opcache_strings_count 5056
+# HELP php_opcache_cache_scripts_count The amount of cached scripts.
+# TYPE php_opcache_cache_scripts_count counter
+php_opcache_cache_scripts_count 59
+# HELP php_opcache_cache_keys_count The amount of hash table keys.
+# TYPE php_opcache_cache_keys_count counter
+php_opcache_cache_keys_count 78
+# HELP php_opcache_cache_max_keys_count The maximum amount of hash table keys.
+# TYPE php_opcache_cache_max_keys_count gauge
+php_opcache_cache_max_keys_count 223
+# HELP php_opcache_cache_hits_count The amount of cache hits.
+# TYPE php_opcache_cache_hits_count counter
+php_opcache_cache_hits_count 66817
+# HELP php_opcache_started The timestamp opcache has been started.
+# TYPE php_opcache_started counter
+php_opcache_started 1410858101
+# HELP php_opcache_last_restart The last timestamp opcache has been restarted.
+# TYPE php_opcache_last_restart counter
+php_opcache_last_restart 1410915824
+# HELP php_opcache_restarts_oom_count The amount of out of memory restarts.
+# TYPE php_opcache_restarts_oom_count counter
+php_opcache_restarts_oom_count 0
+# HELP php_opcache_restarts_hash_count The amount of hash table overflow restarts.
+# TYPE php_opcache_restarts_hash_count counter
+php_opcache_restarts_hash_count 1
+# HELP php_opcache_restarts_manual_count The amount of manual restarts.
+# TYPE php_opcache_restarts_manual_count counter
+php_opcache_restarts_manual_count 0
+# HELP php_opcache_cache_misses_count The amount of cache misses.
+# TYPE php_opcache_cache_misses_count counter
+php_opcache_cache_misses_count 126
+# HELP php_opcache_cache_blacklist_misses_count The amount of blacklist cache misses.
+# TYPE php_opcache_cache_blacklist_misses_count counter
+php_opcache_cache_blacklist_misses_count 0
+# HELP php_opcache_cache_blacklist_misses_percent The percentage of blacklist cache misses.
+# TYPE php_opcache_cache_blacklist_misses_percent gauge
+php_opcache_cache_blacklist_misses_percent 0
+# HELP php_opcache_cache_hit_percent The percentage of cache hits.
+# TYPE php_opcache_cache_hit_percent gauge
+php_opcache_cache_hit_percent 99.81178017119

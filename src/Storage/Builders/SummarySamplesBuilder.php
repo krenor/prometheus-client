@@ -3,7 +3,6 @@
 namespace Krenor\Prometheus\Storage\Builders;
 
 use Closure;
-use Krenor\Prometheus\Sample;
 use Krenor\Prometheus\Metrics\Summary;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
@@ -27,55 +26,42 @@ class SummarySamplesBuilder extends SamplesBuilder
     }
 
     /**
-     * @return Collection
-     */
-    protected function initialize(): Collection
-    {
-        return new Collection;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    protected function group(): Collection
+    protected function parse(): Collection
     {
-        return parent::group()->collapse()->map(function ($item) {
-            /** @var Collection $values */
-            $values = $item['value'];
-            $count = $values->count();
-            $labels = $item['labels'];
+        $quantiles = $this->metric->quantiles();
 
-            return $this->metric
-                ->quantiles()
-                ->map($this->calculate($values->sort()->values(), $count))
-                ->push(compact('count'))
-                ->push(['sum' => $values->sum()])
-                ->map(function ($item) use ($labels) {
-                    $item['labels'] = $labels;
+        return parent
+            ::parse()
+            ->flatMap(function (array $item) use ($quantiles) {
+                ['name'   => $name,
+                 'labels' => $labels] = $item;
 
-                    return $item;
-                });
-        });
-    }
+                $values = !$item['value'] instanceof Collection
+                    ? new Collection
+                    : $item['value'];
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function build(string $name): Closure
-    {
-        return function (array $item) use ($name) {
-            $labels = new Collection($item['labels']);
+                $count = $values->count();
 
-            if (array_key_exists('count', $item)) {
-                return new Sample("{$name}_count", $item['count'], $labels);
-            }
+                return $quantiles
+                    ->map($this->calculate($values->sort()->values(), $count))
+                    ->map(function (array $item) use ($name, $labels) {
+                        $item['labels'] = $labels + [
+                            'quantile' => $item['quantile']
+                        ];
 
-            if (array_key_exists('sum', $item)) {
-                return new Sample("{$name}_sum", $item['sum'], $labels);
-            }
-
-            return new Sample("{$name}", $item['value'], $labels->put('quantile', $item['quantile']));
-        };
+                        return $item + compact('name');
+                    })->push([
+                        'name'   => "{$name}_count",
+                        'value'  => $count,
+                        'labels' => $labels,
+                    ])->push([
+                        'name'   => "{$name}_sum",
+                        'value'  => $values->sum(),
+                        'labels' => $labels,
+                    ]);
+            });
     }
 
     /**

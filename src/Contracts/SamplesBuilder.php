@@ -2,7 +2,6 @@
 
 namespace Krenor\Prometheus\Contracts;
 
-use Closure;
 use Krenor\Prometheus\Sample;
 use Tightenco\Collect\Support\Collection;
 
@@ -31,61 +30,44 @@ abstract class SamplesBuilder
     }
 
     /**
-     * @return Collection
+     * @return Collection|Sample[]
      */
     public function samples(): Collection
     {
-        return $this->group()->flatMap(function (Collection $group) {
-            return $group->map($this->build($this->metric->key()));
-        });
+        return $this
+            ->parse()
+            ->map(function (array $data) {
+                return new Sample(
+                    $data['name'],
+                    $data['value'],
+                    new Collection($data['labels'])
+                );
+            });
     }
-
-    /**
-     * @return mixed
-     */
-    abstract protected function initialize();
 
     /**
      * @return Collection
      */
-    protected function group(): Collection
+    protected function parse(): Collection
     {
-        if ($this->metric->labels()->isEmpty() && $this->items->isEmpty()) {
-            return new Collection([
-                new Collection([[
-                    'labels' => null,
-                    'value'  => $this->initialize(),
-                ]]),
-            ]);
-        }
-
+        $name = $this->metric->key();
         $labels = $this->metric->labels()->toArray();
 
-        return $this->items
-            ->map(function ($value, string $key) {
-                return json_decode($key, true) + compact('value');
+        if (empty($labels) && $this->items->isEmpty()) {
+            return (new Collection)
+                ->push(['value' => 0] + compact('name', 'labels'));
+        }
+
+        return $this
+            ->items
+            ->map(function ($value, string $field) use ($name) {
+                // Merge stored fields with the value and name to an array.
+                return compact('name', 'value') + json_decode($field, true);
             })->reject(function (array $data) use ($labels) {
+                // Filter out items lacking the key "labels" or where labels names don't match.
                 return !array_key_exists('labels', $data)
                     ?: array_keys($data['labels']) !== $labels;
-            })->mapToGroups(function (array $item) {
-                return [
-                    json_encode($item['labels']) => $item,
-                ];
-            })->sortKeys();
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Closure
-     */
-    protected function build(string $name): Closure
-    {
-        return function (array $item) use ($name) {
-            $value = $item['value'];
-            $labels = new Collection($item['labels']);
-
-            return new Sample($name, $value, $labels);
-        };
+            })->sortBy('labels')
+            ->values();
     }
 }
