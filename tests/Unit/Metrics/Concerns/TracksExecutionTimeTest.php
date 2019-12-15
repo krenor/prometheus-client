@@ -7,10 +7,7 @@ use Krenor\Prometheus\Metrics\Concerns\TracksExecutionTime;
 
 class TracksExecutionTimeTest extends TestCase
 {
-    /**
-     * @var object
-     */
-    private $object;
+    private object $object;
 
     /**
      * {@inheritdoc}
@@ -78,7 +75,7 @@ class TracksExecutionTimeTest extends TestCase
 
         $this->assertSame($this->object->labels, [
             'foo',
-            'bar'
+            'bar',
         ]);
 
         $track(['baz', 'qux']);
@@ -96,19 +93,12 @@ class TracksExecutionTimeTest extends TestCase
      */
     private function createObjectForTrait()
     {
-        return new class
-        {
+        return new class {
             use TracksExecutionTime;
 
-            /**
-             * @var float
-             */
-            public $value = 0.0;
+            public float $value = 0.0;
 
-            /**
-             * @var array
-             */
-            public $labels = [];
+            public array $labels = [];
 
             /**
              * {@inheritdoc}

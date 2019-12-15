@@ -10,10 +10,7 @@ use Krenor\Prometheus\Metrics\Counter;
 
 class FPMTest extends TestCase
 {
-    /**
-     * @var FPM
-     */
-    private $fpm;
+    private FPM $fpm;
 
     /**
      * {@inheritdoc}

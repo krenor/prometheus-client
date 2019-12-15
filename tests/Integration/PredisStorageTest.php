@@ -9,11 +9,6 @@ use Krenor\Prometheus\Storage\Repositories\RedisRepository;
 class PredisStorageTest extends TestCase
 {
     /**
-     * @var RedisRepository
-     */
-    protected static $repository;
-
-    /**
      * {@inheritdoc}
      */
     public static function setUpBeforeClass(): void

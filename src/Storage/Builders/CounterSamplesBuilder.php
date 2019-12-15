@@ -9,11 +9,6 @@ use Krenor\Prometheus\Contracts\SamplesBuilder;
 class CounterSamplesBuilder extends SamplesBuilder
 {
     /**
-     * @var Counter
-     */
-    protected $metric;
-
-    /**
      * CounterSamplesBuilder constructor.
      *
      * @param Counter $counter

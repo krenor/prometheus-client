@@ -7,15 +7,9 @@ use Tightenco\Collect\Support\Collection;
 
 class MetricFamilySamples
 {
-    /**
-     * @var Metric
-     */
-    protected $metric;
+    protected Metric $metric;
 
-    /**
-     * @var Collection
-     */
-    protected $samples;
+    protected Collection $samples;
 
     /**
      * MetricFamilySamples constructor.

@@ -199,7 +199,7 @@ class StorageManagerTest extends TestCase
         /** @var array $bindings */
         $bindings = $reflection->getValue($storage);
         $bindings['collect'][Counter::class] = new class {
-            public function __invoke(){}
+            public function __invoke() {}
         };
 
         $reflection->setValue($storage, $bindings);
@@ -567,7 +567,9 @@ class StorageManagerTest extends TestCase
     public function it_should_be_possible_to_bind_custom_collectors_to_metric_types()
     {
         $storage = new StorageManager(m::mock(Repository::class));
-        $collector = get_class(new class{});
+        $collector = get_class(new class {
+            //
+        });
 
         $reflection = (new ReflectionClass($storage))->getProperty('bindings');
         $reflection->setAccessible(true);

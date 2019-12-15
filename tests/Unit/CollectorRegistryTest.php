@@ -19,10 +19,7 @@ use Krenor\Prometheus\Tests\Stubs\MultipleLabelsHistogramStub;
 
 class CollectorRegistryTest extends TestCase
 {
-    /**
-     * @var CollectorRegistry
-     */
-    private $registry;
+    private CollectorRegistry $registry;
 
     /**
      * {@inheritdoc}
@@ -143,8 +140,8 @@ class CollectorRegistryTest extends TestCase
     public function it_should_throw_an_invalid_argument_exception_when_registering_unknown_metric_types()
     {
         $custom = new class extends Metric {
-            protected $namespace = 'custom';
-            protected $name = 'metric';
+            protected string $namespace = 'custom';
+            protected string $name = 'metric';
 
             public function builder(Collection $items): SamplesBuilder {}
 

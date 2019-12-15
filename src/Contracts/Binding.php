@@ -7,12 +7,12 @@ abstract class Binding
     /**
      * @var Repository
      */
-    protected $repository;
+    protected Repository $repository;
 
     /**
      * @var string
      */
-    protected $key;
+    protected string $key;
 
     /**
      * Binding constructor.

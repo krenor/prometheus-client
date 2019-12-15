@@ -6,20 +6,11 @@ use Tightenco\Collect\Support\Collection;
 
 class Sample
 {
-    /**
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
-    /**
-     * @var float
-     */
-    protected $value;
+    protected float $value;
 
-    /**
-     * @var Collection
-     */
-    protected $labels;
+    protected Collection $labels;
 
     /**
      * Sample constructor.

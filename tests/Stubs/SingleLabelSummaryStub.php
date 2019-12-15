@@ -6,32 +6,17 @@ use Krenor\Prometheus\Metrics\Summary;
 
 class SingleLabelSummaryStub extends Summary
 {
-    /**
-     * @var string
-     */
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
 
-    /**
-     * @var string
-     */
-    protected $name = 'summary';
+    protected string $name = 'summary';
 
-    /**
-     * @var string
-     */
-    protected $description = 'Example Summary.';
+    protected string $description = 'Example Summary.';
 
-    /**
-     * @var string[]
-     */
-    protected $labels = [
+    protected array $labels = [
         'example_label',
     ];
 
-    /**
-     * @var int[]
-     */
-    protected $quantiles = [
+    protected array $quantiles = [
         .2,
         .4,
         .6,

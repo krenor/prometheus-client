@@ -12,25 +12,13 @@ use Tightenco\Collect\Support\Collection;
 
 class CollectorRegistry
 {
-    /**
-     * @var Collection
-     */
-    protected $counters;
+    protected Collection $counters;
 
-    /**
-     * @var Collection
-     */
-    protected $gauges;
+    protected Collection $gauges;
 
-    /**
-     * @var Collection
-     */
-    protected $histograms;
+    protected Collection $histograms;
 
-    /**
-     * @var Collection
-     */
-    protected $summaries;
+    protected Collection $summaries;
 
     /**
      * CollectorRegistry constructor.

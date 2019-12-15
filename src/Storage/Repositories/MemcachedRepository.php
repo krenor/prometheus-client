@@ -7,10 +7,7 @@ use Tightenco\Collect\Support\Collection;
 
 class MemcachedRepository extends SimpleRepository
 {
-    /**
-     * @var Memcached
-     */
-    protected $memcached;
+    protected Memcached $memcached;
 
     /**
      * MemcachedRepository constructor.

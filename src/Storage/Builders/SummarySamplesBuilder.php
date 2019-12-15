@@ -10,11 +10,6 @@ use Krenor\Prometheus\Contracts\SamplesBuilder;
 class SummarySamplesBuilder extends SamplesBuilder
 {
     /**
-     * @var Summary
-     */
-    protected $metric;
-
-    /**
      * SummarySamplesBuilder constructor.
      *
      * @param Summary $summary

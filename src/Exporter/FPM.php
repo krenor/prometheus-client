@@ -18,10 +18,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected $namespace = 'php_fpm';
-                protected $name = 'uptime_seconds';
-                protected $description = 'The number of seconds since FPM has started.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'uptime_seconds';
+                protected string $description = 'The number of seconds since FPM has started.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -37,10 +37,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected $namespace = 'php_fpm';
-                protected $name = 'connections_total';
-                protected $description = 'The number of requests accepted.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'connections_total';
+                protected string $description = 'The number of requests accepted.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -56,10 +56,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected $namespace = 'php_fpm';
-                protected $name = 'connections_queued_count';
-                protected $description = 'The number of request in the queue of pending connections.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'connections_queued_count';
+                protected string $description = 'The number of request in the queue of pending connections.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -75,10 +75,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected $namespace = 'php_fpm';
-                protected $name = 'connections_max_queued_count';
-                protected $description = 'The maximum number of requests in the queue of pending connections.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'connections_max_queued_count';
+                protected string $description = 'The maximum number of requests in the queue of pending connections.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -94,10 +94,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected $namespace = 'php_fpm';
-                protected $name = 'connections_queue_size';
-                protected $description = 'The size of the socket queue for pending connections.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'connections_queue_size';
+                protected string $description = 'The size of the socket queue for pending connections.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -113,10 +113,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected $namespace = 'php_fpm';
-                protected $name = 'processes_idle_count';
-                protected $description = 'The number of idle processes.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'processes_idle_count';
+                protected string $description = 'The number of idle processes.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -132,10 +132,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected $namespace = 'php_fpm';
-                protected $name = 'processes_active_count';
-                protected $description = 'The number of active processes.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'processes_active_count';
+                protected string $description = 'The number of active processes.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -151,10 +151,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected $namespace = 'php_fpm';
-                protected $name = 'processes_total';
-                protected $description = 'The number of idle and active processes.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'processes_total';
+                protected string $description = 'The number of idle and active processes.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -170,10 +170,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected $namespace = 'php_fpm';
-                protected $name = 'processes_max_active_count';
-                protected $description = 'The maximum number of active processes since FPM has started.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'processes_max_active_count';
+                protected string $description = 'The maximum number of active processes since FPM has started.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -189,10 +189,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected $namespace = 'php_fpm';
-                protected $name = 'processes_limit_reached_count';
-                protected $description = 'The number of times the process limit has been reached when trying to start more children.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'processes_limit_reached_count';
+                protected string $description = 'The number of times the process limit has been reached when trying to start more children.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -208,10 +208,10 @@ class FPM extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected $namespace = 'php_fpm';
-                protected $name = 'connections_slow_count';
-                protected $description = 'The number of requests exceeding the configured \'request_slowlog_timeout\' value.';
-                protected $labels = [
+                protected string $namespace = 'php_fpm';
+                protected string $name = 'connections_slow_count';
+                protected string $description = 'The number of requests exceeding the configured \'request_slowlog_timeout\' value.';
+                protected array $labels = [
                     'pool',
                 ];
             },
@@ -235,10 +235,10 @@ class FPM extends Exporter
                 return new Collection([
                     $this->sampled(
                         new class extends Counter {
-                            protected $namespace = 'php_fpm';
-                            protected $name = 'process_requests_total';
-                            protected $description = 'The number of requests the process has served.';
-                            protected $labels = [
+                            protected string $namespace = 'php_fpm';
+                            protected string $name = 'process_requests_total';
+                            protected string $description = 'The number of requests the process has served.';
+                            protected array $labels = [
                                 'pool',
                                 'pid',
                             ];
@@ -249,10 +249,10 @@ class FPM extends Exporter
 
                     $this->sampled(
                         new class extends Gauge {
-                            protected $namespace = 'php_fpm';
-                            protected $name = 'process_requests_duration_microseconds';
-                            protected $description = 'The duration in microseconds of the requests.';
-                            protected $labels = [
+                            protected string $namespace = 'php_fpm';
+                            protected string $name = 'process_requests_duration_microseconds';
+                            protected string $description = 'The duration in microseconds of the requests.';
+                            protected array $labels = [
                                 'pool',
                                 'pid',
                             ];
@@ -263,10 +263,10 @@ class FPM extends Exporter
 
                     $this->sampled(
                         new class extends Gauge {
-                            protected $namespace = 'php_fpm';
-                            protected $name = 'process_last_cpu_percent';
-                            protected $description = 'The percentage of cpu the last request consumed.';
-                            protected $labels = [
+                            protected string $namespace = 'php_fpm';
+                            protected string $name = 'process_last_cpu_percent';
+                            protected string $description = 'The percentage of cpu the last request consumed.';
+                            protected array $labels = [
                                 'pool',
                                 'pid',
                             ];
@@ -277,10 +277,10 @@ class FPM extends Exporter
 
                     $this->sampled(
                         new class extends Gauge {
-                            protected $namespace = 'php_fpm';
-                            protected $name = 'process_last_memory_bytes';
-                            protected $description = 'The amount of memory the last request consumed.';
-                            protected $labels = [
+                            protected string $namespace = 'php_fpm';
+                            protected string $name = 'process_last_memory_bytes';
+                            protected string $description = 'The amount of memory the last request consumed.';
+                            protected array $labels = [
                                 'pool',
                                 'pid',
                             ];

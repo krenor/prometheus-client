@@ -17,20 +17,16 @@ abstract class Counter extends Metric implements Incrementable
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function increment(array $labels = []): Incrementable
+    public function increment(array $labels = []): self
     {
         return $this->incrementBy(1, $labels);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function incrementBy(float $value, array $labels = []): Incrementable
+    public function incrementBy(float $value, array $labels = []): self
     {
         if ($value < 0) {
             throw new PrometheusException('Counters can only be incremented by non-negative amounts.');

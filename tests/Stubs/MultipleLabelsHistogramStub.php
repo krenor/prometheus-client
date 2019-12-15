@@ -6,34 +6,19 @@ use Krenor\Prometheus\Metrics\Histogram;
 
 class MultipleLabelsHistogramStub extends Histogram
 {
-    /**
-     * @var string
-     */
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
 
-    /**
-     * @var string
-     */
-    protected $name = 'multi_labeled_histogram';
+    protected string $name = 'multi_labeled_histogram';
 
-    /**
-     * @var string
-     */
-    protected $description = 'Example Histogram using multiple labels.';
+    protected string $description = 'Example Histogram using multiple labels.';
 
-    /**
-     * @var string[]
-     */
-    protected $labels = [
+    protected array $labels = [
         'example_label',
         'other_label',
         'yet_another_label',
     ];
 
-    /**
-     * @var int[]
-     */
-    protected $buckets = [
+    protected array $buckets = [
         200,
         400,
         600,

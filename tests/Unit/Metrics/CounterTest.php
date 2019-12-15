@@ -19,11 +19,10 @@ class CounterTest extends TestCase
         $this->expectException(PrometheusException::class);
         $this->expectExceptionMessage('Counters can only be incremented by non-negative amounts.');
 
-        $counter = new class extends Counter
-        {
-            protected $namespace = '';
+        $counter = new class extends Counter {
+            protected string $namespace = '';
 
-            protected $name = '';
+            protected string $name = '';
         };
 
         $counter->incrementBy(-42);

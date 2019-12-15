@@ -55,19 +55,19 @@ given **label values**
 use Krenor\Prometheus\Metrics\Histogram;
 
 $histogram = new class extends Histogram {
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
     
-    protected $name = 'histogram';
+    protected string $name = 'histogram';
 
-    protected $description = 'Example Histogram.';
+    protected string $description = 'Example Histogram.';
 
-    protected $labels = [
+    protected array $labels = [
         'example_label',
         'other_label',
         'yet_another_label',
     ];
 
-    protected $buckets = [
+    protected array $buckets = [
         .5,
         1.25,
         2.25,

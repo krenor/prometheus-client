@@ -23,20 +23,11 @@ use Krenor\Prometheus\Tests\Stubs\MultipleLabelsHistogramStub;
 
 abstract class TestCase extends BaseTestCase
 {
-    /**
-     * @var Repository
-     */
-    protected static $repository;
+    protected static Repository $repository;
 
-    /**
-     * @var CollectorRegistry
-     */
-    private $registry;
+    private CollectorRegistry $registry;
 
-    /**
-     * @var array
-     */
-    private $labels = [
+    private array $labels = [
         'multi'  => [
             'one'  => ['one', 'two', 'three'],
             'foo'  => ['foo', 'bar', 'baz'],

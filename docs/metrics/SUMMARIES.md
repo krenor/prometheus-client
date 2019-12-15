@@ -49,19 +49,19 @@ given **label values**.
 use Krenor\Prometheus\Metrics\Summary;
 
 $summary = new class extends Summary {
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
     
-    protected $name = 'summary';
+    protected string $name = 'summary';
 
-    protected $description = 'Example Summary.';
+    protected string $description = 'Example Summary.';
 
-    protected $labels = [
+    protected array $labels = [
         'example_label',
         'other_label',
         'yet_another_label',
     ];
 
-    protected $quantiles = [
+    protected array $quantiles = [
         .33,
         .66,
         .99,

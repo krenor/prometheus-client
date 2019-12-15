@@ -10,30 +10,15 @@ use Krenor\Prometheus\Contracts\Metric as MetricContract;
 
 abstract class Metric implements MetricContract
 {
-    /**
-     * @var string
-     */
-    protected $namespace;
+    protected string $namespace;
 
-    /**
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
-    /**
-     * @var string
-     */
-    protected $description;
+    protected string $description;
 
-    /**
-     * @var string[]
-     */
-    protected $labels = [];
+    protected array $labels = [];
 
-    /**
-     * @var Storage
-     */
-    protected static $storage;
+    protected static Storage $storage;
 
     /**
      * Metric constructor.

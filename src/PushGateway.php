@@ -9,15 +9,9 @@ use Krenor\Prometheus\Renderer\TextRenderer;
 
 class PushGateway
 {
-    /**
-     * @var Client
-     */
-    protected $client;
+    protected Client $client;
 
-    /**
-     * @var CollectorRegistry
-     */
-    protected $registry;
+    protected CollectorRegistry $registry;
 
     /**
      * PushGateway constructor.

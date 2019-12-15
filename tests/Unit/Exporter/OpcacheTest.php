@@ -10,10 +10,7 @@ use Krenor\Prometheus\Exporter\Opcache;
 
 class OpcacheTests extends TestCase
 {
-    /**
-     * @var Opcache
-     */
-    private $opcache;
+    private Opcache $opcache;
 
     /**
      * {@inheritdoc}

@@ -10,12 +10,9 @@ abstract class SamplesBuilder
     /**
      * @var Metric
      */
-    protected $metric;
+    protected Metric $metric;
 
-    /**
-     * @var Collection
-     */
-    protected $items;
+    protected Collection $items;
 
     /**
      * SamplesCollector constructor.

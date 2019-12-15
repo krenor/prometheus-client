@@ -12,10 +12,7 @@ abstract class Summary extends Metric implements Observable
 {
     use TracksExecutionTime;
 
-    /**
-     * @var float[]
-     */
-    protected $quantiles = [
+    protected array $quantiles = [
         .01,
         .05,
         .5,
@@ -55,10 +52,8 @@ abstract class Summary extends Metric implements Observable
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function observe(float $value, array $labels = []): Observable
+    public function observe(float $value, array $labels = []): self
     {
         static::$storage->observe($this, $value, $labels);
 

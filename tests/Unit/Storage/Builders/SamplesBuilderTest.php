@@ -51,9 +51,8 @@ class SamplesBuilderTest extends TestCase
             "{\"baz\":{$labels}}" => 3,
         ]);
 
-        $builder = new class($this->metric, $items) extends SamplesBuilder
-        {
-            protected function initialize() {}
+        $builder = new class($this->metric, $items) extends SamplesBuilder {
+            //
         };
 
         $this->assertCount(0, $builder->samples());
@@ -85,9 +84,8 @@ class SamplesBuilderTest extends TestCase
             "{\"labels\":{$labels[2]}}" => 3,
         ]);
 
-        $builder = new class($this->metric, $items) extends SamplesBuilder
-        {
-            protected function initialize() {}
+        $builder = new class($this->metric, $items) extends SamplesBuilder {
+            //
         };
 
         /** @var Sample[] $samples */
@@ -128,9 +126,8 @@ class SamplesBuilderTest extends TestCase
             "{\"labels\":{$labels[3]}}" => 40,
         ]);
 
-        $builder = new class($this->metric, $items) extends SamplesBuilder
-        {
-            protected function initialize() {}
+        $builder = new class($this->metric, $items) extends SamplesBuilder {
+            //
         };
 
         /** @var Sample[] $samples */

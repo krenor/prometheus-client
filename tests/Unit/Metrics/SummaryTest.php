@@ -20,13 +20,12 @@ class SummaryTest extends TestCase
         $this->expectException(LabelException::class);
         $this->expectExceptionMessage('The label `quantile` is used internally to designate summary quantiles.');
 
-        new class extends Summary
-        {
-            protected $namespace = '';
+        new class extends Summary {
+            protected string $namespace = '';
 
-            protected $name = '';
+            protected string $name = '';
 
-            protected $labels = [
+            protected array $labels = [
                 'quentin',
                 'quantum',
                 'quantile',
@@ -45,13 +44,12 @@ class SummaryTest extends TestCase
         $this->expectException(PrometheusException::class);
         $this->expectExceptionMessage('Quantiles have to be in the range between 0 and 1.');
 
-        new class extends Summary
-        {
-            protected $namespace = '';
+        new class extends Summary {
+            protected string $namespace = '';
 
-            protected $name = '';
+            protected string $name = '';
 
-            protected $quantiles = [
+            protected array $quantiles = [
                 .5,
                 1.5,
                 3,
@@ -66,13 +64,12 @@ class SummaryTest extends TestCase
      */
     public function it_should_sort_quantiles_automatically()
     {
-        $summary = new class extends Summary
-        {
-            protected $namespace = '';
+        $summary = new class extends Summary {
+            protected string $namespace = '';
 
-            protected $name = '';
+            protected string $name = '';
 
-            protected $quantiles = [
+            protected array $quantiles = [
                 .4,
                 .3,
                 .2,

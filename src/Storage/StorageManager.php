@@ -34,20 +34,11 @@ class StorageManager implements Storage
 
     use StoresMetrics;
 
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
-    /**
-     * @var string
-     */
-    protected $prefix;
+    protected string $prefix;
 
-    /**
-     * @var array
-     */
-    protected $bindings = [
+    protected array $bindings = [
         self::COLLECTOR_BINDING_KEY => [
             Counter::class   => CounterCollector::class,
             Gauge::class     => GaugeCollector::class,
@@ -145,7 +136,7 @@ class StorageManager implements Storage
     {
         try {
             $this->binding(self::OBSERVER_BINDING_KEY, $metric)
-                ($metric, $this->labeled($metric, $labels), $value);
+            ($metric, $this->labeled($metric, $labels), $value);
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {

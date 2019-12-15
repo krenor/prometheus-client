@@ -9,11 +9,6 @@ use Krenor\Prometheus\Contracts\SamplesBuilder;
 class GaugeSamplesBuilder extends SamplesBuilder
 {
     /**
-     * @var Gauge
-     */
-    protected $metric;
-
-    /**
      * GaugeSamplesBuilder constructor.
      *
      * @param Gauge $gauge

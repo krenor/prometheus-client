@@ -35,13 +35,13 @@ Incrementing by a negative amount will result in an exception.
 use Krenor\Prometheus\Metrics\Counter;
 
 $counter = new class extends Counter {
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
     
-    protected $name = 'counter';
+    protected string $name = 'counter';
 
-    protected $description = 'Example Counter.';
+    protected string $description = 'Example Counter.';
 
-    protected $labels = [
+    protected array $labels = [
         'example_label',
         'other_label',
         'yet_another_label',

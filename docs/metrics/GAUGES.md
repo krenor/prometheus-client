@@ -47,13 +47,13 @@ Pass a call to the underlying [Storage][storage-docs] to set this gauge to `$val
 use Krenor\Prometheus\Metrics\Gauge;
 
 $gauge = new class extends Gauge {
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
     
-    protected $name = 'gauge';
+    protected string $name = 'gauge';
 
-    protected $description = 'Example Gauge.';
+    protected string $description = 'Example Gauge.';
 
-    protected $labels = [
+    protected array $labels = [
         'example_label',
         'other_label',
         'yet_another_label',

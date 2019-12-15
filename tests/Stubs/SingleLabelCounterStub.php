@@ -6,25 +6,13 @@ use Krenor\Prometheus\Metrics\Counter;
 
 class SingleLabelCounterStub extends Counter
 {
-    /**
-     * @var string
-     */
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
 
-    /**
-     * @var string
-     */
-    protected $name = 'counter';
+    protected string $name = 'counter';
 
-    /**
-     * @var string
-     */
-    protected $description = 'Example Counter.';
+    protected string $description = 'Example Counter.';
 
-    /**
-     * @var string[]
-     */
-    protected $labels = [
+    protected array $labels = [
         'example_label',
     ];
 }

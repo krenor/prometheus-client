@@ -11,10 +11,7 @@ abstract class Exporter
 {
     use StoresMetrics;
 
-    /**
-     * @var array
-     */
-    protected $data;
+    protected array $data;
 
     /**
      * Exporter constructor.

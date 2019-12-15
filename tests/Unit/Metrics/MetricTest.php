@@ -19,9 +19,8 @@ class ValidationTest extends BaseTestCase
         $this->expectException(LabelException::class);
         $this->expectExceptionMessage('The label `__in-val:id` contains invalid characters.');
 
-        new class extends Metric
-        {
-            protected $labels = [
+        new class extends Metric {
+            protected array $labels = [
                 'valid',
                 '__in-val:id',
             ];
@@ -40,13 +39,12 @@ class ValidationTest extends BaseTestCase
         $this->expectException(PrometheusException::class);
         $this->expectExceptionMessage('The metric name `valid_învälíd` contains invalid characters.');
 
-        new class extends Metric
-        {
-            protected $namespace = 'valid';
+        new class extends Metric {
+            protected string $namespace = 'valid';
 
-            protected $name = 'învälíd';
+            protected string $name = 'învälíd';
 
-            protected $labels = [];
+            protected array $labels = [];
 
             public function type(): string {}
         };

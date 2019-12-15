@@ -13,15 +13,9 @@ use Krenor\Prometheus\Renderer\TextRenderer;
 
 class PushGatewayTest extends TestCase
 {
-    /**
-     * @var HandlerStack
-     */
-    private $handler;
+    private MockHandler $handler;
 
-    /**
-     * @var PushGateway
-     */
-    private $gateway;
+    private PushGateway $gateway;
 
     /**
      * {@inheritdoc}

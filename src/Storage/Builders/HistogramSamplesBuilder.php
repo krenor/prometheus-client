@@ -3,16 +3,14 @@
 namespace Krenor\Prometheus\Storage\Builders;
 
 use InvalidArgumentException;
+use Krenor\Prometheus\Contracts\Metric;
 use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
 
 class HistogramSamplesBuilder extends SamplesBuilder
 {
-    /**
-     * @var Histogram
-     */
-    protected $metric;
+    protected Metric $metric;
 
     /**
      * HistogramSamplesBuilder constructor.

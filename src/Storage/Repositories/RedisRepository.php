@@ -8,10 +8,7 @@ use Krenor\Prometheus\Storage\Redis\Connection as Redis;
 
 class RedisRepository implements Repository
 {
-    /**
-     * @var Redis
-     */
-    protected $redis;
+    protected Redis $redis;
 
     /**
      * RedisRepository constructor.

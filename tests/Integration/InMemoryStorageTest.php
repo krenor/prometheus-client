@@ -7,11 +7,6 @@ use Krenor\Prometheus\Storage\Repositories\InMemoryRepository;
 class InMemoryStorageTest extends TestCase
 {
     /**
-     * @var InMemoryRepository
-     */
-    protected static $repository;
-
-    /**
      * {@inheritdoc}
      */
     public static function setUpBeforeClass(): void

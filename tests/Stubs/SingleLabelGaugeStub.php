@@ -6,25 +6,13 @@ use Krenor\Prometheus\Metrics\Gauge;
 
 class SingleLabelGaugeStub extends Gauge
 {
-    /**
-     * @var string
-     */
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
 
-    /**
-     * @var string
-     */
-    protected $name = 'gauge';
+    protected string $name = 'gauge';
 
-    /**
-     * @var string
-     */
-    protected $description = 'Example Gauge.';
+    protected string $description = 'Example Gauge.';
 
-    /**
-     * @var string[]
-     */
-    protected $labels = [
+    protected array $labels = [
         'example_label',
     ];
 }

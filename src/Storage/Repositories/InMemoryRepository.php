@@ -6,10 +6,7 @@ use Tightenco\Collect\Support\Collection;
 
 class InMemoryRepository extends SimpleRepository
 {
-    /**
-     * @var Collection
-     */
-    protected $items;
+    protected Collection $items;
 
     /**
      * InMemoryRepository constructor.

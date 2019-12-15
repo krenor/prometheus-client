@@ -20,13 +20,12 @@ class HistogramTest extends TestCase
         $this->expectException(LabelException::class);
         $this->expectExceptionMessage('The label `le` is used internally to designate buckets.');
 
-        new class extends Histogram
-        {
-            protected $namespace = '';
+        new class extends Histogram {
+            protected string $namespace = '';
 
-            protected $name = '';
+            protected string $name = '';
 
-            protected $labels = [
+            protected array $labels = [
                 'lel',
                 'le',
                 'lul',
@@ -45,13 +44,12 @@ class HistogramTest extends TestCase
         $this->expectException(PrometheusException::class);
         $this->expectExceptionMessage('Histograms must contain at least one bucket.');
 
-        new class extends Histogram
-        {
-            protected $namespace = '';
+        new class extends Histogram {
+            protected string $namespace = '';
 
-            protected $name = '';
+            protected string $name = '';
 
-            protected $buckets = [];
+            protected array $buckets = [];
         };
     }
 
@@ -62,13 +60,12 @@ class HistogramTest extends TestCase
      */
     public function it_should_sort_buckets_automatically()
     {
-        $histogram = new class extends Histogram
-        {
-            protected $namespace = '';
+        $histogram = new class extends Histogram {
+            protected string $namespace = '';
 
-            protected $name = '';
+            protected string $name = '';
 
-            protected $buckets = [
+            protected array $buckets = [
                 5,
                 2,
                 3,

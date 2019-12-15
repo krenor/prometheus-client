@@ -21,20 +21,16 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable, Set
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function increment(array $labels = []): Incrementable
+    public function increment(array $labels = []): self
     {
         return $this->incrementBy(1, $labels);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function incrementBy(float $value, array $labels = []): Incrementable
+    public function incrementBy(float $value, array $labels = []): self
     {
         static::$storage->increment($this, $value, $labels);
 
@@ -43,20 +39,16 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable, Set
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function decrement(array $labels = []): Decrementable
+    public function decrement(array $labels = []): self
     {
         return $this->decrementBy(1, $labels);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function decrementBy(float $value, array $labels = []): Decrementable
+    public function decrementBy(float $value, array $labels = []): self
     {
         static::$storage->decrement($this, $value, $labels);
 
@@ -65,10 +57,8 @@ abstract class Gauge extends Metric implements Incrementable, Decrementable, Set
 
     /**
      * {@inheritdoc}
-     *
-     * @return self
      */
-    public function set(float $value, array $labels = []): Settable
+    public function set(float $value, array $labels = []): self
     {
         static::$storage->set($this, $value, $labels);
 

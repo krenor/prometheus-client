@@ -9,10 +9,7 @@ use Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub;
 
 class StoresMetricsTest extends TestCase
 {
-    /**
-     * @var object
-     */
-    private $object;
+    private object $object;
 
     /**
      * {@inheritdoc}
@@ -60,8 +57,7 @@ class StoresMetricsTest extends TestCase
      */
     private function createObjectForTrait()
     {
-        return new class
-        {
+        return new class {
             use StoresMetrics;
 
             public function getLabels(...$args)

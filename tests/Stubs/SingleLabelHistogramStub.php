@@ -6,32 +6,17 @@ use Krenor\Prometheus\Metrics\Histogram;
 
 class SingleLabelHistogramStub extends Histogram
 {
-    /**
-     * @var string
-     */
-    protected $namespace = 'example';
+    protected string $namespace = 'example';
 
-    /**
-     * @var string
-     */
-    protected $name = 'histogram';
+    protected string $name = 'histogram';
 
-    /**
-     * @var string
-     */
-    protected $description = 'Example Histogram.';
+    protected string $description = 'Example Histogram.';
 
-    /**
-     * @var string[]
-     */
-    protected $labels = [
+    protected array $labels = [
         'example_label',
     ];
 
-    /**
-     * @var int[]
-     */
-    protected $buckets = [
+    protected array $buckets = [
         100,
         150,
         250,
