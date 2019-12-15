@@ -98,6 +98,6 @@ class PushGateway
         return $this
                 ->client
                 ->send($request, $options)
-                ->getStatusCode() === 202;
+                ->getStatusCode() === 200;
     }
 }
