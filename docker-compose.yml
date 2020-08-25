@@ -20,11 +20,11 @@ services:
 
   ## Memcached Container ###########
   memcached:
-    image: memcached:1.5-alpine
+    image: memcached:1.6-alpine
 
   ## Redis Container ###########
   redis:
-    image: redis:5.0-alpine3.8
+    image: redis:6.0-alpine3.12
 
   pushgateway:
     image: prom/pushgateway
