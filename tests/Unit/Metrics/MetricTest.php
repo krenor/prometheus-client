@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Exceptions\PrometheusException;
 
-class ValidationTest extends BaseTestCase
+class MetricTest extends BaseTestCase
 {
     /**
      * @test

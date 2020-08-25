@@ -2,12 +2,12 @@
 
 Monitor your PHP applications using [Prometheus](https://prometheus.io).  
 
-[![Packagist][icon-version]][link-version]
+[![icon-version]][link-version]
 [![icon-php]][link-version]
-[![Travis][icon-travis]][link-travis]
-[![Quality][icon-code-quality]][link-code-quality]
-[![Coverage][icon-code-coverage]][link-code-coverage]
-[![License][icon-license]][link-license]
+[![icon-build]][link-build]  
+[![icon-code-quality]][link-code-quality]
+[![icon-code-coverage]][link-code-coverage]
+[![icon-license]][link-license]
 
 ## Features
 
@@ -70,15 +70,15 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
 The MIT License. Please see [LICENSE](LICENSE.md) for more information.
 
-[icon-php]: https://img.shields.io/packagist/php-v/krenor/prometheus-client?color=%234F5B93&label=PHP&style=flat-square
-[icon-version]: https://img.shields.io/packagist/v/krenor/prometheus-client.svg?style=flat-square
-[icon-travis]: https://img.shields.io/travis/krenor/prometheus-client.svg?style=flat-square
-[icon-code-quality]: https://img.shields.io/scrutinizer/g/krenor/prometheus-client.svg?style=flat-square
-[icon-code-coverage]: https://img.shields.io/scrutinizer/coverage/g/krenor/prometheus-client.svg?style=flat-square
-[icon-license]: https://img.shields.io/github/license/krenor/prometheus-client.svg?style=flat-square
+[icon-version]: https://img.shields.io/packagist/v/krenor/prometheus-client.svg?logo=codeship&style=for-the-badge
+[icon-php]: https://img.shields.io/packagist/php-v/krenor/prometheus-client?label=PHP&logo=php&logoColor=white&color=%234F5B93&style=for-the-badge
+[icon-build]: https://img.shields.io/github/workflow/status/krenor/prometheus-client/CI/master?logo=github&style=for-the-badge
+[icon-code-quality]: https://img.shields.io/scrutinizer/g/krenor/prometheus-client.svg?logo=code-climate&style=for-the-badge
+[icon-code-coverage]: https://img.shields.io/scrutinizer/coverage/g/krenor/prometheus-client.svg?logo=codecov&logoColor=white&style=for-the-badge
+[icon-license]: https://img.shields.io/github/license/krenor/prometheus-client.svg?logo=open-source-initiative&logoColor=white&style=for-the-badge
 
 [link-version]: https://packagist.org/packages/krenor/prometheus-client
-[link-travis]: http://travis-ci.org/krenor/prometheus-client
+[link-build]: https://github.com/krenor/prometheus-client/actions?query=branch%3Amaster
 [link-code-quality]: https://scrutinizer-ci.com/g/krenor/prometheus-client
 [link-code-coverage]: https://scrutinizer-ci.com/g/krenor/prometheus-client
 [link-license]: https://github.com/krenor/prometheus-client/blob/master/LICENSE.md

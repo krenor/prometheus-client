@@ -8,7 +8,7 @@ use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Exporter\Opcache;
 
-class OpcacheTests extends TestCase
+class OpcacheTest extends TestCase
 {
     private Opcache $opcache;
 

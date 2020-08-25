@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system:
+          - ubuntu-latest
+        php-versions:
+          - '7.4'
+
+    services:
+      memcached:
+        image: memcached:1.6-alpine
+        ports:
+          - 11211/tcp
+        options:
+          --health-cmd "timeout 5 sh -c '/usr/bin/nc -z 127.0.0.1 11211'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      redis:
+        image: redis:6.0-alpine3.12
+        ports:
+          - 6379/tcp
+        options:
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: apcu memcached redis
+          ini-values: apc.enable_cli=1
+          coverage: pcov
+          tools: composer:v2, pecl
+        env:
+          update: true
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=cache-dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.cache-dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer update
+               --no-interaction
+               --no-suggest
+               --prefer-dist
+               --optimize-autoloader
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
+        env:
+          MEMCACHED_HOST: 127.0.0.1
+          MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+
+      - name: Code coverage
+        run: |
+            wget https://scrutinizer-ci.com/ocular.phar
+            php ocular.phar code-coverage:upload --format=php-clover phpunit/coverage/clover.xml
