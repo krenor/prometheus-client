@@ -77,7 +77,22 @@ jobs:
           REDIS_HOST: 127.0.0.1
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
 
-      - name: Code coverage
+      - name: Scrutinizer
         run: |
             wget https://scrutinizer-ci.com/ocular.phar
             php ocular.phar code-coverage:upload --format=php-clover phpunit/coverage/clover.xml
+
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./phpunit/coverage/clover.xml
+          flags: unittests
+          fail_ci_if_error: true
+
+      - name: Code Climate
+        uses: paambaati/codeclimate-action@v2.6.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
+        with:
+          coverageCommand: echo
+          coverageLocations: ${{github.workspace}}/phpunit/coverage/clover.xml:clover

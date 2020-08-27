@@ -1,0 +1,15 @@
+version: "2"
+
+plugins:
+  # TODO: Needs config file and probably a lot of tinkering
+  #phan:
+    #enabled: true
+  phpcodesniffer:
+    enabled: true
+  phpmd:
+    enabled: true
+  sonar-php:
+    enabled: true
+    config:
+      tests_patterns:
+        - tests/**
