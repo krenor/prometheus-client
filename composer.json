@@ -21,7 +21,7 @@
   "require": {
     "php": "^7.4",
     "ext-json": "*",
-    "guzzlehttp/guzzle": "^6.5",
+    "guzzlehttp/guzzle": "^7.0",
     "tightenco/collect": "^7.25"
   },
   "require-dev": {
