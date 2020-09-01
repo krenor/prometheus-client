@@ -49,7 +49,7 @@ given **label values**.
 use Krenor\Prometheus\Metrics\Summary;
 
 $summary = new class extends Summary {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
     
     protected string $name = 'summary';
 

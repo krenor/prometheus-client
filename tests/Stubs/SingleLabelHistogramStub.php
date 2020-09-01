@@ -6,7 +6,7 @@ use Krenor\Prometheus\Metrics\Histogram;
 
 class SingleLabelHistogramStub extends Histogram
 {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
 
     protected string $name = 'histogram';
 

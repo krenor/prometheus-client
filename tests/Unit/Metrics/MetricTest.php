@@ -40,7 +40,7 @@ class MetricTest extends BaseTestCase
         $this->expectExceptionMessage('The metric name `valid_învälíd` contains invalid characters.');
 
         new class extends Metric {
-            protected string $namespace = 'valid';
+            protected ?string $namespace = 'valid';
 
             protected string $name = 'învälíd';
 

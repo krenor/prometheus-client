@@ -17,9 +17,9 @@ interface Metric
     public function type(): string;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function namespace(): string;
+    public function namespace(): ?string;
 
     /**
      * @return string

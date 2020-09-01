@@ -6,7 +6,7 @@ use Krenor\Prometheus\Metrics\Counter;
 
 class MultipleLabelsCounterStub extends Counter
 {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
 
     protected string $name = 'multi_labeled_counter';
 

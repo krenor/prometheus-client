@@ -6,7 +6,7 @@ use Krenor\Prometheus\Metrics\Gauge;
 
 class MultipleLabelsGaugeStub extends Gauge
 {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
 
     protected string $name = 'multi_labeled_gauge';
 

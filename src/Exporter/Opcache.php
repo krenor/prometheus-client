@@ -16,7 +16,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'enabled';
                 protected string $description = 'Indicator if opcache is enabled.';
             },
@@ -31,7 +31,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'out_of_memory';
                 protected string $description = 'Indicator if cache is full.';
             },
@@ -46,7 +46,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'restart_pending';
                 protected string $description = 'Indicator if a restart is pending';
             },
@@ -61,7 +61,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'is_restarting';
                 protected string $description = 'Indicator if a restart is in progress.';
             },
@@ -76,7 +76,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'memory_used_bytes';
                 protected string $description = 'The amount of memory consumed.';
             },
@@ -91,7 +91,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'memory_free_bytes';
                 protected string $description = 'The amount of memory available for consumption.';
             },
@@ -106,7 +106,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'memory_wasted_bytes';
                 protected string $description = 'The amount of memory wasted.';
             },
@@ -121,7 +121,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'memory_wasted_percent';
                 protected string $description = 'The percentage of currently wasted memory.';
             },
@@ -136,7 +136,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'strings_buffer_size_bytes';
                 protected string $description = 'The buffer size of interned strings.';
             },
@@ -151,7 +151,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'strings_memory_used_bytes';
                 protected string $description = 'The amount of memory used by interned strings.';
             },
@@ -166,7 +166,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'strings_memory_free_bytes';
                 protected string $description = 'The amount of memory available for interned strings.';
             },
@@ -181,7 +181,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'strings_count';
                 protected string $description = 'The amount of used interned strings';
             },
@@ -196,7 +196,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_scripts_count';
                 protected string $description = 'The amount of cached scripts.';
             },
@@ -211,7 +211,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_keys_count';
                 protected string $description = 'The amount of hash table keys.';
             },
@@ -226,7 +226,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_max_keys_count';
                 protected string $description = 'The maximum amount of hash table keys.';
             },
@@ -241,7 +241,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_hits_count';
                 protected string $description = 'The amount of cache hits.';
             },
@@ -256,7 +256,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'started';
                 protected string $description = 'The timestamp opcache has been started.';
             },
@@ -271,7 +271,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'last_restart';
                 protected string $description = 'The last timestamp opcache has been restarted.';
             },
@@ -286,7 +286,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'restarts_oom_count';
                 protected string $description = 'The amount of out of memory restarts.';
             },
@@ -301,7 +301,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'restarts_hash_count';
                 protected string $description = 'The amount of hash table overflow restarts.';
             },
@@ -316,7 +316,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'restarts_manual_count';
                 protected string $description = 'The amount of manual restarts.';
             },
@@ -331,7 +331,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_misses_count';
                 protected string $description = 'The amount of cache misses.';
             },
@@ -346,7 +346,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Counter {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_blacklist_misses_count';
                 protected string $description = 'The amount of blacklist cache misses.';
             },
@@ -361,7 +361,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_blacklist_misses_percent';
                 protected string $description = 'The percentage of blacklist cache misses. ';
             },
@@ -376,7 +376,7 @@ class Opcache extends Exporter
     {
         return $this->sampled(
             new class extends Gauge {
-                protected string $namespace = 'php_opcache';
+                protected ?string $namespace = 'php_opcache';
                 protected string $name = 'cache_hit_percent';
                 protected string $description = 'The percentage of cache hits.';
             },

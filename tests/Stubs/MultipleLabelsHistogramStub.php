@@ -6,7 +6,7 @@ use Krenor\Prometheus\Metrics\Histogram;
 
 class MultipleLabelsHistogramStub extends Histogram
 {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
 
     protected string $name = 'multi_labeled_histogram';
 

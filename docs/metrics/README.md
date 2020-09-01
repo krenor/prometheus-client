@@ -24,7 +24,7 @@ its implemented `Krenor\Prometheus\Contracts\Metric` interface.
 
 ## Properties
 
-#### `string $namespace`
+#### `?string $namespace`
 
 A metric name should have a (single-word) application prefix (**aka namespace**) relevant to the domain  
 the metric belongs to. For metrics specific to an application, the prefix is usually the application name  

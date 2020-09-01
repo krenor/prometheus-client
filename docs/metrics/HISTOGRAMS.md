@@ -55,7 +55,7 @@ given **label values**
 use Krenor\Prometheus\Metrics\Histogram;
 
 $histogram = new class extends Histogram {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
     
     protected string $name = 'histogram';
 

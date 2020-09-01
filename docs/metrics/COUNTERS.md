@@ -35,7 +35,7 @@ Incrementing by a negative amount will result in an exception.
 use Krenor\Prometheus\Metrics\Counter;
 
 $counter = new class extends Counter {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
     
     protected string $name = 'counter';
 

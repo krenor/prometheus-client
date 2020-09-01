@@ -20,9 +20,7 @@ class CounterTest extends TestCase
         $this->expectExceptionMessage('Counters can only be incremented by non-negative amounts.');
 
         $counter = new class extends Counter {
-            protected string $namespace = '';
-
-            protected string $name = '';
+            protected string $name = 'counter';
         };
 
         $counter->incrementBy(-42);

@@ -6,7 +6,7 @@ use Krenor\Prometheus\Metrics\Summary;
 
 class SingleLabelSummaryStub extends Summary
 {
-    protected string $namespace = 'example';
+    protected ?string $namespace = 'example';
 
     protected string $name = 'summary';
 

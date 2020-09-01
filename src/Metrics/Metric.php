@@ -10,7 +10,7 @@ use Krenor\Prometheus\Contracts\Metric as MetricContract;
 
 abstract class Metric implements MetricContract
 {
-    protected string $namespace;
+    protected ?string $namespace = null;
 
     protected string $name;
 
@@ -43,6 +43,10 @@ abstract class Metric implements MetricContract
      */
     public function key(): string
     {
+        if (!$this->namespace()) {
+            return $this->name();
+        }
+
         return "{$this->namespace()}_{$this->name()}";
     }
 
@@ -52,9 +56,9 @@ abstract class Metric implements MetricContract
     abstract public function type(): string;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function namespace(): string
+    public function namespace(): ?string
     {
         return $this->namespace;
     }

@@ -136,7 +136,7 @@ class CollectorRegistryTest extends TestCase
     public function it_should_throw_an_invalid_argument_exception_when_registering_unknown_metric_types()
     {
         $custom = new class extends Metric {
-            protected string $namespace = 'custom';
+            protected ?string $namespace = 'custom';
             protected string $name = 'metric';
 
             public function builder(Collection $items): SamplesBuilder {}
