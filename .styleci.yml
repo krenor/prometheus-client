@@ -17,3 +17,4 @@ enabled:
 
 disabled:
   - new_with_braces
+  - function_declaration # TODO: Re-enable once arrow functions can be differentiated

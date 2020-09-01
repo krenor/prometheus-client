@@ -13,12 +13,12 @@ use Krenor\Prometheus\Renderer\TextRenderer;
 use Krenor\Prometheus\Storage\StorageManager;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelGaugeStub;
-use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub;
+use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsGaugeStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelHistogramStub;
-use Krenor\Prometheus\Tests\Stubs\MultipleLabelsSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsCounterStub;
+use Krenor\Prometheus\Tests\Stubs\MultipleLabelsSummaryStub;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsHistogramStub;
 
 abstract class TestCase extends BaseTestCase

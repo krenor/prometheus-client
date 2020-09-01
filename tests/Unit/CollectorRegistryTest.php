@@ -7,8 +7,8 @@ use InvalidArgumentException;
 use Krenor\Prometheus\Sample;
 use PHPUnit\Framework\TestCase;
 use Krenor\Prometheus\Metrics\Metric;
-use Krenor\Prometheus\Contracts\Storage;
 use Krenor\Prometheus\CollectorRegistry;
+use Krenor\Prometheus\Contracts\Storage;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\MetricFamilySamples;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
@@ -139,9 +139,15 @@ class CollectorRegistryTest extends TestCase
             protected ?string $namespace = 'custom';
             protected string $name = 'metric';
 
-            public function builder(Collection $items): SamplesBuilder {}
+            public function builder(Collection $items): SamplesBuilder
+            {
+                //
+            }
 
-            public function type(): string {}
+            public function type(): string
+            {
+                //
+            }
         };
 
         $this->expectException(InvalidArgumentException::class);

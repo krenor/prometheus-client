@@ -3,8 +3,8 @@
 namespace Krenor\Prometheus\Metrics;
 
 use Krenor\Prometheus\Contracts\Types\Settable;
-use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Contracts\Types\Decrementable;
+use Krenor\Prometheus\Contracts\Types\Incrementable;
 use Krenor\Prometheus\Metrics\Concerns\TracksExecutionTime;
 
 abstract class Gauge extends Metric implements Incrementable, Decrementable, Settable

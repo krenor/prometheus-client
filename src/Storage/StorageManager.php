@@ -8,8 +8,8 @@ use Krenor\Prometheus\Metrics\Gauge;
 use Krenor\Prometheus\Metrics\Counter;
 use Krenor\Prometheus\Metrics\Summary;
 use Krenor\Prometheus\Contracts\Metric;
-use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Storage;
+use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Contracts\Repository;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
@@ -29,8 +29,8 @@ use Krenor\Prometheus\Storage\Bindings\Collectors\HistogramCollector;
 
 class StorageManager implements Storage
 {
-    const COLLECTOR_BINDING_KEY = 'collect';
-    const OBSERVER_BINDING_KEY = 'observe';
+    public const COLLECTOR_BINDING_KEY = 'collect';
+    public const OBSERVER_BINDING_KEY = 'observe';
 
     use StoresMetrics;
 
@@ -135,8 +135,12 @@ class StorageManager implements Storage
     public function observe(Observable $metric, float $value, array $labels = []): void
     {
         try {
-            $this->binding(self::OBSERVER_BINDING_KEY, $metric)
-                ($metric, $this->labeled($metric, $labels), $value);
+            call_user_func(
+                $this->binding(self::OBSERVER_BINDING_KEY, $metric),
+                $metric,
+                $this->labeled($metric, $labels),
+                $value
+            );
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {

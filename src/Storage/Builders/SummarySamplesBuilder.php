@@ -43,7 +43,7 @@ class SummarySamplesBuilder extends SamplesBuilder
                     ->map($this->calculate($values->sort()->values(), $count))
                     ->map(function (array $item) use ($name, $labels) {
                         $item['labels'] = $labels + [
-                            'quantile' => $item['quantile']
+                            'quantile' => $item['quantile'],
                         ];
 
                         return $item + compact('name');

@@ -2,8 +2,8 @@
 
 namespace Krenor\Prometheus\Storage\Bindings\Collectors;
 
-use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Binding;
+use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Storage\Builders\HistogramSamplesBuilder;
 

@@ -58,7 +58,8 @@ class TracksExecutionTimeTest extends TestCase
         $track();
 
         $this->assertSame($precision, strlen(substr(
-            strstr($this->object->value, '.'), 1
+            strstr($this->object->value, '.'),
+            1
         )));
     }
 

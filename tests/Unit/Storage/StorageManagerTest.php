@@ -14,7 +14,6 @@ use Krenor\Prometheus\Contracts\Repository;
 use Krenor\Prometheus\Storage\StorageManager;
 use Krenor\Prometheus\Exceptions\LabelException;
 use Krenor\Prometheus\Exceptions\StorageException;
-use Krenor\Prometheus\Tests\Stubs\InvalidCollectorStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelGaugeStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelSummaryStub;
@@ -199,7 +198,10 @@ class StorageManagerTest extends TestCase
         /** @var array $bindings */
         $bindings = $reflection->getValue($storage);
         $bindings['collect'][Counter::class] = new class {
-            public function __invoke() {}
+            public function __invoke()
+            {
+                //
+            }
         };
 
         $reflection->setValue($storage, $bindings);

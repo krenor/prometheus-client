@@ -2,8 +2,8 @@
 
 namespace Krenor\Prometheus\Storage\Bindings\Observers;
 
-use Krenor\Prometheus\Metrics\Histogram;
 use Krenor\Prometheus\Contracts\Binding;
+use Krenor\Prometheus\Metrics\Histogram;
 use Tightenco\Collect\Support\Collection;
 
 class HistogramObserver extends Binding

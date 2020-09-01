@@ -25,7 +25,10 @@ class MetricTest extends BaseTestCase
                 '__in-val:id',
             ];
 
-            public function type(): string {}
+            public function type(): string
+            {
+                //
+            }
         };
     }
 
@@ -46,7 +49,10 @@ class MetricTest extends BaseTestCase
 
             protected array $labels = [];
 
-            public function type(): string {}
+            public function type(): string
+            {
+                //
+            }
         };
     }
 }

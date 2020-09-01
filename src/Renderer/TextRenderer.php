@@ -9,7 +9,7 @@ use Krenor\Prometheus\Contracts\Renderable;
 
 class TextRenderer implements Renderable
 {
-    const CONTENT_TYPE = 'text/plain; version=0.0.4';
+    public const CONTENT_TYPE = 'text/plain; version=0.0.4';
 
     /**
      * {@inheritdoc}
