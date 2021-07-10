@@ -11,7 +11,7 @@ class MetricFamilySamples
      * MetricFamilySamples constructor.
      *
      * @param Metric $metric
-     * @param Collection $samples
+     * @param Collection|Sample[] $samples
      */
     public function __construct(protected Metric $metric, protected Collection $samples)
     {
@@ -27,7 +27,7 @@ class MetricFamilySamples
     }
 
     /**
-     * @return Collection
+     * @return Collection|Sample[]
      */
     public function samples(): Collection
     {

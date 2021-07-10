@@ -59,7 +59,6 @@ class HistogramSamplesBuilderTest extends TestCase
             "{\"labels\":{$labels}}"                 => 0,
         ]));
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertNotEmpty($samples);
@@ -89,7 +88,6 @@ class HistogramSamplesBuilderTest extends TestCase
             "{\"labels\":{$labels}}"                     => 42,
         ]));
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount($histogram->buckets()->count() + 3, $samples);
@@ -149,7 +147,6 @@ class HistogramSamplesBuilderTest extends TestCase
 
         $builder = new HistogramSamplesBuilder($histogram, new Collection);
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount($histogram->buckets()->count() + 3, $samples);

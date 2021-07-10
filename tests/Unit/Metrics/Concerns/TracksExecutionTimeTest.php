@@ -104,7 +104,7 @@ class TracksExecutionTimeTest extends TestCase
             /**
              * {@inheritdoc}
              */
-            protected function track(float $value, array $labels): void
+            protected function track(float $value, array $labels = []): void
             {
                 $this->value = $value;
                 $this->labels = $labels;

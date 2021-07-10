@@ -17,7 +17,7 @@ class ApcuRepository extends SimpleRepository
     /**
      * {@inheritdoc}
      */
-    protected function retrieve(string $key)
+    protected function retrieve(string $key): mixed
     {
         return apcu_fetch($key);
     }

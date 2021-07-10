@@ -10,7 +10,6 @@ use Krenor\Prometheus\Metrics\Metric;
 use Krenor\Prometheus\CollectorRegistry;
 use Krenor\Prometheus\Contracts\Storage;
 use Tightenco\Collect\Support\Collection;
-use Krenor\Prometheus\MetricFamilySamples;
 use Krenor\Prometheus\Contracts\SamplesBuilder;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsGaugeStub;
 use Krenor\Prometheus\Tests\Stubs\MultipleLabelsCounterStub;
@@ -125,7 +124,6 @@ class CollectorRegistryTest extends TestCase
 
         $this->assertCount(4, $collection);
 
-        /** @var MetricFamilySamples $family */
         foreach ($collection as $index => $family) {
             $this->assertEquals($metrics[$index], $family->metric());
             $this->assertCount(1, $family->samples());

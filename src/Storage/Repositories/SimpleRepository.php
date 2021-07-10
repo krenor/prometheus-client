@@ -70,7 +70,7 @@ abstract class SimpleRepository implements Repository
      *
      * @return mixed
      */
-    abstract protected function retrieve(string $key);
+    abstract protected function retrieve(string $key): mixed;
 
     /**
      * @param string $key

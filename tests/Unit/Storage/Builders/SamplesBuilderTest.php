@@ -3,7 +3,6 @@
 namespace Krenor\Prometheus\Tests\Unit\Storage\Builders;
 
 use Mockery as m;
-use Krenor\Prometheus\Sample;
 use PHPUnit\Framework\TestCase;
 use Krenor\Prometheus\Contracts\Metric;
 use Tightenco\Collect\Support\Collection;
@@ -88,11 +87,9 @@ class SamplesBuilderTest extends TestCase
             //
         };
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount(1, $samples);
-
         $this->assertSame($labels[0], $samples[0]->labels()->toJson());
     }
 
@@ -130,11 +127,9 @@ class SamplesBuilderTest extends TestCase
             //
         };
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount(4, $samples);
-
         $this->assertSame($labels[3], $samples[0]->labels()->toJson()); // You know
         $this->assertSame($labels[0], $samples[1]->labels()->toJson()); // how the
         $this->assertSame($labels[2], $samples[2]->labels()->toJson()); // song goes :-)

@@ -19,7 +19,7 @@ class PhpRedisConnection extends Connection
     /**
      * {@inheritdoc}
      */
-    public function hset(string $key, string $field, $value): int
+    public function hset(string $key, string $field, mixed $value): int
     {
         return (int) $this->client->hset($key, $field, $value);
     }

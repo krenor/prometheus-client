@@ -3,7 +3,6 @@
 namespace Krenor\Prometheus\Tests\Unit\Storage\Builders;
 
 use ReflectionProperty;
-use Krenor\Prometheus\Sample;
 use PHPUnit\Framework\TestCase;
 use Tightenco\Collect\Support\Collection;
 use Krenor\Prometheus\Tests\Stubs\SingleLabelCounterStub;
@@ -30,11 +29,9 @@ class CounterSamplesBuilderTest extends TestCase
             "{\"labels\":{$labels}}" => 42,
         ]));
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount(1, $samples);
-
         $this->assertSame($labels, $samples[0]->labels()->toJson());
         $this->assertEquals(42, $samples[0]->value());
     }
@@ -55,11 +52,9 @@ class CounterSamplesBuilderTest extends TestCase
 
         $builder = new CounterSamplesBuilder($counter, new Collection);
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount(1, $samples);
-
         $this->assertEmpty($samples[0]->labels());
         $this->assertEquals(0, $samples[0]->value());
     }

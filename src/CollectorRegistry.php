@@ -32,7 +32,7 @@ class CollectorRegistry
     }
 
     /**
-     * @return Collection
+     * @return Collection|MetricFamilySamples[]
      */
     public function collect(): Collection
     {
@@ -46,6 +46,13 @@ class CollectorRegistry
      * @param Metric $metric
      *
      * @return Metric
+     */
+
+    /**
+     * @template T
+     * @psalm-param T $metric
+     *
+     * @return T
      */
     public function register(Metric $metric): Metric
     {
