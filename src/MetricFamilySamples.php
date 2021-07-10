@@ -7,20 +7,15 @@ use Tightenco\Collect\Support\Collection;
 
 class MetricFamilySamples
 {
-    protected Metric $metric;
-
-    protected Collection $samples;
-
     /**
      * MetricFamilySamples constructor.
      *
      * @param Metric $metric
      * @param Collection $samples
      */
-    public function __construct(Metric $metric, Collection $samples)
+    public function __construct(protected Metric $metric, protected Collection $samples)
     {
-        $this->metric = $metric;
-        $this->samples = $samples;
+        //
     }
 
     /**

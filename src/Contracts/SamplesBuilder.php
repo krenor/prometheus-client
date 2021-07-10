@@ -8,22 +8,14 @@ use Tightenco\Collect\Support\Collection;
 abstract class SamplesBuilder
 {
     /**
-     * @var Metric
-     */
-    protected Metric $metric;
-
-    protected Collection $items;
-
-    /**
      * SamplesCollector constructor.
      *
      * @param Metric $metric
      * @param Collection $items
      */
-    public function __construct(Metric $metric, Collection $items)
+    public function __construct(protected Metric $metric, protected Collection $items)
     {
-        $this->metric = $metric;
-        $this->items = $items;
+        //
     }
 
     /**

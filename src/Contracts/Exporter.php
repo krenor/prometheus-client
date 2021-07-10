@@ -11,16 +11,14 @@ abstract class Exporter
 {
     use StoresMetrics;
 
-    protected array $data;
-
     /**
      * Exporter constructor.
      *
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(protected array $data)
     {
-        $this->data = $data;
+        //
     }
 
     /**
