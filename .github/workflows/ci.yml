@@ -13,7 +13,7 @@ jobs:
         operating-system:
           - ubuntu-latest
         php-versions:
-          - '7.4'
+          - '8.0'
 
     services:
       memcached:
@@ -27,7 +27,7 @@ jobs:
           --health-retries=3
 
       redis:
-        image: redis:6.0-alpine3.12
+        image: redis:6.2-alpine
         ports:
           - 6379/tcp
         options:
@@ -78,19 +78,18 @@ jobs:
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
 
       - name: Scrutinizer
-        run: |
-            wget https://scrutinizer-ci.com/ocular.phar
-            php ocular.phar code-coverage:upload --format=php-clover phpunit/coverage/clover.xml
+        run:
+          git fetch --unshallow &&
+          vendor/bin/ocular code-coverage:upload --format=php-clover phpunit/coverage/clover.xml
 
       - name: Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           file: ./phpunit/coverage/clover.xml
-          flags: unittests
           fail_ci_if_error: true
 
       - name: Code Climate
-        uses: paambaati/codeclimate-action@v2.6.0
+        uses: paambaati/codeclimate-action@v2.7.5
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
         with:

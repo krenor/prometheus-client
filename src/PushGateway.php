@@ -3,8 +3,8 @@
 namespace Krenor\Prometheus;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\Request;
-use function GuzzleHttp\Psr7\stream_for;
 use Krenor\Prometheus\Renderer\TextRenderer;
 
 class PushGateway
@@ -83,7 +83,7 @@ class PushGateway
         ];
 
         if ($method !== 'DELETE') {
-            $options['body'] = stream_for(
+            $options['body'] = Utils::streamFor(
                 (new TextRenderer)
                     ->render($this->registry->collect())
             );

@@ -16,22 +16,37 @@
     }
   ],
   "config": {
-    "sort-packages": true
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "process-timeout": 0,
+    "platform": {
+      "php": "8.0",
+      "ext-apcu": "5.1",
+      "ext-memcached": "3.1",
+      "ext-redis": "5.3"
+    }
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/krenor/ocular"
+    }
+  ],
   "require": {
-    "php": "^7.4",
-    "ext-json": "*",
-    "guzzlehttp/guzzle": "^6.5",
-    "tightenco/collect": "^7.25"
+    "php": "^8.0",
+    "guzzlehttp/guzzle": "^7.3",
+    "tightenco/collect": "^8.34"
   },
   "require-dev": {
-    "codedungeon/phpunit-result-printer": "^0.28",
-    "mockery/mockery": "^1.4",
-    "phpunit/phpunit": "^9.3",
-    "predis/predis": "^1.1",
-    "ext-redis": "*",
     "ext-apcu": "*",
-    "ext-memcached": "*"
+    "ext-memcached": "*",
+    "ext-redis": "*",
+    "codedungeon/phpunit-result-printer": "^0.30.1",
+    "mockery/mockery": "^1.4",
+    "phpunit/phpunit": "^9.5",
+    "predis/predis": "^1.1",
+    "scrutinizer/ocular": "dev-master"
   },
   "suggest": {
     "ext-apcu": "Required to use the APCu storage.",

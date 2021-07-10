@@ -3,34 +3,39 @@
          backupStaticAttributes="false"
          bootstrap="vendor/autoload.php"
          colors="true"
-         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
          processIsolation="false"
-         stopOnFailure="false">
+         stopOnFailure="false"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+
+        <report>
+            <clover outputFile="phpunit/coverage/clover.xml"/>
+            <html outputDirectory="phpunit/coverage/html"/>
+            <text outputFile="phpunit/coverage/text.txt"/>
+        </report>
+    </coverage>
+
+    <logging>
+        <junit outputFile="phpunit/reports/junit.xml"/>
+    </logging>
+
     <testsuites>
         <testsuite name="Integration">
             <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
-
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="junit" target="phpunit/reports/junit.xml"/>
-        <log type="coverage-html" target="phpunit/coverage/html"/>
-        <log type="coverage-text" target="phpunit/coverage/text.txt"/>
-        <log type="coverage-clover" target="phpunit/coverage/clover.xml"/>
-    </logging>
 
     <php>
         <env name="MEMCACHED_HOST" value="memcached"/>
