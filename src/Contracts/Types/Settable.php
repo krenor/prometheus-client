@@ -10,7 +10,7 @@ interface Settable extends Metric
      * @param float $value
      * @param array $labels
      *
-     * @return self
+     * @return static
      */
-    public function set(float $value, array $labels = []): self;
+    public function set(float $value, array $labels = []): static;
 }

@@ -10,7 +10,7 @@ interface Observable extends Metric
      * @param float $value
      * @param array $labels
      *
-     * @return self
+     * @return static
      */
-    public function observe(float $value, array $labels = []): self;
+    public function observe(float $value, array $labels = []): static;
 }

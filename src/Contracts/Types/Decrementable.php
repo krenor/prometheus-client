@@ -9,15 +9,15 @@ interface Decrementable extends Metric
     /**
      * @param array $labels
      *
-     * @return self
+     * @return static
      */
-    public function decrement(array $labels = []): self;
+    public function decrement(array $labels = []): static;
 
     /**
      * @param float $value
      * @param array $labels
      *
-     * @return self
+     * @return static
      */
-    public function decrementBy(float $value, array $labels = []): self;
+    public function decrementBy(float $value, array $labels = []): static;
 }

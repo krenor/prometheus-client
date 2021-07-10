@@ -18,7 +18,7 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
-    public function increment(array $labels = []): self
+    public function increment(array $labels = []): static
     {
         return $this->incrementBy(1, $labels);
     }
@@ -26,7 +26,7 @@ abstract class Counter extends Metric implements Incrementable
     /**
      * {@inheritdoc}
      */
-    public function incrementBy(float $value, array $labels = []): self
+    public function incrementBy(float $value, array $labels = []): static
     {
         if ($value < 0) {
             throw new PrometheusException('Counters can only be incremented by non-negative amounts.');

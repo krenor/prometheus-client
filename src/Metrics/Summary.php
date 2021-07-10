@@ -53,7 +53,7 @@ abstract class Summary extends Metric implements Observable
     /**
      * {@inheritdoc}
      */
-    public function observe(float $value, array $labels = []): self
+    public function observe(float $value, array $labels = []): static
     {
         static::$storage->observe($this, $value, $labels);
 
