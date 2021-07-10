@@ -12,7 +12,7 @@ trait TracksExecutionTime
      *
      * @return Closure
      */
-    public function chronometer($labels = [], int $precision = 4): Closure
+    public function chronometer(array $labels = [], int $precision = 4): Closure
     {
         $start = microtime(true);
 

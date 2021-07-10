@@ -19,17 +19,7 @@ class InMemoryRepository extends SimpleRepository
     /**
      * {@inheritdoc}
      */
-    public function flush(): bool
-    {
-        $this->items = new Collection;
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function retrieve(string $key)
+    protected function retrieve(string $key): mixed
     {
         return $this->items->get($key);
     }
@@ -40,6 +30,16 @@ class InMemoryRepository extends SimpleRepository
     protected function store(string $key, Collection $collection): bool
     {
         $this->items->put($key, $collection);
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): bool
+    {
+        $this->items = new Collection;
 
         return true;
     }

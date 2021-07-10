@@ -38,7 +38,7 @@ interface Repository
      *
      * @return void
      */
-    public function set(string $key, string $field, $value): void;
+    public function set(string $key, string $field, mixed $value): void;
 
     /**
      * @param string $key

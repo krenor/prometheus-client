@@ -125,7 +125,6 @@ class CollectorRegistryTest extends TestCase
 
         $this->assertCount(4, $collection);
 
-        /** @var MetricFamilySamples $family */
         foreach ($collection as $index => $family) {
             $this->assertEquals($metrics[$index], $family->metric());
             $this->assertCount(1, $family->samples());

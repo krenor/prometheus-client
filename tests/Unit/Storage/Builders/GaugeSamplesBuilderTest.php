@@ -30,11 +30,9 @@ class GaugeSamplesBuilderTest extends TestCase
             "{\"labels\":{$labels}}" => 99,
         ]));
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount(1, $samples);
-
         $this->assertSame($labels, $samples[0]->labels()->toJson());
         $this->assertEquals(99, $samples[0]->value());
     }
@@ -55,11 +53,9 @@ class GaugeSamplesBuilderTest extends TestCase
 
         $builder = new GaugeSamplesBuilder($gauge, new Collection);
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount(1, $samples);
-
         $this->assertEmpty($samples[0]->labels());
         $this->assertEquals(0, $samples[0]->value());
     }

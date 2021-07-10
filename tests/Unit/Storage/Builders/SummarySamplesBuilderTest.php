@@ -32,7 +32,6 @@ class SummarySamplesBuilderTest extends TestCase
             "{\"labels\":{$labels}}" => $values,
         ]));
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount($summary->quantiles()->count() + 2, $samples);
@@ -76,7 +75,6 @@ class SummarySamplesBuilderTest extends TestCase
 
         $builder = new SummarySamplesBuilder($summary, new Collection);
 
-        /** @var Sample[] $samples */
         $samples = $builder->samples();
 
         $this->assertCount($summary->quantiles()->count() + 2, $samples);

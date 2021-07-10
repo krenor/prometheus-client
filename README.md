@@ -47,7 +47,6 @@ Metric::storeUsing(new StorageManager(new InMemoryRepository));
 
 $registry = new CollectorRegistry;
 
-/** @var Counter $counter */
 $counter = $registry->register(new ExampleCounter);
 
 $counter->increment(['some', 'label', 'values']);

@@ -20,15 +20,7 @@ class MemcachedRepository extends SimpleRepository
     /**
      * {@inheritdoc}
      */
-    public function flush(): bool
-    {
-        return $this->memcached->flush();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function retrieve(string $key)
+    protected function retrieve(string $key): mixed
     {
         return $this->memcached->get($key);
     }
@@ -39,5 +31,13 @@ class MemcachedRepository extends SimpleRepository
     protected function store(string $key, Collection $collection): bool
     {
         return $this->memcached->set($key, $collection);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): bool
+    {
+        return $this->memcached->flush();
     }
 }

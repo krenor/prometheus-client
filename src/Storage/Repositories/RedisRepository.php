@@ -24,7 +24,7 @@ class RedisRepository implements Repository
     public function get(string $key): Collection
     {
         return new Collection(
-            strpos($key, ':VALUES') === false
+            !str_contains($key, ':VALUES')
                 ? $this->redis->hgetall($key)
                 : $this->redis->lrange($key, 0, -1)
         );
@@ -49,7 +49,7 @@ class RedisRepository implements Repository
     /**
      * {@inheritdoc}
      */
-    public function set(string $key, string $field, $value): void
+    public function set(string $key, string $field, mixed $value): void
     {
         $this->redis->hset($key, $field, $value);
     }

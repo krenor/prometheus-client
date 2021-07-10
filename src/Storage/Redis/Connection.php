@@ -58,7 +58,7 @@ abstract class Connection
      *
      * @return int
      */
-    public function hset(string $key, string $field, $value): int
+    public function hset(string $key, string $field, mixed $value): int
     {
         return $this->client->hset($key, $field, $value);
     }
