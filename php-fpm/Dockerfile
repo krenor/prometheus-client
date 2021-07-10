@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:8.0-fpm-alpine
 
 ENV MEMCACHED_DEPS \
   cyrus-sasl-dev \
@@ -31,5 +31,3 @@ COPY php-fpm/xdebug.ini \
      /usr/local/etc/php/conf.d/
 
 WORKDIR /var/www
-
-EXPOSE 9000
