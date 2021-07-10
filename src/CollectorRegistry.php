@@ -50,7 +50,7 @@ class CollectorRegistry
     public function register(Metric $metric): Metric
     {
         $collector = $this->collector($metric);
-        $namespace = get_class($metric);
+        $namespace = $metric::class;
 
         if (!$collector->contains($namespace)) {
             $collector->put($namespace, $metric);
@@ -67,7 +67,7 @@ class CollectorRegistry
     public function unregister(Metric $metric): self
     {
         $this->collector($metric)
-             ->forget(get_class($metric));
+             ->forget($metric::class);
 
         return $this;
     }

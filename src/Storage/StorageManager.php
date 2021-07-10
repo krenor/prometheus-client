@@ -78,7 +78,7 @@ class StorageManager implements Storage
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {
-            $class = get_class($metric);
+            $class = $metric::class;
 
             throw new StorageException("Failed to collect the samples of [{$class}]: {$e->getMessage()}", 0, $e);
         }
@@ -98,7 +98,7 @@ class StorageManager implements Storage
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {
-            $class = get_class($metric);
+            $class = $metric::class;
 
             throw new StorageException("Failed to increment [{$class}] by `{$value}`: {$e->getMessage()}", 0, $e);
         }
@@ -118,7 +118,7 @@ class StorageManager implements Storage
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {
-            $class = get_class($metric);
+            $class = $metric::class;
 
             throw new StorageException("Failed to decrement [{$class}] by `{$value}`: {$e->getMessage()}", 0, $e);
         }
@@ -139,7 +139,7 @@ class StorageManager implements Storage
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {
-            $class = get_class($metric);
+            $class = $metric::class;
 
             throw new StorageException("Failed to observe [{$class}] with `{$value}`: {$e->getMessage()}", 0, $e);
         }
@@ -159,7 +159,7 @@ class StorageManager implements Storage
         } catch (LabelException $e) {
             throw $e;
         } catch (Exception $e) {
-            $class = get_class($metric);
+            $class = $metric::class;
 
             throw new StorageException("Failed to set [{$class}] to `{$value}`: {$e->getMessage()}", 0, $e);
         }
