@@ -6,12 +6,6 @@ use Tightenco\Collect\Support\Collection;
 
 class Sample
 {
-    protected string $name;
-
-    protected float $value;
-
-    protected Collection $labels;
-
     /**
      * Sample constructor.
      *
@@ -19,11 +13,9 @@ class Sample
      * @param float $value
      * @param Collection $labels
      */
-    public function __construct(string $name, float $value, Collection $labels)
+    public function __construct(protected string $name, protected float $value, protected Collection $labels)
     {
-        $this->name = $name;
-        $this->value = $value;
-        $this->labels = $labels;
+        //
     }
 
     /**

@@ -34,10 +34,6 @@ class StorageManager implements Storage
 
     use StoresMetrics;
 
-    protected Repository $repository;
-
-    protected string $prefix;
-
     protected array $bindings = [
         self::COLLECTOR_BINDING_KEY => [
             Counter::class   => CounterCollector::class,
@@ -55,12 +51,11 @@ class StorageManager implements Storage
      * StorageManager constructor.
      *
      * @param Repository $repository
-     * @param string|null $prefix
+     * @param string $prefix
      */
-    public function __construct(Repository $repository, ?string $prefix = 'PROMETHEUS')
+    public function __construct(protected Repository $repository, protected string $prefix = 'PROMETHEUS')
     {
-        $this->repository = $repository;
-        $this->prefix = $prefix;
+        //
     }
 
     /**

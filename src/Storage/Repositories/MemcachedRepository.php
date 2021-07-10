@@ -7,16 +7,14 @@ use Tightenco\Collect\Support\Collection;
 
 class MemcachedRepository extends SimpleRepository
 {
-    protected Memcached $memcached;
-
     /**
      * MemcachedRepository constructor.
      *
      * @param Memcached $memcached
      */
-    public function __construct(Memcached $memcached)
+    public function __construct(protected Memcached $memcached)
     {
-        $this->memcached = $memcached;
+        //
     }
 
     /**
