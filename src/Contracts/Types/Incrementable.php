@@ -9,15 +9,15 @@ interface Incrementable extends Metric
     /**
      * @param array $labels = []
      *
-     * @return self
+     * @return static
      */
-    public function increment(array $labels = []): self;
+    public function increment(array $labels = []): static;
 
     /**
      * @param float $value
      * @param array $labels
      *
-     * @return self
+     * @return static
      */
-    public function incrementBy(float $value, array $labels = []): self;
+    public function incrementBy(float $value, array $labels = []): static;
 }
